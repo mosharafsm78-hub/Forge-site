@@ -57,7 +57,7 @@ export default {
 
     const suggest = checkField({
       id: "f-name-suggest",
-      label: "Ask the Forge team to suggest names",
+      label: "Ask Forge to suggest names",
       help: "The team will send ideas based on your product. You still choose the final name.",
       checked: st.name.wantsSuggestions,
       onChange: (v) => set("wantsSuggestions", v),

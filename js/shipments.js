@@ -8,7 +8,7 @@ export function statusLabel(sh) {
   return sh.receivedAt ? "With you" : SHIP_STATUS[sh.status] || "Not shipped";
 }
 
-// kind "first": paid in the first bill. kind "reorder": the team sends a product bill after the owner asks.
+// kind "first": paid in the first bill. kind "reorder": Forge sends a product bill after the owner asks.
 export function makeShipment(st, kind = "first") {
   const p = st.product || {};
   const qty = kind === "first" ? st.qty : st.reorder.qty || st.qty;

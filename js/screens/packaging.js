@@ -43,7 +43,7 @@ export default {
             "div",
             { class: "wait" },
             h("h3", null, "Quote requested"),
-            h("p", { class: "wait__left" }, "The Forge team sends your quote by ", h("b", null, dueDate(p.requestedAt)), "."),
+            h("p", { class: "wait__left" }, "Forge sends your quote by ", h("b", null, dueDate(p.requestedAt)), "."),
             h("p", { class: "field__help" }, "That is 3 working days, not counting Fridays, Saturdays or public holidays. The quote has the estimated cost and the packaging design. You approve it before anything is billed.")
           ),
           h("div", { class: "file", style: "margin-top:16px" }, chosen.map((i) => h("div", { class: "file__row file__row--2" }, h("span", { class: "file__key" }, i.label), h("span", { class: "file__val num" }, qtyOf(p.items[i.id]).toLocaleString("en-US") + " pieces")))),
@@ -108,7 +108,7 @@ export default {
           h("div", { class: "section__head" }, h("h2", null, "What happens next")),
           h("ol", { class: "steps" },
             h("li", null, "You ask for a quote."),
-            h("li", null, `Within 3 working days (by ${dueDate()}), the Forge team sends the estimated cost and the packaging design.`),
+            h("li", null, `Within 3 working days (by ${dueDate()}), Forge sends the estimated cost and the packaging design.`),
             h("li", null, "You approve the quote. It is added to your bill."),
             h("li", null, "The packaging is made locally in Bangladesh.")
           )
@@ -130,7 +130,7 @@ export default {
                   ITEMS.forEach((i) => { s.packaging.items[i.id].qty = Number(itemRows[ITEMS.indexOf(i)]._qty.value); });
                   s.packaging.requestedAt = Date.now();
                 });
-                announce("Quote requested. The Forge team replies within 3 working days.");
+                announce("Quote requested. Forge replies within 3 working days.");
                 paint();
                 paintFoot();
               },
@@ -141,7 +141,7 @@ export default {
       );
     }
 
-    const root = h("section", { class: "screen" }, head("Packaging", "Your parcels need packaging. The Forge team quotes it and designs it for you, and it is made locally in Bangladesh."), body, footSlot);
+    const root = h("section", { class: "screen" }, head("Packaging", "Your parcels need packaging. Forge quotes it and designs it for you, and it is made locally in Bangladesh."), body, footSlot);
     paint();
     paintFoot();
     return root;

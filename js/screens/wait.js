@@ -1,4 +1,4 @@
-// The waiting panel for work the Forge team does. Counts down to the time the team promised.
+// The waiting panel for work Forge does. Counts down to the time the team promised.
 import { h } from "../ui.js";
 import { formatCountdown } from "../time.js";
 

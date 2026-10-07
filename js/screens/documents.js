@@ -20,15 +20,15 @@ export default {
     const agreementBox = h("div");
     const checkBox = h("div");
 
-    // The Forge team checks every document. Until then the next stages stay closed.
+    // Forge checks every document. Until then the next stages stay closed.
     function paintCheck() {
       const s = getState();
       checkBox.replaceChildren();
       if (CONFIG.demo || documentsMissing(s).length) return;
       const d = s.documents;
       if (documentsChecked(s)) add(checkBox, h("div", { class: "notice notice--ok", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Your documents are checked.")), h("p", null, "The next stages are open.")));
-      else if (d.reviewNote && !d.verifiedAt) add(checkBox, h("div", { class: "notice notice--error", style: "margin-bottom:24px" }, h("p", null, h("b", null, "The Forge team needs a change.")), h("p", null, d.reviewNote)));
-      else add(checkBox, h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, h("b", null, "The Forge team is checking your documents.")), h("p", null, "This page updates by itself when they are done. You can close it and come back.")));
+      else if (d.reviewNote && !d.verifiedAt) add(checkBox, h("div", { class: "notice notice--error", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Forge needs a change.")), h("p", null, d.reviewNote)));
+      else add(checkBox, h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Forge is checking your documents.")), h("p", null, "This page updates by itself when they are done. You can close it and come back.")));
     }
 
     function paintList() {
@@ -45,7 +45,7 @@ export default {
       const done = isComplete("documents", s);
       const next = target || done ? h("button", { type: "button", class: "btn btn--primary", onclick: () => go(target || "summary") }, "Continue") : h("button", { type: "button", class: "btn btn--primary", disabled: true }, "Continue");
       const waiting = !done && documentsMissing(s).length === 0;
-      footSlot.replaceChildren(foot({ back: "name", next, note: done ? "" : waiting ? "Waiting for the Forge team to check your documents." : "Add the items marked as still needed." }));
+      footSlot.replaceChildren(foot({ back: "name", next, note: done ? "" : waiting ? "Waiting for Forge to check your documents." : "Add the items marked as still needed." }));
     }
 
     function refresh() {
@@ -87,7 +87,7 @@ export default {
       agreementBox.replaceChildren();
       if (!d.agreementReady) {
         add(agreementBox, 
-          h("div", { class: "notice" }, h("p", null, h("b", null, "Your agreement is not ready yet.")), h("p", null, "The Forge team places it here. Then you download it, print it, sign it, scan it and upload it back.")),
+          h("div", { class: "notice" }, h("p", null, h("b", null, "Your agreement is not ready yet.")), h("p", null, "Forge places it here. Then you download it, print it, sign it, scan it and upload it back.")),
           CONFIG.demo ? h("p", null, h("button", { type: "button", class: "btn btn--small btn--quiet", onclick: () => { update((s) => { s.documents.agreementReady = true; }); paintAgreement(); refresh(); } }, "Preview only: show the agreement as ready")) : null
         );
       } else {
@@ -105,9 +105,9 @@ export default {
     const root = h(
       "section",
       { class: "screen" },
-      head("Documents and agreement", "The Forge team needs these to import your goods and set up your courier account."),
-      h("div", { class: "notice notice--error", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Nothing starts without your signed agreement."), " The Forge team does not make your logo, page or packaging, register your domain, order your goods or take payment until your signed agreement is uploaded here. The next stages stay closed until then.")),
-      CONFIG.demo ? h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, "Preview: files you choose here are not sent anywhere. Secure storage is connected before real documents are collected.")) : h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Your files are private."), " They are stored securely and only you and the Forge team who handle your file can open them.")),
+      head("Documents and agreement", "Forge needs these to import your goods and set up your courier account."),
+      h("div", { class: "notice notice--error", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Nothing starts without your signed agreement."), " Forge does not make your logo, page or packaging, register your domain, order your goods or take payment until your signed agreement is uploaded here. The next stages stay closed until then.")),
+      CONFIG.demo ? h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, "Preview: files you choose here are not sent anywhere. Secure storage is connected before real documents are collected.")) : h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Your files are private."), " They are stored securely and only you and the Forge staff who handle your file can open them.")),
       checkBox,
       section("What you need", null, checklist),
       section("Your NID", "Needed to register you as the owner and to open your courier account.", nidFront.el, nidBack.el),

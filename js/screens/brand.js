@@ -43,7 +43,7 @@ export default {
       const { logo } = getState().brand;
       const industry = industryById(getState().industryId);
       logoBox.replaceChildren();
-      add(logoBox, h("div", { class: "section__head" }, h("h2", null, "Logo"), h("p", null, "The Forge team designs your logo. You choose the kind, and then pick from the designs we make.")));
+      add(logoBox, h("div", { class: "section__head" }, h("h2", null, "Logo"), h("p", null, "Forge designs your logo. You choose the kind, and then pick from the designs we make.")));
 
       if (logo.forName && logo.forName !== businessName()) {
         add(logoBox, h("div", { class: "notice" }, h("p", null, `These logos were made for "${logo.forName}". Your business name is now "${businessName()}". Check that the logo still fits.`)));
@@ -100,7 +100,7 @@ export default {
           onInput: (v) => update((s) => { s.brand.logo.notes = v; }),
         });
         add(logoBox, 
-          h("div", { class: "field" }, h("p", { class: "field__label" }, "What kind of logo do you want?"), h("p", { class: "field__help" }, industry ? `For ${industry.name.toLowerCase()}, the team suggests the ones marked. Choose as many as you like.` : "Choose as many as you like."), h("div", { class: "pick-grid" }, typeButtons), typeError),
+          h("div", { class: "field" }, h("p", { class: "field__label" }, "What kind of logo do you want?"), h("p", { class: "field__help" }, industry ? `For ${industry.name.toLowerCase()}, Forge suggests the ones marked. Choose as many as you like.` : "Choose as many as you like."), h("div", { class: "pick-grid" }, typeButtons), typeError),
           h("div", { class: "field" }, h("p", { class: "field__label" }, "Main colour"), h("div", { class: "chips" }, colorButtons)),
           notes.el,
           h(
@@ -140,7 +140,7 @@ export default {
           requestedAt: logo.requestedAt,
           durationMs: HOUR,
           lines: ["Come back in about 1 hour. Your request is saved, so you can close this page.", "You will see 6 designs and choose one."],
-          lateText: "This is taking a little longer than usual. The Forge team will contact you if they need anything.",
+          lateText: "This is taking a little longer than usual. Forge will contact you if they need anything.",
         });
         stoppers.push(w.stop);
         add(logoBox, w.el);
@@ -181,7 +181,7 @@ export default {
       add(logoBox, 
         h("p", { class: "field__help" }, logo.chosenId ? "Your logo is chosen. You can pick another design if you change your mind." : "Choose the design you like best."),
         grid,
-        CONFIG.demo ? h("p", { class: "field__help" }, "These are sample designs drawn for the preview. Real designs come from the Forge team.") : null
+        CONFIG.demo ? h("p", { class: "field__help" }, "These are sample designs drawn for the preview. Real designs come from Forge.") : null
       );
     }
 
@@ -189,7 +189,7 @@ export default {
     function paintPage() {
       const { page } = getState().brand;
       pageBox.replaceChildren();
-      add(pageBox, h("div", { class: "section__head" }, h("h2", null, "Facebook page"), h("p", null, "The Forge team creates your page and adds you as an admin. The team keeps admin access too, so it can post and run ads for you.")));
+      add(pageBox, h("div", { class: "section__head" }, h("h2", null, "Facebook page"), h("p", null, "Forge creates your page and adds you as an admin. Forge keeps admin access too, so it can post and run ads for you.")));
 
       if (!page.requestedAt) {
         const touched = new Set();
@@ -241,7 +241,7 @@ export default {
           requestedAt: page.requestedAt,
           durationMs: HOUR,
           lines: ["Come back in about 1 hour. Your request is saved, so you can close this page.", "The link to your page will appear here."],
-          lateText: "This is taking a little longer than usual. The Forge team will contact you if they need anything.",
+          lateText: "This is taking a little longer than usual. Forge will contact you if they need anything.",
         });
         stoppers.push(w.stop);
         add(pageBox, w.el);
@@ -261,7 +261,7 @@ export default {
           { class: "notice notice--ok" },
           h("p", null, h("b", null, page.pageName)),
           h("p", null, CONFIG.demo ? h("span", null, page.url, " (sample, not a real page)") : h("a", { href: "https://" + page.url.replace(/^https?:\/\//, ""), target: "_blank", rel: "noopener noreferrer" }, page.url)),
-          h("p", { class: "field__help" }, "You are an admin of this page, and so is the Forge team. The team adds your chosen logo to the page.")
+          h("p", { class: "field__help" }, "You are an admin of this page, and so is Forge. Forge adds your chosen logo to the page.")
         )
       );
     }
@@ -292,7 +292,7 @@ export default {
     const root = h(
       "section",
       { class: "screen screen--wide" },
-      head("Logo and Facebook page", "Both are made by the Forge team and take about 1 hour each. You can ask for both now."),
+      head("Logo and Facebook page", "Both are made by Forge and take about 1 hour each. You can ask for both now."),
       h("div", { class: "section" }, logoBox),
       h("div", { class: "section" }, pageBox),
       footSlot

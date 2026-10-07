@@ -6,11 +6,11 @@ const add = (el, ...k) => append(el, k);
 
 const RULES = [
   ["Before your goods are ordered", "You can stop. Money already spent for you, such as the domain, packaging and website work, is not returned. The rest of what you paid is returned to you."],
-  ["Ordered, not yet shipped", "The Forge team asks the supplier to cancel. If the supplier agrees, the product cost comes back to you. If not, the goods are shipped and become yours."],
+  ["Ordered, not yet shipped", "Forge asks the supplier to cancel. If the supplier agrees, the product cost comes back to you. If not, the goods are shipped and become yours."],
   ["On the way, or arrived", "The goods are yours. Freight and duty are billed at the actual cost. If the freight is not paid, the goods stay in Forge stock."],
   ["Selling", "You can pause at any time. Forge pauses your ads and does not confirm new orders. Parcels already with the courier continue. Your stock stays with you."],
   ["Ending the business", "Sell the stock you have, or keep it. Forge does not promise to buy stock back. Returned items go back to your stock."],
-  ["No trade licence after 30 days", "The Forge team stops the process of doing business. Your goods stay in Forge stock until a licence in your business name is uploaded."],
+  ["No trade licence after 30 days", "Forge stops the process of doing business. Your goods stay in Forge stock until a licence in your business name is uploaded."],
 ];
 
 export default {

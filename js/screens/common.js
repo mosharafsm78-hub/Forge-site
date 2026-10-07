@@ -93,7 +93,7 @@ export function foot({ back, next, note }) {
   );
 }
 
-// A button that only exists in the sample-data preview, so a reviewer can see a step the Forge team normally does.
+// A button that only exists in the sample-data preview, so a reviewer can see a step Forge normally does.
 export function previewAction(label, fn, inline = false) {
   if (!CONFIG.demo) return null;
   const button = h("button", { type: "button", class: "btn btn--small btn--quiet", onclick: fn }, "Preview only: " + label);

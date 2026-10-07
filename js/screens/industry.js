@@ -40,7 +40,7 @@ export default {
     const idea = textareaField({
       id: "f-industry-note",
       label: "Not on the list?",
-      help: "Tell us what you want to sell. The Forge team will read it, but you still need to choose one industry above to continue.",
+      help: "Tell us what you want to sell. Forge will read it, but you still need to choose one industry above to continue.",
       value: st.industryNote,
       full: true,
       onInput: (v) =>

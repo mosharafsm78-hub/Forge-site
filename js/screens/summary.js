@@ -32,7 +32,7 @@ export default {
         row("Industry", industry ? industry.name : ""),
         row("Product", p ? p.name : "", "product", p ? h("span", { class: "field__help num" }, `${st.qty} units at ${formatUsd(p.priceUsd)}${bdt !== null ? ", about " + formatBdt(bdt) : ""}`) : null),
         row("Business name", st.name.chosen.trim(), "name"),
-        row("Domain", st.domain ? st.domain.name : "", "domain", st.domain && st.domain.status === "requested" ? h("span", { class: "field__help" }, "The Forge team will check this domain for you.") : null),
+        row("Domain", st.domain ? st.domain.name : "", "domain", st.domain && st.domain.status === "requested" ? h("span", { class: "field__help" }, "Forge will check this domain for you.") : null),
         row("Logo", st.brand.logo.chosenId ? "Chosen" : "", "brand"),
         row("Facebook page", st.brand.page.pageName, "brand", h("span", { class: "field__help" }, st.brand.page.url)),
         row("Packaging", "Quote requested", "packaging", h("span", { class: "field__help" }, "Quote due " + formatDay(addWorkingDays(st.packaging.requestedAt, 3)))),

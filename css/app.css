@@ -184,7 +184,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .rail__item.is-current .rail__link { background: var(--brand-soft); font-weight: 600; }
 .rail__item.is-later .rail__static { color: var(--muted); }
 .rail__who { display: block; font-size: 0.78rem; color: var(--muted); }
-.rail__who--team { color: var(--team); }
+.rail__who--forge { color: var(--team); }
 
 /* ---------- Main ---------- */
 .main { grid-area: main; padding: 36px clamp(20px, 4vw, 52px) 80px; outline: none; min-width: 0; }
@@ -545,3 +545,11 @@ body.auth .brand__sub { display: none; }
   .auth__card { margin: 16px; padding: 24px 18px; }
   .topbar__email { display: none; }
 }
+
+/* Stage list grouped in four parts */
+.rail__phase { margin: 0 0 16px; padding: 0 0 4px; }
+.rail__phasehead { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin: 0; padding: 6px 8px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.02em; color: var(--ink); border-bottom: 1px solid var(--line); }
+.rail__count { font-weight: 500; font-size: 0.74rem; color: var(--muted); }
+.rail__phase.is-done .rail__count { color: var(--brand); }
+.rail__phase.is-active .rail__phasehead { border-bottom-color: var(--brand); }
+.rail__phaselede { margin: 6px 8px 6px; font-size: 0.78rem; color: var(--muted); }

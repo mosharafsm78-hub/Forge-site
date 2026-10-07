@@ -16,7 +16,7 @@ export default {
       { class: "screen" },
       head(
         "Start your business with Forge",
-        "Every business is two jobs: deciding and doing. Deciding is yours. Doing is Forge's, using AI for speed and a real team for accountability."
+        "Every business is two jobs: deciding and doing. Deciding is yours. Doing is Forge's, and Forge answers for it."
       ),
       h(
         "div",

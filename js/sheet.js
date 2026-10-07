@@ -42,7 +42,7 @@ export function computeSheet(st) {
   } else if (st.packaging && st.packaging.requestedAt) {
     rows.push({ key: "packaging", label: "Packaging", sub: "Quote requested", pending: "Quote due " + formatDay(addWorkingDays(st.packaging.requestedAt, 3)) });
   } else {
-    rows.push({ key: "packaging", label: "Packaging", pending: "Quoted by the Forge team" });
+    rows.push({ key: "packaging", label: "Packaging", pending: "Quoted by Forge" });
   }
   if (Number(pay.websiteFee) > 0) {
     rows.push({ key: "setup", label: "Website setup", value: formatBdt(Number(pay.websiteFee)) });

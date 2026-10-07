@@ -40,9 +40,9 @@ export default {
         h("p", { class: "field__help" }, "Stock in hand now: ", h("b", { class: "num" }, stockFigures(st).inHand), stockFigures(st).onTheWay ? ", on the way: " + stockFigures(st).onTheWay : ""),
         h("div", { class: "chosen-bar" }, p.image ? h("img", { src: p.image, alt: "", width: 56, height: 56 }) : null, h("div", null, h("div", { class: "chosen-bar__name" }, p.name), h("div", { class: "chosen-bar__meta num" }, `${formatUsd(p.priceUsd)} each`))),
         st.reorder.requestedAt
-          ? h("div", { class: "notice notice--ok", style: "margin-top:20px" }, h("p", null, h("b", null, "Reorder requested"), ` on ${dateText(st.reorder.requestedAt)} for ${st.reorder.qty} units. The Forge team checks the supplier price and stock, then sends you the bill on your billing page. Your goods appear under shipment and freight.`), h("button", { type: "button", class: "btn btn--small", onclick: () => { update((s) => { s.reorder.requestedAt = null; }); paint(); } }, "Order again"))
+          ? h("div", { class: "notice notice--ok", style: "margin-top:20px" }, h("p", null, h("b", null, "Reorder requested"), ` on ${dateText(st.reorder.requestedAt)} for ${st.reorder.qty} units. Forge checks the supplier price and stock, then sends you the bill on your billing page. Your goods appear under shipment and freight.`), h("button", { type: "button", class: "btn btn--small", onclick: () => { update((s) => { s.reorder.requestedAt = null; }); paint(); } }, "Order again"))
           : h("section", { class: "section", style: "margin-top:24px" },
-              h("div", { class: "section__head" }, h("h2", null, "Order more of this product"), h("p", null, "Do this when your stock runs low. The price may have changed, so the Forge team checks it before billing you.")),
+              h("div", { class: "section__head" }, h("h2", null, "Order more of this product"), h("p", null, "Do this when your stock runs low. The price may have changed, so Forge checks it before billing you.")),
               h("div", { class: "field" }, h("label", { class: "field__label", for: "f-reorder" }, "How many units?"), input),
               cost,
               h("p", { class: "field__help" }, "Freight and duty are billed when the goods arrive, at the actual cost, as before."),

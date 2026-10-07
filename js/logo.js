@@ -23,7 +23,7 @@ export const LOGO_SUGGESTION = {
 export const suggestionFor = (industryId) => LOGO_SUGGESTION[industryId] || ["wordmark", "monogram"];
 
 export const LOGO_COLORS = [
-  { id: "team", label: "Let the team choose", a: null },
+  { id: "team", label: "Let Forge choose", a: null },
   { id: "black", label: "Black", a: "#16181a", b: "#8a8f94" },
   { id: "navy", label: "Navy", a: "#18356b", b: "#c8962e" },
   { id: "green", label: "Green", a: "#1b6b4a", b: "#d3a04b" },

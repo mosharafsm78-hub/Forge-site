@@ -1,7 +1,7 @@
 // The frame around every screen: top bar, stage list, order sheet.
 import { h } from "./ui.js";
 import { CONFIG } from "./config.js";
-import { STAGES, stageNumber } from "./stages.js";
+import { STAGES, PHASES, stageNumber } from "./stages.js";
 import { getState, subscribe, isSaved, saveStatus, currentUser, saveNow } from "./store.js";
 import { loadBackend } from "./backend.js";
 import { canOpen, stageStatus } from "./rules.js";
@@ -82,36 +82,62 @@ function renderTop() {
   }
   const n = stageNumber(currentId);
   const stage = STAGES.find((s) => s.id === currentId);
-  els.stepBtn.replaceChildren(...(stage ? [h("span", { class: "long" }, `Step ${n} of ${STAGES.length}: ${stage.label}`), h("span", { class: "short" }, `Step ${n} of ${STAGES.length}`)] : ["All steps"]));
+  const phase = currentPhase();
+  const pn = phase ? PHASES.indexOf(phase) + 1 : 0;
+  els.stepBtn.replaceChildren(...(stage ? [h("span", { class: "long" }, `Part ${pn} of ${PHASES.length}: ${phase.label}. Step ${n} of ${STAGES.length}`), h("span", { class: "short" }, `Step ${n} of ${STAGES.length}`)] : ["All steps"]));
   els.stepBtn.setAttribute("aria-expanded", railOpen ? "true" : "false");
+}
+
+function railItem(stage, st) {
+  const index = STAGES.indexOf(stage);
+  const status = stageStatus(stage.id, st);
+  const done = status.state === "done";
+  const open = stage.built && canOpen(stage.id, st);
+  const classes = ["rail__item", done ? "is-done" : "", stage.id === currentId ? "is-current" : "", "is-" + status.state].filter(Boolean).join(" ");
+  const marker = h("span", { class: "rail__marker", "aria-hidden": "true" }, done ? checkIcon() : String(index + 1));
+  let who = status.text;
+  if (status.state === "open" && stage.wait) who = stage.wait;
+  const text = h(
+    "span",
+    null,
+    h("span", null, stage.label),
+    h("span", { class: "rail__who" + (stage.who === "forge" && status.state === "open" ? " rail__who--forge" : "") + (status.state === "waiting" ? " rail__who--wait" : "") }, who)
+  );
+  const inner = open
+    ? h("a", { class: "rail__link", href: "#/" + stage.id, "aria-current": stage.id === currentId ? "step" : null }, marker, text)
+    : h("span", { class: "rail__static" }, marker, text);
+  return h("li", { class: classes }, inner);
+}
+
+function currentPhase() {
+  const stage = STAGES.find((s) => s.id === currentId);
+  return stage ? PHASES.find((p) => p.id === stage.phase) : null;
 }
 
 function renderRail() {
   const st = getState();
-  const items = STAGES.map((stage, index) => {
-    const status = stageStatus(stage.id, st);
-    const done = status.state === "done";
-    const open = stage.built && canOpen(stage.id, st);
-    const classes = ["rail__item", done ? "is-done" : "", stage.id === currentId ? "is-current" : "", "is-" + status.state].filter(Boolean).join(" ");
-    const marker = h("span", { class: "rail__marker", "aria-hidden": "true" }, done ? checkIcon() : String(index + 1));
-    let who = status.text;
-    if (status.state === "open" && stage.wait) who = (stage.who === "team" ? "Forge team, " : "") + stage.wait.charAt(0).toLowerCase() + stage.wait.slice(1);
-    const text = h(
-      "span",
-      null,
-      h("span", null, stage.label),
-      h("span", { class: "rail__who" + (stage.who === "team" && status.state === "open" ? " rail__who--team" : "") + (status.state === "waiting" ? " rail__who--wait" : "") }, who)
+  const groups = PHASES.map((phase, i) => {
+    const list = STAGES.filter((s) => s.phase === phase.id);
+    const doneCount = list.filter((s) => stageStatus(s.id, st).state === "done").length;
+    const active = currentPhase() === phase;
+    return h(
+      "section",
+      { class: "rail__phase" + (active ? " is-active" : "") + (doneCount === list.length ? " is-done" : "") },
+      h(
+        "h3",
+        { class: "rail__phasehead" },
+        h("span", null, `${i + 1}. ${phase.label}`),
+        h("span", { class: "rail__count" }, `${doneCount} of ${list.length} done`)
+      ),
+      h("p", { class: "rail__phaselede" }, phase.lede),
+      h("ol", { class: "rail__list" }, list.map((stage) => railItem(stage, st)))
     );
-    const inner = open
-      ? h("a", { class: "rail__link", href: "#/" + stage.id, "aria-current": stage.id === currentId ? "step" : null }, marker, text)
-      : h("span", { class: "rail__static" }, marker, text);
-    return h("li", { class: classes }, inner);
   });
   els.rail.className = "rail" + (railOpen ? " rail--open" : "");
   els.rail.replaceChildren(
     h("p", { class: "rail__title" }, "Your business file"),
-    h("p", { class: "rail__lede" }, "Nothing starts until your documents and signed agreement are in. After that, the logo and page, packaging and domain run side by side. Ask for the packaging quote first: it takes the longest."),
-    h("ol", { class: "rail__list" }, items)
+    h("p", { class: "rail__lede" }, "Four parts, in order. Nothing starts until your documents and signed agreement are in. Ask for the packaging quote first: it takes the longest."),
+    ...groups
   );
 }
 

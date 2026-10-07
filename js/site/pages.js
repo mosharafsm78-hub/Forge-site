@@ -49,9 +49,9 @@ function goodsTable() {
 
 function whyForge() {
   const reasons = [
-    ["Nothing starts without a signed agreement", "Our team does no work and takes no money until the agreement is signed. It says who pays for what and who carries which loss, so there are no surprises later."],
+    ["Nothing starts without a signed agreement", "Forge does no work and takes no money until the agreement is signed. It says who pays for what and who carries which loss, so there are no surprises later."],
     ["You see every number before you pay", "Your first bill lists each line. Freight is never guessed in advance: it is billed at actual cost, only after your goods reach Bangladesh."],
-    ["Real people are accountable", "A dedicated team buys your domain, gets your packaging made, runs your ads and confirms your orders. The AI makes them faster. It does not replace them."],
+    ["Forge does the work and answers for it", "Forge buys your domain, gets your packaging made, runs your ads and confirms your orders. You can see each step, and you can ask about any of them."],
     ["One place instead of eight suppliers", "Alone, you would find a designer, a packaging maker, a domain seller, an importer, a freight agent, an ad expert and a courier. Here it is one file and one team."],
     ["It is your business, not ours", "Your brand, your Facebook page, your domain and your stock. You can see stock in hand and every order at any time, and you can pause whenever you decide to."],
     ["We tell you the risk first", "Most services only sell the dream. Forge tells you up front that mistakes happen and money can be lost, and shows you how we reduce that risk."],
@@ -67,7 +67,7 @@ function alone() {
     ["Domain", "Learn how to buy one", "You choose, our staff buy"],
     ["Shipping and freight", "Arrange it yourself, risk surprise costs", "A goods table, freight billed at actual cost on arrival"],
     ["Ads", "Learn Facebook ads, spend while learning", "Our staff run them"],
-    ["Orders and returns", "Chase every customer", "Our team confirms orders, returned goods are resold"],
+    ["Orders and returns", "Chase every customer", "Forge confirms orders, returned goods are resold"],
   ];
   return h("figure", { class: "tablefig", style: "max-width:960px" },
     h("div", { class: "tablewrap" }, h("table", null,
@@ -94,7 +94,7 @@ function costTable() {
     ["Packaging", "Your bags and boxes, made locally in Bangladesh.", "In your first bill", "From the quote you approve"],
     ["Website setup", "Setting up your online shop page.", "In your first bill", "Confirmed by Forge before you pay"],
     ["Freight, duty and clearance", "The whole cost of getting goods from the supplier's country into your hands. Explained below.", "When your goods reach Bangladesh", "Known only on arrival, then shown line by line"],
-    ["Advertising", "Money spent on Facebook ads. Our team runs them.", "While ads run", "You set the budget"],
+    ["Advertising", "Money spent on Facebook ads. Forge runs them.", "While ads run", "You set the budget"],
     ["Minimum to start", "The least money you must have ready before you begin: ৳30,000. It is a starting floor for a small first batch plus the costs above, not a fee, and not paid to Forge. More money gives you a bigger first batch and room for ads and returned parcels.", "Not paid to Forge", "You tell us in your details"],
     ["Trade licence", "Your licence in your business name, within 30 days. Paid to the licensing authority, not to Forge.", "Within 30 days of starting", "Set by the authority"],
     ["Forge's own fees", "What Forge charges for its service.", "As set in your agreement", "Written in your agreement before you sign"],
@@ -186,7 +186,7 @@ function worries() {
       "There is nothing to hide, so we list every cost. Part 4 shows each one, when you pay it and how you learn the amount. One cost, freight, cannot be known until your goods reach Bangladesh. Part 4 explains exactly what it is, line by line, and why we never guess it.",
       "You see it in Part 4 below, and on your Billing page."],
     ["What if I do not know how to do any of this?",
-      "You do not need to. You make the decisions, and Forge handles the hassle: a real team designs your logo options, builds your page, buys your domain, gets your packaging made and runs your ads. The AI keeps everything quick.",
+      "You do not need to. You make the decisions, and Forge handles the hassle: Forge designs your logo options, builds your page, buys your domain, gets your packaging made and runs your ads.",
       "Every stage tells you what you do and what Forge does."],
     ["What if I cannot see what is going on?",
       "One table shows every item: price, paid or unpaid, status and freight. Your stock in hand and every order are in front of you at all times.",
@@ -251,7 +251,7 @@ function moneyBar() {
 }
 
 function fitLists() {
-  const yes = ["You are 18 or older and can afford to lose the money you put in.", "You want to sell a physical product on cash on delivery.", "You will make the decisions and let a team do the setup.", "You can keep at least ৳30,000 ready to start."];
+  const yes = ["You are 18 or older and can afford to lose the money you put in.", "You want to sell a physical product on cash on delivery.", "You will make the decisions and let Forge do the setup.", "You can keep at least ৳30,000 ready to start."];
   const no = ["You expect guaranteed income or a quick profit.", "You would be borrowing money you cannot repay.", "You want to skip reading the agreement.", "You want a business that runs with no effort from you."];
   const col = (title, items, cls) => h("div", { class: "fit__col fit__col--" + cls }, h("h3", null, title), h("ul", null, items.map((i) => h("li", null, i))));
   return h("div", { class: "fit" }, col("Forge suits you if", yes, "yes"), col("Forge is not for you if", no, "no"));
@@ -279,7 +279,7 @@ function costGlance() {
     ["Minimum to start", "৳30,000", "The least you must have ready. It buys a small first batch. Not a fee, and not paid to Forge."],
     ["Your first bill", "Itemised", "Product, domain, packaging and website setup, shown line by line before you pay."],
     ["Freight and customs", "At actual cost", "Billed after your goods reach Bangladesh, because the real number is only known then."],
-    ["Advertising", "Your budget", "You decide how much to spend. Our team runs the ads."],
+    ["Advertising", "Your budget", "You decide how much to spend. Forge runs the ads."],
   ];
   return h("dl", { class: "glance" }, rows.map(([k, v, d]) => h("div", null, h("dt", null, k), h("dd", { class: "glance__v" }, v), h("dd", { class: "glance__d" }, d))));
 }
@@ -297,7 +297,7 @@ const home = {
       h("section", { class: "hero" }, h("div", { class: "wrap hero__in" },
         h("div", { class: "hero__text" },
           h("h1", null, "You make the decisions. Forge handles the hassle."),
-          h("p", { class: "lede" }, "Starting an import business means deciding and doing. You decide what to sell and how much to risk. Our team does the sourcing, branding, packaging, shipping, ads and order confirmation. You sell cash on delivery."),
+          h("p", { class: "lede" }, "Starting an import business means deciding and doing. You decide what to sell and how much to risk. Forge does the sourcing, branding, packaging, shipping, ads and order confirmation. You sell cash on delivery."),
           h("div", { class: "actions" }, cta(workspace), link("how", "See how it works")),
           h("p", { class: "hero__fine" }, "Forge can make mistakes, and a business can lose money. Forge does not promise sales or profit.")),
         orderSheet())),
@@ -334,12 +334,12 @@ const STAGES = [
     you: "Give your name, mobile number, email, date of birth (you must be 18 or older) and your city.",
     we: "Nothing yet. Your answers are saved on your device as you go.",
     get: "Your business file is opened." },
-  { t: "Industry", by: "You, with Forge AI", time: "Same day",
+  { t: "Industry", by: "You, with Forge", time: "Same day",
     what: "You decide what kind of business you will run.",
     you: "Pick an industry.",
-    we: "The AI suggests what suits you and what logo type fits the industry. You are never forced to take a suggestion.",
+    we: "Forge suggests what suits you and what logo type fits the industry. You are never forced to take a suggestion.",
     get: "An industry on your file." },
-  { t: "Product", by: "You, with Forge AI", time: "Same day",
+  { t: "Product", by: "You, with Forge", time: "Same day",
     what: "You decide what you will sell and how many to start with.",
     you: "Pick a product from the supplier catalogue, and a quantity. Start small: you can reorder when it sells.",
     we: "We show live supplier prices with an estimate in taka.",
@@ -350,16 +350,16 @@ const STAGES = [
     we: "We keep it on your file so the logo, page and domain all use the same name.",
     get: "A business name on your file." },
   { t: "Documents and agreement", by: "You", time: "Nothing else starts until this is done",
-    what: "This is the gate. Until your documents and signed agreement are in, our team does no work and no payment is taken.",
+    what: "This is the gate. Until your documents and signed agreement are in, Forge does no work and no payment is taken.",
     you: "Upload your National ID (front and back). Give a cheque leaf for Pathao, or a bKash number if you have no bank account. Print the agreement, sign it, scan it and upload it. Later you will upload a trade licence within 30 days.",
     we: "We check the documents and release the next stages.",
     get: "Logo and page, packaging and domain all open together." },
-  { t: "Logo and Facebook page", by: "Forge team", time: "About one hour for each",
+  { t: "Logo and Facebook page", by: "Forge", time: "About one hour for each",
     what: "Your brand look and your first sales channel.",
     you: "Choose the kind of logo you want. Press the button, and a timer shows when to come back. Pick one of the 5 or 6 options. For the page, add Forge as an admin of your own Facebook profile so we can set it up.",
     we: "We suggest a logo type for your industry, design the options, and create your page.",
     get: "A chosen logo and a Facebook page link." },
-  { t: "Packaging", by: "Forge team", time: "Quote within 3 working days",
+  { t: "Packaging", by: "Forge", time: "Quote within 3 working days",
     what: "Your product needs a bag or box with your brand on it.",
     you: "Choose a polythene bag, a box, and optionally a sticker or card. Ask for the quote right away, because it takes the longest.",
     we: "We get your packaging made locally in Bangladesh and send you the quote.",
@@ -374,29 +374,29 @@ const STAGES = [
     you: "Check each line. Pay product price times quantity, the domain, the packaging and the website setup.",
     we: "We confirm your payment and start your shipment. Freight, duty and clearance are not in this bill. They come later, at actual cost.",
     get: "Your goods are ordered." },
-  { t: "Business plan", by: "Forge AI, then you", time: "Same day",
+  { t: "Business plan", by: "Forge, then you", time: "Same day",
     what: "A plain plan for your business, in writing.",
     you: "Read it. Ask us about anything unclear.",
-    we: "The AI drafts the plan from your choices. A team member can review it with you.",
+    we: "Forge drafts the plan from your choices and goes through it with you.",
     get: "A business plan on your file." },
-  { t: "Shipping and freight", by: "Forge team", time: "Depends on the shipment",
+  { t: "Shipping and freight", by: "Forge", time: "Depends on the shipment",
     what: "Your goods travel to Bangladesh.",
     you: "Follow each item in the goods table: price, paid or unpaid, and status. When goods reach Bangladesh, the freight appears. Pay it to receive your goods.",
     we: "We ship the goods. Freight is everything it costs to bring them here: international shipping, customs duty and taxes, clearance and port charges, and delivery to Forge stock. We bill it at actual cost, as separate lines, only after arrival. If it stays unpaid, your goods wait in Forge stock.",
     get: "Goods in your hands." },
-  { t: "Marketing", by: "Forge team", time: "Ongoing",
+  { t: "Marketing", by: "Forge", time: "Ongoing",
     what: "People need to see your product.",
     you: "Set an ad budget. Post on your Facebook page when the weekly reminder arrives.",
-    we: "Our staff run your ads, with the AI helping them plan and write.",
+    we: "Forge runs your ads and writes them with you.",
     get: "Customers and orders." },
   { t: "Orders and customers", by: "Shared", time: "Ongoing",
     what: "This is the daily business.",
     you: "Hand confirmed parcels to the Pathao courier and receive any that come back. Check your stock in hand at any time.",
-    we: "Our team confirms every order with the customer before it goes out.",
+    we: "Forge confirms every order with the customer before it goes out.",
     get: "Delivered orders and money collected on delivery." },
   { t: "Returns", by: "Shared", time: "Ongoing",
     what: "Not every parcel is accepted by the customer.",
-    you: "Receive returned parcels from the courier and hand them over as the team directs.",
+    you: "Receive returned parcels from the courier and hand them over as Forge directs.",
     we: "Returned goods are checked and resold.",
     get: "Returned goods back in stock." },
   { t: "Reorder", by: "You decide, Forge orders", time: "Ongoing",
@@ -412,7 +412,7 @@ const STEPS = [
   ["Three things run side by side", "Logo and Facebook page (about one hour each), packaging quote (within 3 working days), domain."],
   ["You pay your first bill", "Product, domain, packaging and website setup, in full. You see every line before you pay."],
   ["Goods ship and arrive", "You follow each item in a table. When goods reach Bangladesh, freight, duty and clearance are billed at actual cost."],
-  ["Orders come in and parcels go out", "Our team confirms orders. You hand parcels to Pathao and receive anything that comes back."],
+  ["Orders come in and parcels go out", "Forge confirms orders. You hand parcels to Pathao and receive anything that comes back."],
 ];
 
 const how = {
@@ -464,7 +464,7 @@ const risk = {
       ["Ads cost money", "Ad spend is paid whether or not it brings orders."],
       ["Shipments can be late", "Customs, suppliers and weather can delay goods."],
       ["Freight can differ from the estimate", "Shipping, customs duty and clearance are only known when your goods reach Bangladesh. The final amount can be higher or lower than an early estimate."],
-      ["Forge can make mistakes", "Both our AI and our people can get things wrong. We check the important steps, and you can check every number. If you see a mistake, tell us and we fix it."],
+      ["Forge can make mistakes", "Forge can get things wrong. We check the important steps, and you can check every number. If you see a mistake, tell us and we fix it."],
     ];
     const protections = [
       "A written agreement that says who pays for what and who carries which loss.",
@@ -497,9 +497,9 @@ const QA = [
   ["I have no bank account. Can I still join?", "Yes. Give a bKash number instead. With a bank account, we ask for a cheque leaf so Pathao can pay you."],
   ["What documents do I need?", "Your National ID (front and back), a cheque leaf or bKash number, the signed agreement, and later the trade licence."],
   ["What if my goods do not sell?", "Unsold goods remain your stock. You can keep marketing them, and the agreement sets out what happens if you stop."],
-  ["What happens to refused or returned parcels?", "You receive them from Pathao and hand them over as the team directs. Returned goods go back to stock and are resold."],
-  ["What do I do each day?", "Hand confirmed parcels to Pathao, receive returns, and post on your Facebook page once a week when reminded. Our team confirms orders and runs the ads."],
-  ["Who owns my Facebook page?", "You do. You add our team as an admin of your own profile so we can set it up, and you can remove us."],
+  ["What happens to refused or returned parcels?", "You receive them from Pathao and hand them over as Forge directs. Returned goods go back to stock and are resold."],
+  ["What do I do each day?", "Hand confirmed parcels to Pathao, receive returns, and post on your Facebook page once a week when reminded. Forge confirms orders and runs the ads."],
+  ["Who owns my Facebook page?", "You do. You add Forge as an admin of your own profile so we can set it up, and you can remove us."],
   ["Can I stop?", "Yes, you can pause at any time. The exact terms for pausing or leaving are in your agreement."],
   ["Does Forge promise profit?", "No. Forge can make mistakes and a business can lose money. We promise a clear agreement and numbers you can check."],
 ];

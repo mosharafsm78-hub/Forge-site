@@ -96,7 +96,7 @@ const signup = {
       if (r.needsConfirm) { pendingEmail = addr; go("confirm"); }
     });
     return card("Start your business file", "One account holds everything: your answers, your documents, your bills.", f.el,
-      h("p", { class: "auth__fine" }, "Forge keeps what you enter here and the documents you upload, and shows them only to you and the Forge team who work on your file. Forge can make mistakes and a business can lose money. Forge does not promise sales or profit."),
+      h("p", { class: "auth__fine" }, "Forge keeps what you enter here and the documents you upload, and shows them only to you and the Forge staff who work on your file. Forge can make mistakes and a business can lose money. Forge does not promise sales or profit."),
       h("p", { class: "auth__alt" }, "Already have an account? ", h("a", { href: "#/login" }, "Log in")));
   },
 };

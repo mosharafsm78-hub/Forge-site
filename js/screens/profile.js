@@ -18,7 +18,7 @@ const SECTIONS = [
   },
   {
     title: "Your situation",
-    note: "This helps the Forge team plan the right size for your first order.",
+    note: "This helps Forge plan the right size for your first order.",
     fields: [
       {
         key: "occupation", kind: "select", label: "What do you do now?",
@@ -88,7 +88,7 @@ export default {
       return message;
     };
 
-    const stockNotice = h("div", { class: "notice", hidden: true }, h("p", null, "Without a place for stock and someone to pass parcels to the courier, running this business will be hard. Talk to the Forge team before you continue."));
+    const stockNotice = h("div", { class: "notice", hidden: true }, h("p", null, "Without a place for stock and someone to pass parcels to the courier, running this business will be hard. Talk to Forge before you continue."));
     const ageNotice = h("div", { class: "notice notice--error", hidden: true });
 
     function build(def) {
@@ -174,7 +174,7 @@ export default {
     return h(
       "section",
       { class: "screen" },
-      head("Tell us about yourself", "The Forge team uses your answers to plan your business with you. It takes a few minutes."),
+      head("Tell us about yourself", "Forge uses your answers to plan your business with you. It takes a few minutes."),
       datalist,
       sections,
       ageNotice,

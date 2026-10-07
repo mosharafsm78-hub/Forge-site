@@ -83,10 +83,10 @@ export default {
       const current = getState().domain;
       if (failure) {
         list.append(
-          h("div", { class: "notice notice--error", style: "margin-bottom:12px" }, h("b", null, "Domains could not be checked."), h("p", null, failure), h("p", null, "You can retry, or ask the Forge team to check a domain for you."), h("button", { type: "button", class: "btn", onclick: () => run(order) }, "Try again"))
+          h("div", { class: "notice notice--error", style: "margin-bottom:12px" }, h("b", null, "Domains could not be checked."), h("p", null, failure), h("p", null, "You can retry, or ask Forge to check a domain for you."), h("button", { type: "button", class: "btn", onclick: () => run(order) }, "Try again"))
         );
       } else if (results.size && [...results.values()].every((r) => r.status === "setup_required")) {
-        list.append(h("div", { class: "notice", style: "margin-bottom:12px" }, h("b", null, "Live domain search is not connected yet."), h("p", null, "Ask the Forge team to check the domain you want.")));
+        list.append(h("div", { class: "notice", style: "margin-bottom:12px" }, h("b", null, "Live domain search is not connected yet."), h("p", null, "Ask Forge to check the domain you want.")));
       }
       const extra = current && !order.includes(current.name) ? [current.name] : [];
       list.append(h("div", { class: "domain-list", role: "list" }, [...extra, ...order].map((d) => h("div", { role: "listitem", style: "display:contents" }, row(d)))));
@@ -136,7 +136,7 @@ export default {
     const root = h(
       "section",
       { class: "screen screen--wide" },
-      head("Choose a domain", "This is your business's web address. The Forge team registers the one you choose and connects it to your website."),
+      head("Choose a domain", "This is your business's web address. Forge registers the one you choose and connects it to your website."),
       h("div", { class: "section", style: "max-width:560px" }, h("div", { style: "display:flex;gap:8px;align-items:end;flex-wrap:wrap" }, h("div", { style: "flex:1 1 260px" }, manual.el), h("button", { type: "button", class: "btn", onclick: addManual }, "Check"))),
       list,
       foot({ back: "packaging", next: nextBtn, note: "Domain prices are for the first year. Renewal is billed yearly." })

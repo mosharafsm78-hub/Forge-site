@@ -33,7 +33,7 @@ function footer() {
   return h("footer", { class: "foot" }, h("div", { class: "wrap" },
     h("div", { class: "foot__grid" },
       h("div", { class: "foot__brand" }, h("a", { class: "word", href: "#/" }, "Forge"),
-        h("p", null, "You make the decisions. Forge handles the hassle. A real team and careful tools take the work out of starting an import business in Bangladesh.")),
+        h("p", null, "You make the decisions. Forge handles the hassle. Forge takes the work out of starting an import business in Bangladesh.")),
       h("nav", { "aria-label": "Explore" }, h("h2", { class: "foot__h" }, "Explore"), h("ul", null, NAV.map(([id, label]) => h("li", null, h("a", { href: "#/" + id }, label))))),
       h("nav", { "aria-label": "Your account" }, h("h2", { class: "foot__h" }, "Your account"), h("ul", null,
         h("li", null, h("a", { href: WORKSPACE }, "Join Now")),

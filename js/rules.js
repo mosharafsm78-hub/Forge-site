@@ -119,7 +119,7 @@ export function documentsMissing(st) {
   return missing;
 }
 
-// Documents are all in. On the live site the Forge team must also have checked them, and checked them
+// Documents are all in. On the live site Forge must also have checked them, and checked them
 // after the newest file was added: a changed file needs checking again.
 export function documentsChecked(st) {
   if (CONFIG.demo) return true;
@@ -180,22 +180,22 @@ export function firstOpenStage(st) {
 // state: done | waiting | open | locked | later
 export function stageStatus(stageId, st) {
   const stage = stageById(stageId);
-  if (!stage.built) return { state: "later", text: stage.who === "team" ? "Forge team, opens later" : "You, opens later" };
+  if (!stage.built) return { state: "later", text: "Opens later" };
   if (isComplete(stageId, st)) {
     if (stageId === "packaging") return { state: "done", text: "Quote asked for" };
     return { state: "done", text: "Done" };
   }
   if (stage.needs.some((id) => !isComplete(id, st))) {
     const need = stage.needs.find((id) => !isComplete(id, st));
-    return { state: "locked", text: "Needs: " + stageById(need).label.toLowerCase() };
+    return { state: "locked", text: "Starts after: " + stageById(need).label.toLowerCase() };
   }
-  if (stageId === "documents" && documentsMissing(st).length === 0) return { state: "waiting", text: "Forge team is checking" };
+  if (stageId === "documents" && documentsMissing(st).length === 0) return { state: "waiting", text: "Forge is checking" };
   if (stageId === "brand") {
     const b = st.brand;
-    if (b.logo.requestedAt || b.page.requestedAt) return { state: "waiting", text: "Forge team is working" };
+    if (b.logo.requestedAt || b.page.requestedAt) return { state: "waiting", text: "Forge is working" };
   }
   if (stage.ongoing) return { state: "open", text: "Ongoing" };
-  return { state: "open", text: stage.who === "team" ? "Forge team" : "You decide" };
+  return { state: "open", text: stage.who === "forge" ? "Forge's turn" : "Your turn" };
 }
 
 export function nextAfter(stageId) {
