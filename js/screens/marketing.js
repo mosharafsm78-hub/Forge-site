@@ -1,7 +1,7 @@
-import { h, formatBdt, announce, append } from "../ui.js?v=1791339886";
-import { CONFIG } from "../config.js?v=1791339886";
-import { getState, update } from "../store.js?v=1791339886";
-import { head, previewAction, reviewNote, journeyFoot, timeText } from "./common.js?v=1791339886";
+import { h, formatBdt, announce, append } from "../ui.js?v=1791340075";
+import { CONFIG } from "../config.js?v=1791340075";
+import { getState, update } from "../store.js?v=1791340075";
+import { head, previewAction, reviewNote, journeyFoot, timeText } from "./common.js?v=1791340075";
 
 const add = (el, ...k) => append(el, k);
 

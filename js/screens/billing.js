@@ -1,9 +1,10 @@
-import { h, announce, append, formatBdt } from "../ui.js?v=1791339886";
-import { getState, update } from "../store.js?v=1791339886";
-import { computeSheet } from "../sheet.js?v=1791339886";
-import { addWorkingDays, formatDay } from "../time.js?v=1791339886";
-import { head, previewAction, reviewNote, journeyFoot, dateText, freightNote } from "./common.js?v=1791339886";
-import { makeShipment, freightDue } from "../shipments.js?v=1791339886";
+import { h, announce, append, formatBdt } from "../ui.js?v=1791340075";
+import { getState, update } from "../store.js?v=1791340075";
+import { computeSheet } from "../sheet.js?v=1791340075";
+import { addWorkingDays, formatDay } from "../time.js?v=1791340075";
+import { head, previewAction, reviewNote, journeyFoot, dateText, freightNote } from "./common.js?v=1791340075";
+import { makeShipment, freightDue } from "../shipments.js?v=1791340075";
+import { payPanel } from "./payqr.js?v=1791340075";
 
 const add = (el, ...k) => append(el, k);
 const DAY = 86400000;
@@ -44,19 +45,26 @@ export default {
         add(body, h("div", { class: "notice notice--ok" }, h("p", null, h("b", null, "Payment confirmed"), " on " + dateText(pay.paidAt) + ". Forge now orders your goods.")),
           h("div", { class: "notice notice--info", style: "margin-top:16px" }, h("p", null, h("b", null, "Upload your trade licence by " + dateText(due) + "."), " That is 30 days from today. If it is not uploaded, Forge stops the process of doing business."), st.documents.licence ? h("p", null, "Your licence is uploaded.") : h("p", null, h("a", { href: "#/documents" }, "Upload it on the documents page"))));
       } else if (pay.reportedAt) {
-        add(body, h("div", { class: "notice notice--forge" }, h("p", null, h("b", null, "Waiting for Forge to confirm your payment.")), h("p", null, "You told us you paid on " + dateText(pay.reportedAt) + ". You will see it here when it is confirmed.")),
+        add(body, h("div", { class: "notice notice--forge" }, h("p", null, h("b", null, "Waiting for Forge to verify your payment.")), h("p", null, "You told us you paid on " + dateText(pay.reportedAt) + (pay.trxId ? " (transaction ID " + pay.trxId + ")" : "") + ". Please make sure the payment went through in your app. Forge checks every payment by hand, so please wait here. Nothing is ordered until Forge confirms it.")),
           previewAction("confirm the payment", () => { update((s) => { s.payment.paidAt = Date.now(); if (s.product && !s.shipments.length) s.shipments.push(makeShipment(s, "first")); }); announce("Payment confirmed."); paint(); paintFoot(); }));
       } else if (!final) {
         add(body, h("div", { class: "notice notice--warn" }, h("p", null, h("b", null, "Your bill is not final yet.")), h("p", null, "Still waiting for: " + missing.join(", ") + ". Payment opens when everything is on the bill.")),
           previewAction("show a sample final bill", () => { update((s) => { s.payment.packagingCost = 4500; s.payment.websiteFee = 3000; }); paint(); }));
       } else {
+        const payBtn = h("button", { type: "button", class: "btn btn--primary", disabled: !pay.quoteApprovedAt || !signed || String(pay.trxId || "").trim().length < 6, onclick: () => { update((s) => { s.payment.reportedAt = Date.now(); }); announce("Thank you. Forge will check your payment."); paint(); } }, "I have paid in full");
+        const trxField = () => {
+          const input = h("input", { id: "f-trx", class: "field__control", type: "text", maxlength: "40", autocomplete: "off", value: pay.trxId || "", placeholder: "For example 9H7K2L1M" });
+          input.addEventListener("input", () => { update((s) => { s.payment.trxId = input.value.trim(); }); payBtn.disabled = input.value.trim().length < 6; });
+          return h("div", { class: "field", style: "margin-top:16px" }, h("label", { class: "field__label", for: "f-trx" }, "Transaction ID from your app"), input, h("p", { class: "field__help" }, "Forge uses it to find your payment. You can press the button once you have entered it."));
+        };
         add(body, h("section", { class: "section" },
           h("div", { class: "section__head" }, h("h2", null, "Approve and pay")),
           pay.quoteApprovedAt
             ? h("p", null, h("span", { class: "pill pill--ok" }, "Packaging quote approved"))
             : h("div", { class: "notice notice--warn" }, h("p", null, "Your packaging quote and design are ready. Approve them to add the cost to your bill."), h("button", { type: "button", class: "btn", onclick: () => { update((s) => { s.payment.quoteApprovedAt = Date.now(); }); paint(); } }, "Approve packaging quote")),
-          h("p", { class: "field__help" }, "Forge sends payment details here once the quote is approved. After you pay, press the button below."),
-          h("button", { type: "button", class: "btn btn--primary", disabled: !pay.quoteApprovedAt || !signed, onclick: () => { update((s) => { s.payment.reportedAt = Date.now(); }); announce("Thank you. Forge will confirm your payment."); paint(); } }, "I have paid in full")
+          pay.quoteApprovedAt && signed ? payPanel(sheet.orderTotal) : h("p", { class: "field__help" }, "The payment QR appears here once your packaging quote is approved."),
+          pay.quoteApprovedAt && signed ? trxField() : null,
+          payBtn
         ));
       }
       add(body, otherBills(st));
@@ -91,6 +99,7 @@ export default {
       return h("section", { class: "section", style: "margin-top:32px" },
         h("div", { class: "section__head" }, h("h2", null, "Freight and other bills"), h("p", null, "Freight, duty and clearance are billed at the actual cost once your goods arrive in Bangladesh. Until then this stays empty. You pay the freight bill to receive your goods. If it is not paid, your goods stay in Forge stock.")),
         table,
+        rows.some((r) => !r.paidAt && !r.reportedAt) ? payPanel(formatBdt(rows.filter((r) => !r.paidAt && !r.reportedAt).reduce((n, r) => n + r.amount, 0))) : null,
         freightNote(),
         unpaid > 0 ? h("p", { class: "num", style: "font-weight:600" }, "Unpaid: " + formatBdt(unpaid)) : null,
         pendingReorder ? previewAction("send the bill for my reorder", () => { update((s) => { const x = s.shipments.find((y) => y.id === pendingReorder.id); x.productAmount = rate ? Math.ceil(x.priceUsd * x.qty * rate) : Math.ceil(x.priceUsd * x.qty * 100); }); paint(); }) : null

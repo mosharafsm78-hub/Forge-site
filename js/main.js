@@ -1,11 +1,11 @@
-import { mountChrome } from "./chrome.js?v=1791339886";
-import { startRouter, refreshRoute } from "./router.js?v=1791339886";
-import { getFxRate } from "./api.js?v=1791339886";
-import { setFx, attach, detach, applyServer, currentUser, update, getState } from "./store.js?v=1791339886";
-import { CONFIG } from "./config.js?v=1791339886";
-import { loadBackend } from "./backend.js?v=1791339886";
-import { setAuthNotice } from "./screens/auth.js?v=1791339886";
-import { h } from "./ui.js?v=1791339886";
+import { mountChrome } from "./chrome.js?v=1791340075";
+import { startRouter, refreshRoute } from "./router.js?v=1791340075";
+import { getFxRate } from "./api.js?v=1791340075";
+import { setFx, attach, detach, applyServer, currentUser, update, getState } from "./store.js?v=1791340075";
+import { CONFIG } from "./config.js?v=1791340075";
+import { loadBackend } from "./backend.js?v=1791340075";
+import { setAuthNotice } from "./screens/auth.js?v=1791340075";
+import { h } from "./ui.js?v=1791340075";
 
 async function loadRate() {
   try {

@@ -1,6 +1,6 @@
 // Every taka in and out of the business, worked out from the file. Pure functions, no screens.
-import { usdToBdt } from "./ui.js?v=1791339886";
-import { planNumbers } from "./planDoc.js?v=1791339886";
+import { usdToBdt } from "./ui.js?v=1791340075";
+import { planNumbers } from "./planDoc.js?v=1791340075";
 
 export const COURIER_FEE = 120; // planning figure per parcel sent, until the courier statement replaces it
 
