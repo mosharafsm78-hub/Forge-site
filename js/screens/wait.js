@@ -1,6 +1,6 @@
 // The waiting panel for work Forge does. Counts down to the time the team promised.
-import { h } from "../ui.js?v=1791345317";
-import { formatCountdown } from "../time.js?v=1791345317";
+import { h } from "../ui.js?v=1791345647";
+import { formatCountdown } from "../time.js?v=1791345647";
 
 // Returns { el, stop }. onDue runs once when the promised time arrives.
 export function waitPanel({ title, requestedAt, durationMs, lines, lateText, onDue }) {

@@ -1,6 +1,6 @@
-import { h, announce, append } from "../ui.js?v=1791345317";
-import { getState, update } from "../store.js?v=1791345317";
-import { head, dateText } from "./common.js?v=1791345317";
+import { h, announce, append } from "../ui.js?v=1791345647";
+import { getState, update } from "../store.js?v=1791345647";
+import { head, dateText } from "./common.js?v=1791345647";
 
 const add = (el, ...k) => append(el, k);
 
