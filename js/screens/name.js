@@ -1,9 +1,10 @@
-import { h } from "../ui.js?v=1791340541";
-import { getState, update } from "../store.js?v=1791340541";
-import { validateBusinessName } from "../rules.js?v=1791340541";
-import { head, textField, foot } from "./common.js?v=1791340541";
-import { nameIdeas } from "../nameIdeas.js?v=1791340541";
-import { append } from "../ui.js?v=1791340541";
+import { h } from "../ui.js?v=1791340771";
+import { getState, update } from "../store.js?v=1791340771";
+import { validateBusinessName } from "../rules.js?v=1791340771";
+import { head, textField, foot } from "./common.js?v=1791340771";
+import { nameIdeas } from "../nameIdeas.js?v=1791340771";
+import { industryById } from "../data/industries.js?v=1791340771";
+import { append } from "../ui.js?v=1791340771";
 
 export default {
   id: "name",
@@ -89,7 +90,7 @@ export default {
       paintIdeas();
       const st2 = getState();
       try {
-        ideas = await nameIdeas({ industryId: st2.industryId, productName: st2.product ? st2.product.name : "", ownerFirst: String((st2.profile && st2.profile.fullName) || "").split(/\s+/)[0], seed: round * 3 });
+        ideas = await nameIdeas({ avoid: ideas.map((x) => x.name), industryName: (industryById(st2.industryId) || {}).name, industryId: st2.industryId, productName: st2.product ? st2.product.name : "", ownerFirst: String((st2.profile && st2.profile.fullName) || "").split(/\s+/)[0], seed: round * 3 });
       } catch {
         ideas = [];
       }

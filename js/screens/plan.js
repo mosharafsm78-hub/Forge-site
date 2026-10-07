@@ -1,17 +1,17 @@
-import { h, announce, append } from "../ui.js?v=1791340541";
-import { CONFIG } from "../config.js?v=1791340541";
-import { getState, update, currentUser, applyServer } from "../store.js?v=1791340541";
-import { loadBackend } from "../backend.js?v=1791340541";
-import { HOUR } from "../time.js?v=1791340541";
-import { buildPlan } from "../planDoc.js?v=1791340541";
-import { industryById } from "../data/industries.js?v=1791340541";
-import { head, previewAction, reviewNote, journeyFoot } from "./common.js?v=1791340541";
-import { waitPanel } from "./wait.js?v=1791340541";
+import { h, announce, append } from "../ui.js?v=1791340771";
+import { CONFIG } from "../config.js?v=1791340771";
+import { getState, update, currentUser, applyServer } from "../store.js?v=1791340771";
+import { loadBackend } from "../backend.js?v=1791340771";
+import { HOUR } from "../time.js?v=1791340771";
+import { buildPlan } from "../planDoc.js?v=1791340771";
+import { industryById } from "../data/industries.js?v=1791340771";
+import { head, previewAction, reviewNote, journeyFoot } from "./common.js?v=1791340771";
+import { waitPanel } from "./wait.js?v=1791340771";
 
 const add = (el, ...k) => append(el, k);
 const WAIT = HOUR / 2;
 let asked = false;
-const AUTO_WRITER = false; // the paid plan writer is switched off; the built-in plan is used
+const AUTO_WRITER = true; // used when the server function has a model key; otherwise the built-in plan shows
 
 // Once payment is confirmed, ask the plan writer to prepare this owner's plan. If it cannot, the built-in plan is shown at the promised time.
 async function askForPlan(st, repaint) {

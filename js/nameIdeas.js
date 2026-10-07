@@ -1,6 +1,8 @@
 // Free name ideas: built from the product, the industry and the owner's first name, then checked for a free .com.
-import { slugify, validateBusinessName } from "./rules.js?v=1791340541";
-import { checkDomains } from "./api.js?v=1791340541";
+import { slugify, validateBusinessName } from "./rules.js?v=1791340771";
+import { checkDomains } from "./api.js?v=1791340771";
+import { CONFIG } from "./config.js?v=1791340771";
+import { loadBackend } from "./backend.js?v=1791340771";
 
 const WORDS = {
   footwear: { core: ["Step", "Stride", "Sole", "Tread", "Pace", "Kick", "Walk"], tail: ["Footwear", "Shoes", "Steps", "Studio", "House"] },
@@ -33,8 +35,23 @@ export function makeCandidates({ industryId, productName, ownerFirst, seed = 0 }
 }
 
 // Returns up to `want` names whose .com is free (or could not be checked, marked unchecked).
+// Real language-model names when Forge's server function is switched on. Returns [] if it is not, so the word-list names still work.
+async function modelNames(opts) {
+  if (CONFIG.demo) return [];
+  try {
+    const b = await loadBackend();
+    if (!b.forgeAi) return [];
+    const { data, error } = await b.forgeAi("names", { facts: { industry: opts.industryName || opts.industryId, product: opts.productName, owner: opts.ownerFirst, avoid: opts.avoid || [], style: opts.style } });
+    if (error || !data || !Array.isArray(data.names)) return [];
+    return data.names.filter((n) => !validateBusinessName(n));
+  } catch {
+    return [];
+  }
+}
+
 export async function nameIdeas(opts, want = 6) {
-  const cands = makeCandidates(opts).slice(0, 28);
+  const fromModel = await modelNames(opts);
+  const cands = [...new Set([...fromModel, ...makeCandidates(opts)])].slice(0, 28);
   const status = new Map();
   for (let i = 0; i < cands.length; i += 14) {
     const part = cands.slice(i, i + 14).map((n) => slugify(n) + ".com");

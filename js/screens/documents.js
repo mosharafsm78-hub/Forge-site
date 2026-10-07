@@ -1,10 +1,10 @@
-import { h, announce, append } from "../ui.js?v=1791340541";
+import { h, announce, append } from "../ui.js?v=1791340771";
 const add = (el, ...kids) => append(el, kids);
-import { CONFIG } from "../config.js?v=1791340541";
-import { getState, update, subscribe, testMode } from "../store.js?v=1791340541";
-import { payoutNeeds, validateBkash, documentsMissing, documentsChecked, isComplete, nextToDo } from "../rules.js?v=1791340541";
-import { head, textField, foot, previewAction } from "./common.js?v=1791340541";
-import { fileSlot } from "./files.js?v=1791340541";
+import { CONFIG } from "../config.js?v=1791340771";
+import { getState, update, subscribe, testMode } from "../store.js?v=1791340771";
+import { payoutNeeds, validateBkash, documentsMissing, documentsChecked, isComplete, nextToDo } from "../rules.js?v=1791340771";
+import { head, textField, foot, previewAction } from "./common.js?v=1791340771";
+import { fileSlot } from "./files.js?v=1791340771";
 
 const LABELS = { nidFront: "NID, front", nidBack: "NID, back", cheque: "Cheque leaf", bkash: "bKash number", agreementSigned: "Signed agreement" };
 

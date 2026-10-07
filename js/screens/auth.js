@@ -1,10 +1,10 @@
 // Join, log in, forgot and reset password, and the "check your email" page.
 // These pages stand alone: no stage list and no order sheet.
-import { h, announce } from "../ui.js?v=1791340541";
-import { CONFIG } from "../config.js?v=1791340541";
-import { EMAIL_RE } from "../rules.js?v=1791340541";
-import { loadBackend } from "../backend.js?v=1791340541";
-import { textField } from "./common.js?v=1791340541";
+import { h, announce } from "../ui.js?v=1791340771";
+import { CONFIG } from "../config.js?v=1791340771";
+import { EMAIL_RE } from "../rules.js?v=1791340771";
+import { loadBackend } from "../backend.js?v=1791340771";
+import { textField } from "./common.js?v=1791340771";
 
 export const AUTH_IDS = ["login", "signup", "forgot", "confirm", "reset"];
 export const OPEN_AUTH_IDS = ["login", "signup", "forgot", "confirm"];

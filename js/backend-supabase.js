@@ -1,6 +1,6 @@
 // The real account and storage service. Everything the screens need from the server is here.
-import { createClient } from "./vendor/supabase.js?v=1791340541";
-import { CONFIG } from "./config.js?v=1791340541";
+import { createClient } from "./vendor/supabase.js?v=1791340771";
+import { CONFIG } from "./config.js?v=1791340771";
 
 const sb = createClient(CONFIG.authUrl, CONFIG.authKey, {
   auth: { flowType: "pkce", persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
@@ -74,7 +74,12 @@ export const backend = {
   },
   // Asks the plan writer to prepare this owner's business plan. The writer checks the payment itself.
   async generatePlan(body) {
-    const { data, error } = await sb.functions.invoke("generate-plan", { body });
+    const { data, error } = await sb.functions.invoke("forge-ai", { body: { ...body, task: "plan" } });
+    return { data, error: error ? String(error.message || error) : data && data.error ? String(data.error) : "" };
+  },
+  // Real language-model help (names, and later the chat assistant), through Forge's own server function.
+  async forgeAi(task, body) {
+    const { data, error } = await sb.functions.invoke("forge-ai", { body: { ...body, task } });
     return { data, error: error ? String(error.message || error) : data && data.error ? String(data.error) : "" };
   },
   async loadFile(userId) {
