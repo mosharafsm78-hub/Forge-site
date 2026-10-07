@@ -1,10 +1,10 @@
-import { h, announce, append } from "../ui.js?v=1791340485";
+import { h, announce, append } from "../ui.js?v=1791340541";
 const add = (el, ...kids) => append(el, kids);
-import { CONFIG } from "../config.js?v=1791340485";
-import { getState, update, subscribe, testMode } from "../store.js?v=1791340485";
-import { payoutNeeds, validateBkash, documentsMissing, documentsChecked, isComplete, nextToDo } from "../rules.js?v=1791340485";
-import { head, textField, foot, previewAction } from "./common.js?v=1791340485";
-import { fileSlot } from "./files.js?v=1791340485";
+import { CONFIG } from "../config.js?v=1791340541";
+import { getState, update, subscribe, testMode } from "../store.js?v=1791340541";
+import { payoutNeeds, validateBkash, documentsMissing, documentsChecked, isComplete, nextToDo } from "../rules.js?v=1791340541";
+import { head, textField, foot, previewAction } from "./common.js?v=1791340541";
+import { fileSlot } from "./files.js?v=1791340541";
 
 const LABELS = { nidFront: "NID, front", nidBack: "NID, back", cheque: "Cheque leaf", bkash: "bKash number", agreementSigned: "Signed agreement" };
 
@@ -109,15 +109,17 @@ export default {
       head("Documents and agreement", "Forge needs these to import your goods and set up your courier account."),
       h("div", { class: "notice notice--error", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Nothing starts without your signed agreement."), " Forge does not make your logo, page or packaging, register your domain, order your goods or take payment until your signed agreement is uploaded here. The next stages stay closed until then.")),
       CONFIG.demo ? h("div", { class: "notice notice--info", style: "margin-bottom:24px" }, h("p", null, "Preview: files you choose here are not sent anywhere. Secure storage is connected before real documents are collected.")) : h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Your files are private."), " They are stored securely and only you and the Forge staff who handle your file can open them.")),
-      !CONFIG.demo ? previewAction("add sample documents so I can test", () => {
+      !CONFIG.demo ? previewAction("skip this step: add sample documents and confirm them", () => {
         const f = (n) => ({ name: n, size: 120000, type: "image/jpeg", at: Date.now() });
         update((s) => {
           s.documents.agreementReady = true;
           s.documents.nidFront = f("sample-nid-front.jpg");
           s.documents.nidBack = f("sample-nid-back.jpg");
           if (need.bank) { s.documents.cheque = f("sample-cheque.jpg"); if (!s.documents.bankName) s.documents.bankName = "Sample Bank"; }
-          if (need.bkash) s.documents.bkash = "01712345678";
+          if (need.bkash && !s.documents.bkash) s.documents.bkash = "01712345678";
           s.documents.agreementSigned = { name: "sample-signed-agreement.pdf", size: 240000, type: "application/pdf", at: Date.now() };
+          s.documents.verifiedAt = Date.now() + 1;
+          s.documents.reviewNote = "";
         });
         paintAgreement(); refresh();
       }) : null,
