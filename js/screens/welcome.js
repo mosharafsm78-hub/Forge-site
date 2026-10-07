@@ -1,9 +1,9 @@
-import { h } from "../ui.js?v=1791345196";
-import { getState } from "../store.js?v=1791345196";
-import { previewAction } from "./common.js?v=1791345196";
-import { loadSample } from "../sample.js?v=1791345196";
-import { STAGES, PHASES, stageNumber } from "../stages.js?v=1791345196";
-import { canOpen, canFill, stageStatus } from "../rules.js?v=1791345196";
+import { h } from "../ui.js?v=1791345317";
+import { getState } from "../store.js?v=1791345317";
+import { previewAction } from "./common.js?v=1791345317";
+import { loadSample } from "../sample.js?v=1791345317";
+import { STAGES, PHASES, stageNumber } from "../stages.js?v=1791345317";
+import { canOpen, canFill, stageStatus } from "../rules.js?v=1791345317";
 
 const CHECK = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function tick() {

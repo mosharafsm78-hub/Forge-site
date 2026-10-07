@@ -1,10 +1,10 @@
-import { h, announce, append, formatBdt } from "../ui.js?v=1791345196";
-import { getState, update, subscribe } from "../store.js?v=1791345196";
-import { computeSheet } from "../sheet.js?v=1791345196";
-import { addWorkingDays, formatDay } from "../time.js?v=1791345196";
-import { head, previewAction, reviewNote, journeyFoot, dateText, freightNote } from "./common.js?v=1791345196";
-import { makeShipment, freightDue } from "../shipments.js?v=1791345196";
-import { payPanel } from "./payqr.js?v=1791345196";
+import { h, announce, append, formatBdt } from "../ui.js?v=1791345317";
+import { getState, update, subscribe } from "../store.js?v=1791345317";
+import { computeSheet } from "../sheet.js?v=1791345317";
+import { addWorkingDays, formatDay } from "../time.js?v=1791345317";
+import { head, previewAction, reviewNote, journeyFoot, dateText, freightNote } from "./common.js?v=1791345317";
+import { makeShipment, freightDue } from "../shipments.js?v=1791345317";
+import { payPanel } from "./payqr.js?v=1791345317";
 
 const add = (el, ...k) => append(el, k);
 const DAY = 86400000;
@@ -57,6 +57,7 @@ export default {
           input.addEventListener("input", () => { update((s) => { s.payment.trxId = input.value.trim(); }); payBtn.disabled = !(sheet.orderTotalNum > 0) || input.value.trim().length < 6; });
           return h("div", { class: "field", style: "margin-top:16px" }, h("label", { class: "field__label", for: "f-trx" }, "Transaction ID from your app"), input, h("p", { class: "field__help" }, "Forge uses it to find your payment. You can press the button once you have entered it."));
         };
+        const noRefund = () => h("div", { class: "notice notice--warn", style: "margin-top:16px" }, h("p", null, h("b", null, "No refunds, no cancellations. "), "Once you pay, your payment is not refunded and your order is not cancelled. Only pay if you are sure."));
         add(body, h("section", { class: "section" },
           h("div", { class: "section__head" }, h("h2", null, "Approve and pay")),
           pay.quoteApprovedAt
@@ -64,6 +65,7 @@ export default {
             : h("div", { class: "notice notice--warn" }, h("p", null, "Your packaging quote and design are ready. Approve them to add the cost to your bill."), h("button", { type: "button", class: "btn", onclick: () => { update((s) => { s.payment.quoteApprovedAt = Date.now(); }); paint(); } }, "Approve packaging quote")),
           pay.quoteApprovedAt && signed ? payPanel(sheet.orderTotal) : h("p", { class: "field__help" }, "The payment QR appears here once your packaging quote is approved."),
           pay.quoteApprovedAt && signed ? trxField() : null,
+          noRefund(),
           payBtn
         ));
       }

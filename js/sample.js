@@ -1,8 +1,8 @@
 // Sample business for the preview. Fills the whole file so a reviewer can open any page.
 // Only the preview offers this. Everything is labelled as sample data elsewhere.
-import { update } from "./store.js?v=1791345196";
-import { sampleOptions } from "./logo.js?v=1791345196";
-import { makeShipment } from "./shipments.js?v=1791345196";
+import { update } from "./store.js?v=1791345317";
+import { sampleOptions } from "./logo.js?v=1791345317";
+import { makeShipment } from "./shipments.js?v=1791345317";
 
 const file = (name) => ({ name, size: 184320, type: "image/png", at: Date.now() });
 

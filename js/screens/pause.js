@@ -1,12 +1,12 @@
-import { h, announce, append } from "../ui.js?v=1791345196";
-import { getState, update } from "../store.js?v=1791345196";
-import { head, dateText } from "./common.js?v=1791345196";
+import { h, announce, append } from "../ui.js?v=1791345317";
+import { getState, update } from "../store.js?v=1791345317";
+import { head, dateText } from "./common.js?v=1791345317";
 
 const add = (el, ...k) => append(el, k);
 
 const RULES = [
-  ["Before your goods are ordered", "You can stop. Money already spent for you, such as the domain, packaging and website work, is not returned. The rest of what you paid is returned to you."],
-  ["Ordered, not yet shipped", "Forge asks the supplier to cancel. If the supplier agrees, the product cost comes back to you. If not, the goods are shipped and become yours."],
+  ["Before your goods are ordered", "You can stop at any time. Payments are not refunded and orders are not cancelled, so everything you have paid for stays with your business."],
+  ["Ordered, not yet shipped", "Orders cannot be cancelled. The goods are shipped and become yours."],
   ["On the way, or arrived", "The goods are yours. Freight and duty are billed at the actual cost. If the freight is not paid, the goods stay in Forge stock."],
   ["Selling", "You can pause at any time. Forge pauses your ads and does not confirm new orders. Parcels already with the courier continue. Your stock stays with you."],
   ["Ending the business", "Sell the stock you have, or keep it. Forge does not promise to buy stock back. Returned items go back to your stock."],
@@ -30,7 +30,7 @@ export default {
       );
     }
     const root = h("section", { class: "screen" }, head("Pause or exit", "You can pause your business or stop at any point. This is what happens at each one."),
-      h("div", { class: "notice notice--info", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Draft for review."), " These rules must be confirmed by a lawyer and written into the agreement before owners see them.")),
+      h("div", { class: "notice notice--info", style: "margin-bottom:24px" }, h("p", null, h("b", null, "No refunds, no cancellations."), " Once you pay, your payment is not refunded and your order is not cancelled. Your signed agreement has the full terms.")),
       body);
     paint();
     return root;
