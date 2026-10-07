@@ -1,7 +1,7 @@
 // Building blocks shared by the screens: headings, form fields and the footer.
 import { h } from "../ui.js";
 import { CONFIG } from "../config.js";
-import { getState } from "../store.js";
+import { getState, testMode, syncStaff } from "../store.js";
 import { isComplete } from "../rules.js";
 import { stageById, STAGES, PHASES, stageNumber } from "../stages.js";
 
@@ -105,9 +105,16 @@ export function foot({ back, next, note }) {
 }
 
 // A button that only exists in the sample-data preview, so a reviewer can see a step Forge normally does.
+export function playForge(fn) {
+  return async (e) => {
+    fn(e);
+    if (CONFIG.demo) return;
+    if (await syncStaff()) window.dispatchEvent(new HashChangeEvent("hashchange"));
+  };
+}
 export function previewAction(label, fn, inline = false) {
-  if (!CONFIG.demo) return null;
-  const button = h("button", { type: "button", class: "btn btn--small btn--quiet", onclick: fn }, "Demo: " + label);
+  if (!testMode()) return null;
+  const button = h("button", { type: "button", class: "btn btn--small btn--quiet", onclick: playForge(fn) }, "Demo: " + label);
   return inline ? button : h("p", null, button);
 }
 

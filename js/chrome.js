@@ -2,7 +2,7 @@
 import { h } from "./ui.js";
 import { CONFIG } from "./config.js";
 import { STAGES, PHASES, stageNumber } from "./stages.js";
-import { getState, subscribe, isSaved, saveStatus, currentUser, saveNow } from "./store.js";
+import { getState, subscribe, isSaved, saveStatus, currentUser, saveNow, testMode, resetTestFile } from "./store.js";
 import { loadBackend } from "./backend.js";
 import { canOpen, stageStatus } from "./rules.js";
 import { renderSheet } from "./sheet.js";
@@ -41,11 +41,13 @@ export function mountChrome(root) {
   els.main = h("main", { class: "main", id: "main", tabindex: "-1" });
   els.sheet = h("aside", { class: "sheet", id: "sheet", "aria-label": "Order sheet" });
 
+  els.testbar = h("div", { class: "testbar", role: "note", hidden: true });
   const shell = h("div", { class: "shell" }, els.top, els.rail, els.main, els.sheet);
   root.replaceChildren(
     ...(CONFIG.demo
       ? [h("div", { class: "demo-banner", role: "note" }, "Demo: sample data and pretend payments. Nothing here is real and nothing is saved to an account. Use the \"Demo\" buttons to play Forge's side, such as confirming a payment.")]
       : []),
+    els.testbar,
     shell,
     els.live
   );
@@ -151,8 +153,33 @@ function renderSheetEl() {
   );
 }
 
+let confirmReset = false;
+function renderTestbar() {
+  const on = testMode() && !CONFIG.demo && Boolean(currentUser());
+  els.testbar.hidden = !on;
+  if (!on) return;
+  els.testbar.replaceChildren(
+    h("span", null, h("b", null, "Test account. "), "Buttons marked Demo play Forge's side on your real file, so each step changes the next pages."),
+    h(
+      "button",
+      {
+        type: "button",
+        class: "btn btn--small",
+        onclick: async () => {
+          if (!confirmReset) { confirmReset = true; renderTestbar(); return; }
+          confirmReset = false;
+          await resetTestFile();
+          window.location.hash = "#/welcome";
+        },
+      },
+      confirmReset ? "Tap again to wipe this file" : "Reset my test file"
+    )
+  );
+}
+
 export function refreshChrome() {
   if (!els.rail) return;
+  renderTestbar();
   renderRail();
   renderSheetEl();
   renderTop();

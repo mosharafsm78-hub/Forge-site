@@ -128,12 +128,15 @@ let server = null; // the backend, when live
 let saveState = "saved"; // saved | saving | error
 let staffData = {};
 let ownerBase = {};
+let testAccount = false;
 let retryTimer = null;
 let dirty = false;
 
 export const saveStatus = () => saveState;
 export const currentUser = () => account;
 export const isLive = () => Boolean(CONFIG.live);
+// Test tools show in the sample-data preview, and on a real account only if it is a listed test account.
+export const testMode = () => Boolean(CONFIG.demo || testAccount);
 
 
 function load() {
@@ -223,6 +226,8 @@ export async function attach(backend, user) {
   account = user;
   dirty = false;
   saveState = "saved";
+  testAccount = false;
+  if (CONFIG.testTools && typeof backend.isTestAccount === "function") testAccount = await backend.isTestAccount().catch(() => false);
   const file = await backend.loadFile(user.id);
   ownerBase = file.owner_data || {};
   staffData = file.staff_data || {};
@@ -247,6 +252,7 @@ export function detach() {
   window.clearTimeout(retryTimer);
   server = null;
   account = null;
+  testAccount = false;
   dirty = false;
   staffData = {};
   ownerBase = {};
@@ -268,4 +274,44 @@ export function reset() {
     /* storage unavailable, nothing to clear */
   }
   listeners.forEach((fn) => fn(state));
+}
+
+// ---- Test tools: play Forge's side on a real file ----
+const getPath = (o, p) => p.split(".").reduce((x, k) => (x == null ? undefined : x[k]), o);
+function setPath(o, p, v) {
+  const keys = p.split(".");
+  let t = o;
+  for (let i = 0; i < keys.length - 1; i++) t = t[keys[i]] = t[keys[i]] || {};
+  t[keys[keys.length - 1]] = v;
+}
+
+// Send the staff-owned parts of the file to the database, so the next pages see them like a real Forge step.
+export async function syncStaff() {
+  if (!server || !account || !testAccount || !server.testPatch) return false;
+  const patch = {};
+  for (const path of STAFF_PATHS) {
+    const v = getPath(state, path);
+    if (v !== undefined && v !== null) setPath(patch, path, clone(v));
+  }
+  try {
+    const row = await server.testPatch(patch);
+    staffData = row || staffData;
+    const fx = state.fx;
+    state = compose(dirty ? toOwnerData(state) : ownerBase, staffData);
+    state.fx = fx;
+    listeners.forEach((fn) => fn(state));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Wipe a test file back to a blank start.
+export async function resetTestFile() {
+  if (!server || !account || !testAccount) return;
+  const backend = server;
+  const user = account;
+  await backend.testReset();
+  await attach(backend, user);
+  if (!getState().profile.email) update((s) => { s.profile.email = user.email; });
 }

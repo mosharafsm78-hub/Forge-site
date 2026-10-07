@@ -117,6 +117,20 @@ export const backend = {
     if (error) throw new Error("Could not save. You may not have permission.");
     return data;
   },
+  // ---- Test accounts only: play Forge's side on your own file. The database refuses everyone else. ----
+  async isTestAccount() {
+    const { data, error } = await sb.rpc("is_test_account");
+    return !error && data === true;
+  },
+  async testPatch(patch) {
+    const { data, error } = await sb.rpc("test_patch_file", { p_patch: patch });
+    if (error) throw new Error("Could not save the test step.");
+    return data;
+  },
+  async testReset() {
+    const { error } = await sb.rpc("test_reset_file");
+    if (error) throw new Error("Could not reset the test file.");
+  },
   async documentUrl(path) {
     const { data, error } = await sb.storage.from("documents").createSignedUrl(path, 300);
     if (error || !data) throw new Error("Could not open the document.");

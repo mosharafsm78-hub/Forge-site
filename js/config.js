@@ -14,6 +14,9 @@ export const CONFIG = {
   fake,
   // Accounts are real unless this is the sample-data preview.
   live: !demo,
+  // Test tools: buttons that play Forge's side on a real file. They only appear for accounts listed in the
+  // test_accounts table. Set this to false (and empty that table) to switch them off for good.
+  testTools: true,
   productPageSize: 24,
   requestTimeoutMs: 15000,
 };

@@ -39,7 +39,7 @@ function footer() {
       h("nav", { "aria-label": "Your account" }, h("h2", { class: "foot__h" }, "Your account"), h("ul", null,
         h("li", null, h("a", { href: WORKSPACE }, "Join Now")),
         LOGIN ? h("li", null, h("a", { href: LOGIN }, "Log in")) : null,
-        h("li", null, h("a", { href: DEMO }, "Try the demo")))),
+        h("li", null, h("a", { href: DEMO }, "Try the demo"))))),
     h("p", { class: "foot__risk" }, "Forge can make mistakes, and a business can lose money. Forge does not promise sales or profit. Costs and bills shown on this site are examples."),
     h("p", { class: "foot__copy" }, "\u00a9 " + new Date().getFullYear() + " Forge. Chattogram, Bangladesh.")));
 }

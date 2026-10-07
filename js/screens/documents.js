@@ -1,9 +1,9 @@
 import { h, announce, append } from "../ui.js";
 const add = (el, ...kids) => append(el, kids);
 import { CONFIG } from "../config.js";
-import { getState, update, subscribe } from "../store.js";
+import { getState, update, subscribe, testMode } from "../store.js";
 import { payoutNeeds, validateBkash, documentsMissing, documentsChecked, isComplete, nextToDo } from "../rules.js";
-import { head, textField, foot } from "./common.js";
+import { head, textField, foot, previewAction } from "./common.js";
 import { fileSlot } from "./files.js";
 
 const LABELS = { nidFront: "NID, front", nidBack: "NID, back", cheque: "Cheque leaf", bkash: "bKash number", agreementSigned: "Signed agreement" };
@@ -25,6 +25,7 @@ export default {
       const s = getState();
       checkBox.replaceChildren();
       if (CONFIG.demo || documentsMissing(s).length) return;
+      if (!documentsChecked(s)) add(checkBox, previewAction("Forge confirms my documents", () => { update((x) => { x.documents.verifiedAt = Date.now(); x.documents.agreementReady = true; x.documents.reviewNote = ""; }); refresh(); }));
       const d = s.documents;
       if (documentsChecked(s)) add(checkBox, h("div", { class: "notice notice--ok", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Your documents are checked.")), h("p", null, "The next stages are open.")));
       else if (d.reviewNote && !d.verifiedAt) add(checkBox, h("div", { class: "notice notice--error", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Forge needs a change.")), h("p", null, d.reviewNote)));
@@ -88,7 +89,7 @@ export default {
       if (!d.agreementReady) {
         add(agreementBox, 
           h("div", { class: "notice" }, h("p", null, h("b", null, "Your agreement is not ready yet.")), h("p", null, "Forge places it here. Then you download it, print it, sign it, scan it and upload it back.")),
-          CONFIG.demo ? h("p", null, h("button", { type: "button", class: "btn btn--small btn--quiet", onclick: () => { update((s) => { s.documents.agreementReady = true; }); paintAgreement(); refresh(); } }, "Preview only: show the agreement as ready")) : null
+          previewAction("show the agreement as ready", () => { update((s) => { s.documents.agreementReady = true; }); paintAgreement(); refresh(); })
         );
       } else {
         add(agreementBox, 
@@ -108,6 +109,18 @@ export default {
       head("Documents and agreement", "Forge needs these to import your goods and set up your courier account."),
       h("div", { class: "notice notice--error", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Nothing starts without your signed agreement."), " Forge does not make your logo, page or packaging, register your domain, order your goods or take payment until your signed agreement is uploaded here. The next stages stay closed until then.")),
       CONFIG.demo ? h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, "Preview: files you choose here are not sent anywhere. Secure storage is connected before real documents are collected.")) : h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Your files are private."), " They are stored securely and only you and the Forge staff who handle your file can open them.")),
+      !CONFIG.demo ? previewAction("add sample documents so I can test", () => {
+        const f = (n) => ({ name: n, size: 120000, type: "image/jpeg", at: Date.now() });
+        update((s) => {
+          s.documents.agreementReady = true;
+          s.documents.nidFront = f("sample-nid-front.jpg");
+          s.documents.nidBack = f("sample-nid-back.jpg");
+          if (need.bank) { s.documents.cheque = f("sample-cheque.jpg"); if (!s.documents.bankName) s.documents.bankName = "Sample Bank"; }
+          if (need.bkash) s.documents.bkash = "01712345678";
+          s.documents.agreementSigned = { name: "sample-signed-agreement.pdf", size: 240000, type: "application/pdf", at: Date.now() };
+        });
+        paintAgreement(); refresh();
+      }) : null,
       checkBox,
       section("What you need", null, checklist),
       section("Your NID", "Needed to register you as the owner and to open your courier account.", nidFront.el, nidBack.el),

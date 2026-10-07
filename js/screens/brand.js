@@ -1,7 +1,7 @@
 import { h, announce, append } from "../ui.js";
 const add = (el, ...kids) => append(el, kids);
 import { CONFIG } from "../config.js";
-import { getState, update } from "../store.js";
+import { getState, update, testMode, syncStaff } from "../store.js";
 import { validateBusinessName, isComplete, nextToDo } from "../rules.js";
 import { HOUR } from "../time.js";
 import { LOGO_TYPES, LOGO_COLORS, suggestionFor, sampleOptions, logoView } from "../logo.js";
@@ -144,7 +144,7 @@ export default {
         });
         stoppers.push(w.stop);
         add(logoBox, w.el);
-        if (CONFIG.demo) add(logoBox, demoSkip("Preview only: skip the wait and show sample logos", () => {
+        if (testMode()) add(logoBox, demoSkip("Demo: skip the wait and show sample logos", () => {
           update((s) => {
             s.brand.logo.options = sampleOptions(s.brand.logo.types, s.brand.logo.color);
             s.brand.logo.deliveredAt = Date.now();
@@ -181,7 +181,7 @@ export default {
       add(logoBox, 
         h("p", { class: "field__help" }, logo.chosenId ? "Your logo is chosen. You can pick another design if you change your mind." : "Choose the design you like best."),
         grid,
-        CONFIG.demo ? h("p", { class: "field__help" }, "These are sample designs drawn for the preview. Real designs come from Forge.") : null
+        testMode() ? h("p", { class: "field__help" }, "These are sample designs drawn for the preview. Real designs come from Forge.") : null
       );
     }
 
@@ -245,7 +245,7 @@ export default {
         });
         stoppers.push(w.stop);
         add(pageBox, w.el);
-        if (CONFIG.demo) add(pageBox, demoSkip("Preview only: skip the wait and show a sample page", () => {
+        if (testMode()) add(pageBox, demoSkip("Demo: skip the wait and show a sample page", () => {
           update((s) => {
             s.brand.page.url = "facebook.com/sample-page";
             s.brand.page.deliveredAt = Date.now();
@@ -260,14 +260,14 @@ export default {
           "div",
           { class: "notice notice--ok" },
           h("p", null, h("b", null, page.pageName)),
-          h("p", null, CONFIG.demo ? h("span", null, page.url, " (sample, not a real page)") : h("a", { href: "https://" + page.url.replace(/^https?:\/\//, ""), target: "_blank", rel: "noopener noreferrer" }, page.url)),
+          h("p", null, testMode() ? h("span", null, page.url, " (sample, not a real page)") : h("a", { href: "https://" + page.url.replace(/^https?:\/\//, ""), target: "_blank", rel: "noopener noreferrer" }, page.url)),
           h("p", { class: "field__help" }, "You are an admin of this page, and so is Forge. Forge adds your chosen logo to the page.")
         )
       );
     }
 
     function demoSkip(label, fn) {
-      return h("p", null, h("button", { type: "button", class: "btn btn--small btn--quiet", onclick: fn }, label));
+      return h("p", null, h("button", { type: "button", class: "btn btn--small btn--quiet", onclick: async () => { fn(); if (!CONFIG.demo && (await syncStaff())) window.dispatchEvent(new HashChangeEvent("hashchange")); } }, label));
     }
 
     function paintFoot() {
