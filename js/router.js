@@ -1,29 +1,29 @@
 // Hash routes: #/profile, #/industry, and so on. A stage only opens when the ones before it are complete.
-import { h } from "./ui.js?v=1791339729";
-import { getState, currentUser, subscribe } from "./store.js?v=1791339729";
-import { CONFIG } from "./config.js?v=1791339729";
-import auth, { AUTH_IDS, OPEN_AUTH_IDS } from "./screens/auth.js?v=1791339729";
-import { canFill, blockingStage } from "./rules.js?v=1791339729";
-import { setCurrent } from "./chrome.js?v=1791339729";
-import welcome from "./screens/welcome.js?v=1791339729";
-import profile from "./screens/profile.js?v=1791339729";
-import industry from "./screens/industry.js?v=1791339729";
-import product from "./screens/product.js?v=1791339729";
-import name from "./screens/name.js?v=1791339729";
-import domain from "./screens/domain.js?v=1791339729";
-import brand from "./screens/brand.js?v=1791339729";
-import packaging from "./screens/packaging.js?v=1791339729";
-import documents from "./screens/documents.js?v=1791339729";
-import billing from "./screens/billing.js?v=1791339729";
-import plan from "./screens/plan.js?v=1791339729";
-import freight from "./screens/freight.js?v=1791339729";
-import marketing from "./screens/marketing.js?v=1791339729";
-import orders from "./screens/orders.js?v=1791339729";
-import returns from "./screens/returns.js?v=1791339729";
-import reorder from "./screens/reorder.js?v=1791339729";
-import pause from "./screens/pause.js?v=1791339729";
-import summary from "./screens/summary.js?v=1791339729";
-import accounting from "./screens/accounting.js?v=1791339729";
+import { h } from "./ui.js?v=1791339886";
+import { getState, currentUser, subscribe } from "./store.js?v=1791339886";
+import { CONFIG } from "./config.js?v=1791339886";
+import auth, { AUTH_IDS, OPEN_AUTH_IDS } from "./screens/auth.js?v=1791339886";
+import { canFill, blockingStage } from "./rules.js?v=1791339886";
+import { setCurrent } from "./chrome.js?v=1791339886";
+import welcome from "./screens/welcome.js?v=1791339886";
+import profile from "./screens/profile.js?v=1791339886";
+import industry from "./screens/industry.js?v=1791339886";
+import product from "./screens/product.js?v=1791339886";
+import name from "./screens/name.js?v=1791339886";
+import domain from "./screens/domain.js?v=1791339886";
+import brand from "./screens/brand.js?v=1791339886";
+import packaging from "./screens/packaging.js?v=1791339886";
+import documents from "./screens/documents.js?v=1791339886";
+import billing from "./screens/billing.js?v=1791339886";
+import plan from "./screens/plan.js?v=1791339886";
+import freight from "./screens/freight.js?v=1791339886";
+import marketing from "./screens/marketing.js?v=1791339886";
+import orders from "./screens/orders.js?v=1791339886";
+import returns from "./screens/returns.js?v=1791339886";
+import reorder from "./screens/reorder.js?v=1791339886";
+import pause from "./screens/pause.js?v=1791339886";
+import summary from "./screens/summary.js?v=1791339886";
+import accounting from "./screens/accounting.js?v=1791339886";
 
 const screens = { welcome, profile, industry, product, name, brand, packaging, domain, documents, summary, billing, plan, freight, marketing, orders, returns, reorder, pause, accounting, ...auth };
 
@@ -51,7 +51,7 @@ let lastLocked = false;
 
 // On every page: a plain reminder, like the one under an AI chat box.
 function riskBox() {
-  return h("p", { class: "riskbox", role: "note" }, h("b", null, "Forge can make mistakes, and a business can lose money. "), "Forge does not promise sales or profit. Check every amount before you pay, and tell Forge if something looks wrong. ", h("a", { href: "#/pause" }, "Pause or exit anytime"), ".");
+  return h("p", { class: "riskbox", role: "note" }, h("b", null, "Forge is your business assistant. "), "It makes starting a business easier, but it cannot guarantee a profit. Forge can make mistakes, and like any business, yours can lose money at times. Check every amount before you pay. ", h("a", { href: "#/pause" }, "Pause or exit anytime"), ".");
 }
 
 let toastTimer = null;

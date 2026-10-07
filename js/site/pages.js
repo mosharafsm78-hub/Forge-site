@@ -1,5 +1,5 @@
 // Pages of the public Forge site. Every figure shown here is labelled as an example.
-import { h } from "../ui.js?v=1791339729";
+import { h } from "../ui.js?v=1791339886";
 
 const cta = (ws, label = "Join Now", cls = "btn btn--primary") => h("a", { class: cls, href: ws }, label);
 const link = (id, label, cls = "btn") => h("a", { class: cls, href: "#/" + id }, label);

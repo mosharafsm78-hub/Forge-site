@@ -1,8 +1,8 @@
-import { h, formatUsd, formatBdt, usdToBdt } from "../ui.js?v=1791339729";
-import { getState, reset } from "../store.js?v=1791339729";
-import { industryById } from "../data/industries.js?v=1791339729";
-import { head, foot } from "./common.js?v=1791339729";
-import { addWorkingDays, formatDay } from "../time.js?v=1791339729";
+import { h, formatUsd, formatBdt, usdToBdt } from "../ui.js?v=1791339886";
+import { getState, reset } from "../store.js?v=1791339886";
+import { industryById } from "../data/industries.js?v=1791339886";
+import { head, foot } from "./common.js?v=1791339886";
+import { addWorkingDays, formatDay } from "../time.js?v=1791339886";
 
 export default {
   id: "summary",

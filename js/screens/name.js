@@ -1,10 +1,10 @@
-import { h } from "../ui.js?v=1791339729";
-import { getState, update } from "../store.js?v=1791339729";
-import { validateBusinessName } from "../rules.js?v=1791339729";
-import { head, textField, foot, previewAction } from "./common.js?v=1791339729";
-import { HOUR } from "../time.js?v=1791339729";
-import { waitPanel } from "./wait.js?v=1791339729";
-import { append } from "../ui.js?v=1791339729";
+import { h } from "../ui.js?v=1791339886";
+import { getState, update } from "../store.js?v=1791339886";
+import { validateBusinessName } from "../rules.js?v=1791339886";
+import { head, textField, foot, previewAction } from "./common.js?v=1791339886";
+import { HOUR } from "../time.js?v=1791339886";
+import { waitPanel } from "./wait.js?v=1791339886";
+import { append } from "../ui.js?v=1791339886";
 
 export default {
   id: "name",
