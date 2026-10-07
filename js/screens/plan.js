@@ -1,13 +1,37 @@
 import { h, announce, append } from "../ui.js";
 import { CONFIG } from "../config.js";
-import { getState, update } from "../store.js";
+import { getState, update, currentUser, applyServer } from "../store.js";
+import { loadBackend } from "../backend.js";
 import { HOUR } from "../time.js";
 import { buildPlan } from "../planDoc.js";
+import { industryById } from "../data/industries.js";
 import { head, previewAction, reviewNote, journeyFoot } from "./common.js";
 import { waitPanel } from "./wait.js";
 
 const add = (el, ...k) => append(el, k);
-const WAIT = HOUR / 2; // Forge writes the plan within 30 minutes of the payment being confirmed
+const WAIT = HOUR / 2;
+let asked = false;
+
+// Once payment is confirmed, ask the plan writer to prepare this owner's plan. If it cannot, the built-in plan is shown at the promised time.
+async function askForPlan(st, repaint) {
+  if (asked || CONFIG.demo || !currentUser() || !st.payment.paidAt || (st.plan.doc && st.plan.doc.generatedAt)) return;
+  asked = true;
+  try {
+    const b = await loadBackend();
+    if (!b.generatePlan) return;
+    const ind = industryById ? industryById(st.industryId) : null;
+    const { error } = await b.generatePlan({
+      draft: buildPlan(st),
+      facts: { name: st.name.chosen, product: st.product ? st.product.name : "", industry: ind ? ind.name : "", qty: st.qty, owner: String((st.profile && st.profile.fullName) || "").split(/\s+/)[0] },
+    });
+    if (error) return;
+    const file = await b.loadFile(currentUser().id);
+    applyServer({ staff_data: file.staff_data });
+    repaint();
+  } catch {
+    // the built-in plan covers it
+  }
+} // Forge writes the plan within 30 minutes of the payment being confirmed
 
 function renderSection(sec) {
   const kids = [h("div", { class: "section__head" }, h("h2", null, sec.title))];
@@ -36,7 +60,10 @@ export default {
       if (stopper) stopper();
       const st = getState();
       body.replaceChildren();
-      if (!st.plan.draftedAt) {
+      const due = st.payment && st.payment.paidAt && Date.now() >= st.payment.paidAt + WAIT;
+      const ready = (st.plan.draftedAt && st.plan.draftedAt <= Date.now()) || due;
+      if (st.payment && st.payment.paidAt) askForPlan(st, paint);
+      if (!ready) {
         const paid = st.payment && st.payment.paidAt;
         if (paid) {
           const w = waitPanel({
@@ -45,6 +72,7 @@ export default {
             durationMs: WAIT,
             lines: ["Forge writes it from your file: your costs, your freight, your returns risk and your first 90 days. It checks the numbers before you see it.", "It takes about 30 minutes after your payment is confirmed."],
             lateText: "Forge is checking the numbers. It will appear here in a few minutes.",
+            onDue: paint,
           });
           stopper = w.stop;
           add(body, w.el);

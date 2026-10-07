@@ -72,6 +72,11 @@ export const backend = {
     const { error } = await sb.auth.updateUser({ password });
     if (error) fail(error);
   },
+  // Asks the plan writer to prepare this owner's business plan. The writer checks the payment itself.
+  async generatePlan(body) {
+    const { data, error } = await sb.functions.invoke("generate-plan", { body });
+    return { data, error: error ? String(error.message || error) : data && data.error ? String(data.error) : "" };
+  },
   async loadFile(userId) {
     const { data, error } = await sb.from("business_files").select("owner_data, staff_data").eq("user_id", userId).maybeSingle();
     if (error) throw new Error("Could not load your file.");
