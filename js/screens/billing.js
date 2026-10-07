@@ -1,11 +1,12 @@
-import { h, announce, append, formatBdt } from "../ui.js?v=1791376428";
-import { getState, update, subscribe } from "../store.js?v=1791376428";
-import { computeSheet } from "../sheet.js?v=1791376428";
-import { addWorkingDays, formatDay } from "../time.js?v=1791376428";
-import { head, previewAction, reviewNote, journeyFoot, dateText, freightNote } from "./common.js?v=1791376428";
-import { makeShipment, freightDue } from "../shipments.js?v=1791376428";
-import { payPanel } from "./payqr.js?v=1791376428";
-import { pingForge } from "../changeRequest.js?v=1791376428";
+import { h, announce, append, formatBdt } from "../ui.js?v=1791376723";
+import { getState, update, subscribe } from "../store.js?v=1791376723";
+import { computeSheet } from "../sheet.js?v=1791376723";
+import { addWorkingDays, formatDay } from "../time.js?v=1791376723";
+import { head, previewAction, reviewNote, journeyFoot, dateText, freightNote } from "./common.js?v=1791376723";
+import { makeShipment, freightDue } from "../shipments.js?v=1791376723";
+import { payPanel } from "./payqr.js?v=1791376723";
+import { paidTotal } from "../rules.js?v=1791376723";
+import { pingForge } from "../changeRequest.js?v=1791376723";
 
 const add = (el, ...k) => append(el, k);
 const DAY = 86400000;
@@ -17,6 +18,28 @@ export default {
   render({ go }) {
     const body = h("div");
     const footSlot = h("div");
+
+
+    // After payment the owner may change things. A change that costs more is paid for as a difference. A cheaper one is not possible: no refunds and no credit.
+    function adjustBox(st, sheet) {
+      const paid = paidTotal(st);
+      const cur = sheet.orderTotalNum || 0;
+      const topUps = Array.isArray(st.payment.topUps) ? st.payment.topUps : [];
+      const pending = topUps.filter((t) => !(st.payment.topUpPaidAt >= t.at));
+      const out = [];
+      if (pending.length) out.push(h("div", { class: "notice notice--forge" }, h("p", null, h("b", null, "Waiting for Forge to verify your extra payment of " + formatBdt(pending.reduce((a, t) => a + t.amount, 0)) + "."), " Forge verifies it within 30 minutes.")));
+      if (cur < paid - 1) {
+        out.push(h("div", { class: "notice notice--error" }, h("p", null, h("b", null, "Your order now costs " + formatBdt(cur) + ", less than the " + formatBdt(paid) + " you paid.")), h("p", null, "A cheaper order is not possible, because payments are not refunded and there is no credit. Go back and choose a product or quantity that costs at least " + formatBdt(paid) + ", or switch back to what you paid for."), h("p", null, h("a", { href: "#/product" }, "Change product"))));
+      } else if (cur > paid + 1 && !pending.length) {
+        const diff = Math.round(cur - paid);
+        const box = h("div", { class: "notice notice--warn" }, h("p", null, h("b", null, "Your changes add " + formatBdt(diff) + " to your order.")), h("p", null, "You paid " + formatBdt(paid) + ". Your order now costs " + formatBdt(cur) + ". Pay the difference to keep the change."));
+        const trx = h("input", { class: "field__control", type: "text", maxlength: "40", autocomplete: "off", placeholder: "Transaction ID from your app", "aria-label": "Transaction ID" });
+        const send = h("button", { type: "button", class: "btn btn--primary", disabled: true, onclick: () => { update((s) => { if (!Array.isArray(s.payment.topUps)) s.payment.topUps = []; s.payment.topUps.push({ amount: diff, trxId: trx.value.trim(), at: Date.now() }); }); announce("Thank you. Forge will check your payment."); pingForge("payment"); paint(); } }, "Submit");
+        trx.addEventListener("input", () => { send.disabled = trx.value.trim().length < 6; });
+        out.push(box, payPanel(formatBdt(diff)), h("div", { class: "field", style: "margin-top:16px" }, h("label", { class: "field__label" }, "Transaction ID for the " + formatBdt(diff) + " payment"), trx, h("div", { style: "margin-top:12px" }, send)));
+      }
+      return out.length ? h("section", { class: "section", style: "margin-top:24px" }, h("div", { class: "section__head" }, h("h2", null, "Changes after payment")), out) : null;
+    }
 
     function paint() {
       const st = getState();
@@ -45,6 +68,10 @@ export default {
         const due = pay.paidAt + 30 * DAY;
         add(body, h("div", { class: "notice notice--ok" }, h("p", null, h("b", null, "Payment confirmed"), " on " + dateText(pay.paidAt) + ". Next, Forge prepares your business plan. Forge orders your goods after you have read it.")),
           h("div", { class: "notice notice--info", style: "margin-top:16px" }, h("p", null, h("b", null, "Upload your trade licence by " + dateText(due) + "."), " That is 30 days from today. If it is not uploaded, Forge stops the process of doing business."), st.documents.licence ? h("p", null, "Your licence is uploaded.") : h("p", null, h("a", { href: "#/documents" }, "Upload it on the documents page"))));
+      }
+      if (pay.paidAt || pay.reportedAt) { const ab = adjustBox(st, sheet); if (ab) add(body, ab); }
+      if (pay.paidAt) {
+        // already shown above
       } else if (pay.reportedAt) {
         pingForge("payment"); // the server sends it once; this covers a closed tab or a poor connection
         add(body, h("div", { class: "notice notice--forge" }, h("p", null, h("b", null, "Waiting for Forge to verify your payment.")), h("p", null, "You told us you paid on " + dateText(pay.reportedAt) + (pay.trxId ? " (transaction ID " + pay.trxId + ")" : "") + ". Please make sure the payment went through in your app. Forge verifies your payment within 30 minutes. Please wait here. Nothing is ordered until Forge confirms it.")),

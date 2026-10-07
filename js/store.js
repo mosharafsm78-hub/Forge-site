@@ -3,7 +3,7 @@
 //   owner_data: what the owner enters (the server lets only the owner change it)
 //   staff_data: what the Forge team sets (amounts, deliveries, confirmations; the owner cannot change it)
 // The screens see one merged file.
-import { CONFIG } from "./config.js?v=1791376428";
+import { CONFIG } from "./config.js?v=1791376723";
 
 // Sample-data previews keep their own saved file so they never mix with a real one.
 const KEY = CONFIG.demo ? "forge.file.v2.demo" : "forge.file.v2";
@@ -65,7 +65,7 @@ function merge(base, extra) {
 const STAFF_PATHS = [
   "documents.agreementReady", "documents.verifiedAt", "documents.reviewNote",
   "brand.logo.options", "brand.logo.deliveredAt", "brand.page.url", "brand.page.deliveredAt",
-  "payment.packagingCost", "payment.websiteFee", "payment.paidAt", "payment.quote", "payment.receivedAmount",
+  "payment.packagingCost", "payment.websiteFee", "payment.paidAt", "payment.quote", "payment.receivedAmount", "payment.topUpPaidAt",
   "plan.draftedAt", "plan.doc", "name.suggestions", "name.suggestedAt", "marketing.budget", "marketing.launchedAt", "marketing.postedAt", "marketing.spent", "marketing.reached", "marketing.daily", "marketing.updatedAt", "marketing.note",
   "shipments", "orders.list",
 ];

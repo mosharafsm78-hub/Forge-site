@@ -1,9 +1,9 @@
 // Validation and progress rules. Pure functions, no page access, so they are easy to test.
-import { BUILT, PREP, stageById } from "./stages.js?v=1791376428";
-import { CONFIG } from "./config.js?v=1791376428";
-import { industryById } from "./data/industries.js?v=1791376428";
-import { MIN_CAPITAL, MIN_CAPITAL_TEXT } from "./minimum.js?v=1791376428";
-import { budgetFor } from "./budget.js?v=1791376428";
+import { BUILT, PREP, stageById } from "./stages.js?v=1791376723";
+import { CONFIG } from "./config.js?v=1791376723";
+import { industryById } from "./data/industries.js?v=1791376723";
+import { MIN_CAPITAL, MIN_CAPITAL_TEXT } from "./minimum.js?v=1791376723";
+import { budgetFor } from "./budget.js?v=1791376723";
 
 export const PHONE_RE = /^(?:\+?88)?01[3-9]\d{8}$/;
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -169,11 +169,17 @@ export function isComplete(stageId, st) {
 // A stage opens when it exists and everything it needs is complete.
 // Once the owner has reported a payment, the choices that fix the price and the goods are locked.
 // The database enforces the same rule, so this only makes the page say so plainly.
-export const FROZEN_STAGES = ["industry", "product", "name", "packaging", "domain"];
+// After payment the owner can still change things. Only once Forge has ordered the goods are the goods fixed.
+export const FROZEN_STAGES = ["industry", "product", "packaging"];
 export function isFrozen(stageId, st) {
   if (CONFIG.demo || !FROZEN_STAGES.includes(stageId)) return false;
+  return Boolean(st && Array.isArray(st.shipments) && st.shipments.length > 0);
+}
+// Everything the owner has paid so far: the first payment plus any extra payments for changes.
+export function paidTotal(st) {
   const pay = (st && st.payment) || {};
-  return Boolean(pay.reportedAt || pay.paidAt);
+  const extra = (Array.isArray(pay.topUps) ? pay.topUps : []).reduce((a, t) => a + (Number(t.amount) || 0), 0);
+  return (Number(pay.shownTotal) || 0) + extra;
 }
 
 // Whether the owner can fill in a stage. In the live workspace this is strict, one stage after another.

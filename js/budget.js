@@ -1,6 +1,6 @@
 // How many units an owner can safely order, from their own money.
 // Every figure is a planning figure that says so. Real quotes replace them as soon as Forge has them.
-import { usdToBdt } from "./ui.js?v=1791376428";
+import { usdToBdt } from "./ui.js?v=1791376723";
 
 export const FALLBACK_RATE = 122.76;
 export const FREIGHT_ALLOWANCE = 0.55; // of the goods cost, until the real freight bill exists

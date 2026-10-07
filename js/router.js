@@ -1,30 +1,30 @@
 // Hash routes: #/profile, #/industry, and so on. A stage only opens when the ones before it are complete.
-import { h } from "./ui.js?v=1791376428";
-import { getState, currentUser, subscribe } from "./store.js?v=1791376428";
-import { CONFIG } from "./config.js?v=1791376428";
-import auth, { AUTH_IDS, OPEN_AUTH_IDS } from "./screens/auth.js?v=1791376428";
-import { canFill, blockingStage, isFrozen } from "./rules.js?v=1791376428";
-import { setCurrent } from "./chrome.js?v=1791376428";
-import { changeRequestBox } from "./changeRequest.js?v=1791376428";
-import welcome from "./screens/welcome.js?v=1791376428";
-import profile from "./screens/profile.js?v=1791376428";
-import industry from "./screens/industry.js?v=1791376428";
-import product from "./screens/product.js?v=1791376428";
-import name from "./screens/name.js?v=1791376428";
-import domain from "./screens/domain.js?v=1791376428";
-import brand from "./screens/brand.js?v=1791376428";
-import packaging from "./screens/packaging.js?v=1791376428";
-import documents from "./screens/documents.js?v=1791376428";
-import billing from "./screens/billing.js?v=1791376428";
-import plan from "./screens/plan.js?v=1791376428";
-import freight from "./screens/freight.js?v=1791376428";
-import marketing from "./screens/marketing.js?v=1791376428";
-import orders from "./screens/orders.js?v=1791376428";
-import returns from "./screens/returns.js?v=1791376428";
-import reorder from "./screens/reorder.js?v=1791376428";
-import pause from "./screens/pause.js?v=1791376428";
-import summary from "./screens/summary.js?v=1791376428";
-import accounting from "./screens/accounting.js?v=1791376428";
+import { h } from "./ui.js?v=1791376723";
+import { getState, currentUser, subscribe } from "./store.js?v=1791376723";
+import { CONFIG } from "./config.js?v=1791376723";
+import auth, { AUTH_IDS, OPEN_AUTH_IDS } from "./screens/auth.js?v=1791376723";
+import { canFill, blockingStage, isFrozen } from "./rules.js?v=1791376723";
+import { setCurrent } from "./chrome.js?v=1791376723";
+import { changeRequestBox } from "./changeRequest.js?v=1791376723";
+import welcome from "./screens/welcome.js?v=1791376723";
+import profile from "./screens/profile.js?v=1791376723";
+import industry from "./screens/industry.js?v=1791376723";
+import product from "./screens/product.js?v=1791376723";
+import name from "./screens/name.js?v=1791376723";
+import domain from "./screens/domain.js?v=1791376723";
+import brand from "./screens/brand.js?v=1791376723";
+import packaging from "./screens/packaging.js?v=1791376723";
+import documents from "./screens/documents.js?v=1791376723";
+import billing from "./screens/billing.js?v=1791376723";
+import plan from "./screens/plan.js?v=1791376723";
+import freight from "./screens/freight.js?v=1791376723";
+import marketing from "./screens/marketing.js?v=1791376723";
+import orders from "./screens/orders.js?v=1791376723";
+import returns from "./screens/returns.js?v=1791376723";
+import reorder from "./screens/reorder.js?v=1791376723";
+import pause from "./screens/pause.js?v=1791376723";
+import summary from "./screens/summary.js?v=1791376723";
+import accounting from "./screens/accounting.js?v=1791376723";
 
 const screens = { welcome, profile, industry, product, name, brand, packaging, domain, documents, summary, billing, plan, freight, marketing, orders, returns, reorder, pause, accounting, ...auth };
 
@@ -61,7 +61,7 @@ function lockToast(blocker, frozen) {
   let t = document.getElementById("locktoast");
   if (!t) { t = h("div", { id: "locktoast", class: "locktoast", role: "status" }); document.body.appendChild(t); }
   const label = blocker ? blocker.label : "the step before it";
-  if (frozen) t.replaceChildren(h("span", null, h("b", null, "Locked. "), "This choice is fixed because you reported your payment. Use Request a change on this page."));
+  if (frozen) t.replaceChildren(h("span", null, h("b", null, "Locked. "), "Forge has already ordered your goods, so this choice is fixed. You can still change your business name and domain."));
   else t.replaceChildren(h("span", null, h("b", null, "Almost there. "), "Please finish ", blocker ? h("a", { href: "#/" + blocker.id }, label) : label, " first. This page opens right after."));
   t.classList.add("is-on");
   window.clearTimeout(toastTimer);
@@ -73,7 +73,7 @@ function lockView(node, id, st) {
   const frozen = isFrozen(id, st);
   const blocker = frozen ? null : blockingStage(id, st);
   const note = frozen
-    ? h("div", { class: "notice notice--locked", role: "note" }, h("p", null, h("b", null, "Locked. "), "You reported your payment, so your product, quantity, name, domain and packaging are fixed. This keeps your bill and your order the same. If you need a change, send Forge a request below."), changeRequestBox(id))
+    ? h("div", { class: "notice notice--locked", role: "note" }, h("p", null, h("b", null, "Fixed. "), "Forge has already ordered your goods, so your industry, product, quantity and packaging cannot change now. You can still change your business name and domain. You can add another product as a new order later."))
     : h(
     "div",
     { class: "notice notice--forge", role: "note" },

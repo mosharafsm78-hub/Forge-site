@@ -1,12 +1,12 @@
-import { h, announce, append } from "../ui.js?v=1791376428";
-import { CONFIG } from "../config.js?v=1791376428";
-import { getState, update, currentUser, applyServer } from "../store.js?v=1791376428";
-import { loadBackend } from "../backend.js?v=1791376428";
-import { HOUR } from "../time.js?v=1791376428";
-import { buildPlan } from "../planDoc.js?v=1791376428";
-import { industryById } from "../data/industries.js?v=1791376428";
-import { head, previewAction, reviewNote, journeyFoot } from "./common.js?v=1791376428";
-import { waitPanel } from "./wait.js?v=1791376428";
+import { h, announce, append } from "../ui.js?v=1791376723";
+import { CONFIG } from "../config.js?v=1791376723";
+import { getState, update, currentUser, applyServer } from "../store.js?v=1791376723";
+import { loadBackend } from "../backend.js?v=1791376723";
+import { HOUR } from "../time.js?v=1791376723";
+import { buildPlan } from "../planDoc.js?v=1791376723";
+import { industryById } from "../data/industries.js?v=1791376723";
+import { head, previewAction, reviewNote, journeyFoot } from "./common.js?v=1791376723";
+import { waitPanel } from "./wait.js?v=1791376723";
 
 const add = (el, ...k) => append(el, k);
 const WAIT = HOUR / 2;
