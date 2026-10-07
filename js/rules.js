@@ -1,9 +1,9 @@
 // Validation and progress rules. Pure functions, no page access, so they are easy to test.
-import { BUILT, PREP, stageById } from "./stages.js?v=1791345647";
-import { CONFIG } from "./config.js?v=1791345647";
-import { industryById } from "./data/industries.js?v=1791345647";
-import { MIN_CAPITAL, MIN_CAPITAL_TEXT } from "./minimum.js?v=1791345647";
-import { budgetFor } from "./budget.js?v=1791345647";
+import { BUILT, PREP, stageById } from "./stages.js?v=1791345761";
+import { CONFIG } from "./config.js?v=1791345761";
+import { industryById } from "./data/industries.js?v=1791345761";
+import { MIN_CAPITAL, MIN_CAPITAL_TEXT } from "./minimum.js?v=1791345761";
+import { budgetFor } from "./budget.js?v=1791345761";
 
 export const PHONE_RE = /^(?:\+?88)?01[3-9]\d{8}$/;
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -138,7 +138,7 @@ export function isComplete(stageId, st) {
     case "product": {
       if (!(st.product && st.product.id) || !Number.isInteger(st.qty) || st.qty < 1) return false;
       // The quantity must fit the owner's own money, after setup, ads and a cash reserve.
-      if (CONFIG.demo) return true;
+      if (CONFIG.demo || (st.payment && (st.payment.reportedAt || st.payment.paidAt))) return true; // fixed once payment is reported
       const b = budgetFor(st, st.product.priceUsd);
       return b.maxQty === null || st.qty <= b.maxQty;
     }

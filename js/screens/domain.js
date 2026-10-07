@@ -1,8 +1,8 @@
-import { h, formatUsd, formatBdt, usdToBdt, announce } from "../ui.js?v=1791345647";
-import { getState, update, subscribe } from "../store.js?v=1791345647";
-import { slugify, normalizeDomain, isValidDomain, nextToDo } from "../rules.js?v=1791345647";
-import { checkDomains } from "../api.js?v=1791345647";
-import { head, textField, foot } from "./common.js?v=1791345647";
+import { h, formatUsd, formatBdt, usdToBdt, announce } from "../ui.js?v=1791345761";
+import { getState, update, subscribe } from "../store.js?v=1791345761";
+import { slugify, normalizeDomain, isValidDomain, nextToDo } from "../rules.js?v=1791345761";
+import { checkDomains } from "../api.js?v=1791345761";
+import { head, textField, foot } from "./common.js?v=1791345761";
 
 const TLDS = ["com", "shop", "store", "net", "co"];
 

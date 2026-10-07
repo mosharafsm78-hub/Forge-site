@@ -1,12 +1,12 @@
-import { mountChrome } from "./chrome.js?v=1791345647";
-import { startRouter, refreshRoute } from "./router.js?v=1791345647";
-import { getFxRate } from "./api.js?v=1791345647";
-import { FALLBACK_RATE } from "./budget.js?v=1791345647";
-import { setFx, attach, detach, applyServer, currentUser, update, getState } from "./store.js?v=1791345647";
-import { CONFIG } from "./config.js?v=1791345647";
-import { loadBackend } from "./backend.js?v=1791345647";
-import { setAuthNotice } from "./screens/auth.js?v=1791345647";
-import { h } from "./ui.js?v=1791345647";
+import { mountChrome } from "./chrome.js?v=1791345761";
+import { startRouter, refreshRoute } from "./router.js?v=1791345761";
+import { getFxRate } from "./api.js?v=1791345761";
+import { FALLBACK_RATE } from "./budget.js?v=1791345761";
+import { setFx, attach, detach, applyServer, currentUser, update, getState } from "./store.js?v=1791345761";
+import { CONFIG } from "./config.js?v=1791345761";
+import { loadBackend } from "./backend.js?v=1791345761";
+import { setAuthNotice } from "./screens/auth.js?v=1791345761";
+import { h } from "./ui.js?v=1791345761";
 
 async function loadRate() {
   // Show taka at once with a clearly labelled planning rate, then replace it with today's rate.
