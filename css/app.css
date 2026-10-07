@@ -688,7 +688,7 @@ a.task:hover { background: var(--paper); }
 .notice--lock{background:var(--surface-2,#f1f4f2);border:1px solid var(--line,#c9d3ce);border-left:4px solid #3f4fa3;margin-bottom:20px}
 .notice--lock a{font-weight:700;text-decoration:underline}
 .is-preview .field,.is-preview .section{opacity:.78}
-.is-preview button:disabled,.is-preview input:disabled,.is-preview select:disabled,.is-preview textarea:disabled{cursor:not-allowed}
+
 
 /* Business plan */
 .plan__callout{background:#eef6f1;border:1px solid #bcd8c8;border-radius:14px;padding:20px 22px}
@@ -718,3 +718,8 @@ a.task:hover { background: var(--paper); }
 .acct__bar span{display:block;height:100%;background:var(--brand,#0e7a4b);border-radius:99px}
 @media (max-width:700px){.acct__hero{grid-template-columns:1fr}.acct__side{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:14px}.topbar__acct{display:inline-flex}}
 @media (max-width:600px){.topbar__site{display:none}}
+
+.locktoast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);max-width:min(92vw,460px);padding:14px 18px;border-radius:12px;background:#0b3b28;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:50;font-size:.95rem;line-height:1.45}
+.locktoast.is-on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.locktoast a{color:#fff;font-weight:700;text-decoration:underline}
+.is-preview [aria-disabled="true"]{cursor:not-allowed}

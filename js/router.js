@@ -54,6 +54,18 @@ function riskBox() {
   return h("p", { class: "riskbox", role: "note" }, h("b", null, "Forge can make mistakes, and a business can lose money. "), "Forge does not promise sales or profit. Check every amount before you pay, and tell Forge if something looks wrong. ", h("a", { href: "#/pause" }, "Pause or exit anytime"), ".");
 }
 
+let toastTimer = null;
+// The friendly nudge when someone taps a page that is not open yet.
+function lockToast(blocker) {
+  let t = document.getElementById("locktoast");
+  if (!t) { t = h("div", { id: "locktoast", class: "locktoast", role: "status" }); document.body.appendChild(t); }
+  const label = blocker ? blocker.label : "the step before it";
+  t.replaceChildren(h("span", null, h("b", null, "Almost there. "), "Please finish ", blocker ? h("a", { href: "#/" + blocker.id }, label) : label, " first. This page opens right after."));
+  t.classList.add("is-on");
+  window.clearTimeout(toastTimer);
+  toastTimer = window.setTimeout(() => t.classList.remove("is-on"), 5000);
+}
+
 // A page that is not open for filling yet: the owner can read all of it, but nothing can be changed.
 function lockView(node, id, st) {
   const blocker = blockingStage(id, st);
@@ -63,7 +75,16 @@ function lockView(node, id, st) {
     h("p", null, h("b", null, "Preview only. "), blocker ? "You can read this page now. It opens for you once you finish " : "You can read this page now. It opens for you after the steps before it.", blocker ? h("a", { href: "#/" + blocker.id }, blocker.label) : null, blocker ? "." : "")
   );
   node.classList.add("is-preview");
-  node.querySelectorAll("input, select, textarea, button").forEach((el) => { el.disabled = true; });
+  node.querySelectorAll("input, select, textarea").forEach((el) => { el.readOnly = true; el.setAttribute("aria-disabled", "true"); });
+  node.querySelectorAll("button").forEach((el) => el.setAttribute("aria-disabled", "true"));
+  const stop = (e) => {
+    const t = e.target.closest ? e.target.closest("input, select, textarea, button, label, .logo-card") : null;
+    if (!t || (e.type === "keydown" && ["Tab", "Shift", "Escape"].includes(e.key))) return;
+    e.preventDefault();
+    e.stopPropagation();
+    lockToast(blocker);
+  };
+  ["click", "keydown"].forEach((type) => node.addEventListener(type, stop, true));
   node.prepend(note);
 }
 
