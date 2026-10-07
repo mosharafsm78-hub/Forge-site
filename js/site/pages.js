@@ -222,13 +222,48 @@ function watchParts(root) {
   }, 0);
 }
 
+const ICONS = {
+  sign: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 15c1-2 2-2 3 0s2 1 3-1"/></svg>',
+  receipt: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>',
+  pause: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6"/></svg>',
+};
+function icon(name) {
+  const el = h("span", { class: "ico", "aria-hidden": "true" });
+  el.innerHTML = ICONS[name] || ""; // fixed strings above, never user or supplier text
+  return el;
+}
+
+function moneyBar() {
+  const parts = [
+    ["bill", "Your first bill", 24000, "Product, domain, packaging and website setup. Paid once, before ordering."],
+    ["freight", "Freight and customs", 3000, "Billed at actual cost after your goods reach Bangladesh."],
+    ["ads", "Ads and spare cash", 3000, "Your ad budget and room for returned parcels. You decide."],
+  ];
+  const total = parts.reduce((n, x) => n + x[2], 0);
+  return h("figure", { class: "money", "aria-label": "Example of where a starting amount can go" },
+    h("figcaption", null, h("strong", null, "Where a ৳30,000 start can go"), h("span", null, "Example, amounts illustrative")),
+    h("div", { class: "money__bar", role: "img", "aria-label": parts.map(([, l, v]) => l + " ৳" + v.toLocaleString("en-US")).join(", ") },
+      parts.map(([k, l, v]) => h("span", { class: "money__seg money__seg--" + k, style: "flex-grow:" + v, title: l }))),
+    h("ul", { class: "money__legend" }, parts.map(([k, l, v, d]) => h("li", null,
+      h("span", { class: "money__key money__key--" + k, "aria-hidden": "true" }),
+      h("div", null, h("strong", null, l), h("span", { class: "money__amt" }, "৳" + v.toLocaleString("en-US")), h("p", null, d))))),
+    h("p", { class: "money__note" }, "That is ৳" + total.toLocaleString("en-US") + " in all. With more money you order a bigger first batch and keep more for ads."));
+}
+
+function fitLists() {
+  const yes = ["You are 18 or older and can afford to lose the money you put in.", "You want to sell a physical product on cash on delivery.", "You will make the decisions and let a team do the setup.", "You can keep at least ৳30,000 ready to start."];
+  const no = ["You expect guaranteed income or a quick profit.", "You would be borrowing money you cannot repay.", "You want to skip reading the agreement.", "You want a business that runs with no effort from you."];
+  const col = (title, items, cls) => h("div", { class: "fit__col fit__col--" + cls }, h("h3", null, title), h("ul", null, items.map((i) => h("li", null, i))));
+  return h("div", { class: "fit" }, col("Forge suits you if", yes, "yes"), col("Forge is not for you if", no, "no"));
+}
+
 function trustStrip() {
   const items = [
-    ["Nothing starts before you sign", "No work is done and no money is taken until your agreement is signed."],
-    ["You see every cost first", "Each line of your first bill is shown before you pay. Freight is billed at actual cost."],
-    ["You can pause any time", "The exact terms are written in your agreement before you sign it."],
+    ["sign", "Nothing starts before you sign", "No work is done and no money is taken until your agreement is signed."],
+    ["receipt", "You see every cost first", "Each line of your first bill is shown before you pay. Freight is billed at actual cost."],
+    ["pause", "You can pause any time", "The exact terms are written in your agreement before you sign it."],
   ];
-  return h("ul", { class: "trust" }, items.map(([t, d]) => h("li", null, h("strong", null, t), h("span", null, d))));
+  return h("ul", { class: "trust" }, items.map(([ic, t, d]) => h("li", null, icon(ic), h("div", null, h("strong", null, t), h("span", null, d)))));
 }
 
 function secHead(title, lead, more) {
@@ -274,7 +309,9 @@ const home = {
       sec("how", secHead("How it works", "Six steps from your first question to your first parcel.", link("how", "See all 15 stages")),
         h("ol", { class: "steps steps--track" }, STEPS.map(([t, d]) => h("li", null, h("strong", null, t), h("span", null, d))))),
 
-      sec("cost", secHead("What it costs", "You need at least ৳30,000 ready. Here is where the money goes.", link("costs", "See every cost")), costGlance()),
+      sec("cost", secHead("What it costs", "You need at least ৳30,000 ready. Here is where the money goes.", link("costs", "See every cost")), moneyBar(), costGlance()),
+
+      sec("fit", secHead("Is Forge right for you?", "Read this before you start. Starting a business can lose money."), fitLists()),
 
       sec("faq", secHead("Questions people ask first", null, link("faq", "See all questions")), homeFaq()),
 
