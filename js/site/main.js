@@ -1,6 +1,6 @@
 // The public face of Forge: a small multi-page site on hash routes.
-import { h } from "../ui.js?v=1791375337";
-import { PAGES } from "./pages.js?v=1791375337";
+import { h } from "../ui.js?v=1791375808";
+import { PAGES } from "./pages.js?v=1791375808";
 
 const WORKSPACE = (typeof window !== "undefined" && (window.__WORKSPACE_START__ || window.__WORKSPACE_URL__)) || "workspace.html#/signup";
 // Set only on the live site, where people have accounts.

@@ -1,9 +1,9 @@
 // Validation and progress rules. Pure functions, no page access, so they are easy to test.
-import { BUILT, PREP, stageById } from "./stages.js?v=1791375337";
-import { CONFIG } from "./config.js?v=1791375337";
-import { industryById } from "./data/industries.js?v=1791375337";
-import { MIN_CAPITAL, MIN_CAPITAL_TEXT } from "./minimum.js?v=1791375337";
-import { budgetFor } from "./budget.js?v=1791375337";
+import { BUILT, PREP, stageById } from "./stages.js?v=1791375808";
+import { CONFIG } from "./config.js?v=1791375808";
+import { industryById } from "./data/industries.js?v=1791375808";
+import { MIN_CAPITAL, MIN_CAPITAL_TEXT } from "./minimum.js?v=1791375808";
+import { budgetFor } from "./budget.js?v=1791375808";
 
 export const PHONE_RE = /^(?:\+?88)?01[3-9]\d{8}$/;
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;

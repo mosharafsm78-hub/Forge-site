@@ -1,6 +1,6 @@
 // Forge's business plan, written from the owner's real file. Plain words, real numbers, honest risks.
 // Every figure is either from the file (marked as such) or a planning assumption that says so.
-import { formatBdt, usdToBdt } from "./ui.js?v=1791375337";
+import { formatBdt, usdToBdt } from "./ui.js?v=1791375808";
 
 const FALLBACK_RATE = 122.76;
 const AD_DAYS = 14;

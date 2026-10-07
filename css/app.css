@@ -771,3 +771,4 @@ a.task:hover { background: var(--paper); }
 .rail__more { margin: 18px 0 8px; font-size: 0.9rem; }
 @media (max-width: 480px) { .topbar__acct { display: none; } }
 @media (min-width: 481px) { .rail__more { display: none; } }
+.payqr__status select { display: block; width: 100%; max-width: 280px; margin-top: 6px; }
