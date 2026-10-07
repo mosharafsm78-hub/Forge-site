@@ -1,8 +1,8 @@
 // The order sheet: a running estimate that fills in as the owner decides.
-import { h, formatBdt, formatUsd, usdToBdt } from "./ui.js?v=1791344184";
-import { getState } from "./store.js?v=1791344184";
-import { CONFIG } from "./config.js?v=1791344184";
-import { addWorkingDays, formatDay } from "./time.js?v=1791344184";
+import { h, formatBdt, formatUsd, usdToBdt } from "./ui.js?v=1791344498";
+import { getState } from "./store.js?v=1791344498";
+import { CONFIG } from "./config.js?v=1791344498";
+import { addWorkingDays, formatDay } from "./time.js?v=1791344498";
 
 // Pure calculation. Returns the rows to show and the running total.
 export function computeSheet(st) {
@@ -86,7 +86,7 @@ export function renderSheet(open, onToggle) {
   if (sheet.hasRate) {
     const when = st.fx.fetchedAt ? new Date(st.fx.fetchedAt) : null;
     const dateText = when && !Number.isNaN(when.getTime()) ? ` on ${when.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}` : "";
-    rateNote = `Taka estimate at US$1 = ৳${sheet.rate}${CONFIG.demo ? " (sample rate)" : ""}${dateText}.`;
+    rateNote = st.fx.source === "estimate" ? `Taka estimate at a planning rate of US$1 = ৳${sheet.rate}. Today's rate is loading.` : `Taka estimate at US$1 = ৳${sheet.rate}${CONFIG.demo ? " (sample rate)" : ""}${dateText}.`;
   } else {
     rateNote = "Shown in US dollars until the exchange rate loads.";
   }

@@ -1,9 +1,9 @@
-import { h, announce, append } from "../ui.js?v=1791344184";
+import { h, announce, append } from "../ui.js?v=1791344498";
 const add = (el, ...kids) => append(el, kids);
-import { getState, update } from "../store.js?v=1791344184";
-import { isComplete, nextToDo } from "../rules.js?v=1791344184";
-import { addWorkingDays, formatDay } from "../time.js?v=1791344184";
-import { head, textareaField, checkField, foot } from "./common.js?v=1791344184";
+import { getState, update } from "../store.js?v=1791344498";
+import { isComplete, nextToDo } from "../rules.js?v=1791344498";
+import { addWorkingDays, formatDay } from "../time.js?v=1791344498";
+import { head, textareaField, checkField, foot } from "./common.js?v=1791344498";
 
 const ITEMS = [
   { id: "polybag", label: "Courier polybag", help: "The outer bag your parcel travels in." },

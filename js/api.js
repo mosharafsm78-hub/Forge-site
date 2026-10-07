@@ -1,8 +1,8 @@
 // Calls to the Forge backend functions: supplier products, exchange rate and domain checks.
 // Every call has a time limit, one retry for network problems, and returns clean data or a readable error.
-import { CONFIG } from "./config.js?v=1791344184";
-import * as demo from "./demo.js?v=1791344184";
-import { plainText } from "./ui.js?v=1791344184";
+import { CONFIG } from "./config.js?v=1791344498";
+import * as demo from "./demo.js?v=1791344498";
+import { plainText } from "./ui.js?v=1791344498";
 
 export class ApiError extends Error {
   constructor(message, kind) {
@@ -11,7 +11,7 @@ export class ApiError extends Error {
   }
 }
 
-async function call(fn, { method = "GET", query, body } = {}, { retries = 1 } = {}) {
+async function call(fn, { method = "GET", query, body } = {}, { retries = 1, timeoutMs = 0 } = {}) {
   const url = new URL(`${CONFIG.supabaseUrl}/functions/v1/${fn}`);
   for (const [k, v] of Object.entries(query || {})) {
     if (v !== null && v !== undefined && v !== "") url.searchParams.set(k, String(v));
@@ -19,7 +19,7 @@ async function call(fn, { method = "GET", query, body } = {}, { retries = 1 } = 
   let lastError;
   for (let attempt = 0; attempt <= retries; attempt += 1) {
     const controller = new AbortController();
-    const timer = window.setTimeout(() => controller.abort(), CONFIG.requestTimeoutMs);
+    const timer = window.setTimeout(() => controller.abort(), timeoutMs || CONFIG.requestTimeoutMs);
     try {
       const response = await fetch(url, {
         method,
@@ -99,7 +99,7 @@ export async function productDetail(id) {
 
 export async function getFxRate() {
   if (CONFIG.demo) return demo.getFxRate();
-  const data = await call("fx-rate");
+  const data = await call("fx-rate", {}, { retries: 2, timeoutMs: 30000 });
   const rate = Number(data && data.rate);
   if (!data || data.ok !== true || !Number.isFinite(rate) || rate < 50 || rate > 300) {
     throw new ApiError("The exchange rate is not available right now.", "bad_response");

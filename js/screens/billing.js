@@ -1,10 +1,10 @@
-import { h, announce, append, formatBdt } from "../ui.js?v=1791344184";
-import { getState, update } from "../store.js?v=1791344184";
-import { computeSheet } from "../sheet.js?v=1791344184";
-import { addWorkingDays, formatDay } from "../time.js?v=1791344184";
-import { head, previewAction, reviewNote, journeyFoot, dateText, freightNote } from "./common.js?v=1791344184";
-import { makeShipment, freightDue } from "../shipments.js?v=1791344184";
-import { payPanel } from "./payqr.js?v=1791344184";
+import { h, announce, append, formatBdt } from "../ui.js?v=1791344498";
+import { getState, update, subscribe } from "../store.js?v=1791344498";
+import { computeSheet } from "../sheet.js?v=1791344498";
+import { addWorkingDays, formatDay } from "../time.js?v=1791344498";
+import { head, previewAction, reviewNote, journeyFoot, dateText, freightNote } from "./common.js?v=1791344498";
+import { makeShipment, freightDue } from "../shipments.js?v=1791344498";
+import { payPanel } from "./payqr.js?v=1791344498";
 
 const add = (el, ...k) => append(el, k);
 const DAY = 86400000;
@@ -36,7 +36,7 @@ export default {
         h("section", { class: "section", style: "margin-top:24px" },
           h("div", { class: "section__head" }, h("h2", null, "Your bill"), h("p", null, "You pay the full amount first. Forge orders your goods after payment is confirmed and you have read your business plan. Freight and duty are billed later, at the actual cost, when the goods reach Bangladesh.")),
           h("div", { class: "bill" }, sheet.rows.filter((r) => r.key !== "freight").map((r) => h("div", { class: "bill__row" }, h("span", null, h("b", null, r.label), r.sub ? h("small", null, r.sub) : null), h("span", { class: "num" }, r.value || r.pending || ""))), h("div", { class: "bill__total" }, h("span", null, "Total to pay now"), h("b", { class: "num" }, sheet.orderTotal))),
-          h("p", { class: "field__help" }, sheet.hasRate ? `Product and domain prices are in taka at US$1 = ৳${sheet.rate}. The final amount is the one on this bill when it is confirmed.` : "Product and domain prices are in US dollars until the exchange rate loads.")
+          h("p", { class: "field__help" }, sheet.hasRate ? (getState().fx && getState().fx.source === "estimate" ? `Product and domain prices are in taka at a planning rate of US$1 = ৳${sheet.rate}. Today's rate is still loading; this page updates when it arrives. ` : `Product and domain prices are in taka at US$1 = ৳${sheet.rate}. `) + "The amount on this bill is the amount you pay." : "Product and domain prices are in US dollars until the exchange rate loads.")
         )
       );
 
@@ -51,7 +51,7 @@ export default {
         add(body, h("div", { class: "notice notice--warn" }, h("p", null, h("b", null, "Your bill is not final yet.")), h("p", null, "Still waiting for: " + missing.join(", ") + ". Payment opens when everything is on the bill.")),
           previewAction("show a sample final bill", () => { update((s) => { s.payment.packagingCost = 4500; s.payment.websiteFee = 3000; }); paint(); }));
       } else {
-        const payBtn = h("button", { type: "button", class: "btn btn--primary", disabled: !pay.quoteApprovedAt || !signed || !(sheet.orderTotalNum > 0) || String(pay.trxId || "").trim().length < 6, onclick: () => { update((s) => { s.payment.shownTotal = sheet.orderTotalNum; s.payment.reportedAt = Date.now(); }); announce("Thank you. Forge will check your payment."); paint(); } }, "I have paid in full");
+        const payBtn = h("button", { type: "button", class: "btn btn--primary", disabled: !pay.quoteApprovedAt || !signed || !(sheet.orderTotalNum > 0) || String(pay.trxId || "").trim().length < 6, onclick: () => { update((s) => { s.payment.shownTotal = computeSheet(s).orderTotalNum; s.payment.reportedAt = Date.now(); }); announce("Thank you. Forge will check your payment."); paint(); } }, "I have paid in full");
         const trxField = () => {
           const input = h("input", { id: "f-trx", class: "field__control", type: "text", maxlength: "40", autocomplete: "off", value: pay.trxId || "", placeholder: "For example 9H7K2L1M" });
           input.addEventListener("input", () => { update((s) => { s.payment.trxId = input.value.trim(); }); payBtn.disabled = !(sheet.orderTotalNum > 0) || input.value.trim().length < 6; });
@@ -110,8 +110,15 @@ export default {
       footSlot.replaceChildren(journeyFoot("billing", { go, canContinue: Boolean(getState().payment.paidAt), note: getState().payment.paidAt ? "" : "Opens when your payment is confirmed." }));
     }
 
-    const root = h("section", { class: "screen" }, head("Billing", "Your bills and what you have paid. Forge starts ordering your goods when your first bill is paid."), reviewNote("billing"), body, footSlot);
+    const root = h("section", { class: "screen" }, head("Billing", "Your bills and what you have paid. Forge orders your goods after your payment is confirmed and you have read your business plan."), reviewNote("billing"), body, footSlot);
     paint();
+    // Repaint once when today's exchange rate replaces the planning rate.
+    let seen = getState().fx ? getState().fx.source + getState().fx.rate : "";
+    const off = subscribe((st) => {
+      if (!root.isConnected) { off(); return; }
+      const now = st.fx ? st.fx.source + st.fx.rate : "";
+      if (now !== seen) { seen = now; paint(); }
+    });
     return root;
   },
 };

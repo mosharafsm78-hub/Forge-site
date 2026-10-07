@@ -1,18 +1,24 @@
-import { mountChrome } from "./chrome.js?v=1791344184";
-import { startRouter, refreshRoute } from "./router.js?v=1791344184";
-import { getFxRate } from "./api.js?v=1791344184";
-import { setFx, attach, detach, applyServer, currentUser, update, getState } from "./store.js?v=1791344184";
-import { CONFIG } from "./config.js?v=1791344184";
-import { loadBackend } from "./backend.js?v=1791344184";
-import { setAuthNotice } from "./screens/auth.js?v=1791344184";
-import { h } from "./ui.js?v=1791344184";
+import { mountChrome } from "./chrome.js?v=1791344498";
+import { startRouter, refreshRoute } from "./router.js?v=1791344498";
+import { getFxRate } from "./api.js?v=1791344498";
+import { FALLBACK_RATE } from "./budget.js?v=1791344498";
+import { setFx, attach, detach, applyServer, currentUser, update, getState } from "./store.js?v=1791344498";
+import { CONFIG } from "./config.js?v=1791344498";
+import { loadBackend } from "./backend.js?v=1791344498";
+import { setAuthNotice } from "./screens/auth.js?v=1791344498";
+import { h } from "./ui.js?v=1791344498";
 
 async function loadRate() {
-  try {
-    const fx = await getFxRate();
-    setFx({ rate: fx.rate, fetchedAt: fx.fetchedAt, source: fx.source });
-  } catch {
-    // No rate: prices stay in US dollars. The sheet says so.
+  // Show taka at once with a clearly labelled planning rate, then replace it with today's rate.
+  if (!getState().fx) setFx({ rate: FALLBACK_RATE, fetchedAt: "", source: "estimate" });
+  for (let i = 0; i < 3; i += 1) {
+    try {
+      const fx = await getFxRate();
+      setFx({ rate: fx.rate, fetchedAt: fx.fetchedAt, source: fx.source });
+      return;
+    } catch {
+      await new Promise((r) => setTimeout(r, 4000));
+    }
   }
 }
 
