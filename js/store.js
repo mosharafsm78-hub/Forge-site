@@ -3,7 +3,7 @@
 //   owner_data: what the owner enters (the server lets only the owner change it)
 //   staff_data: what the Forge team sets (amounts, deliveries, confirmations; the owner cannot change it)
 // The screens see one merged file.
-import { CONFIG } from "./config.js?v=1791376102";
+import { CONFIG } from "./config.js?v=1791376428";
 
 // Sample-data previews keep their own saved file so they never mix with a real one.
 const KEY = CONFIG.demo ? "forge.file.v2.demo" : "forge.file.v2";
@@ -42,7 +42,7 @@ function blank() {
     plan: { draftedAt: null, readAt: null, doc: null },
     // One line per batch of goods. The Forge team moves it from "not shipped" to "at Bangladesh" and sets the freight.
     shipments: [],
-    marketing: { budget: 0, launchedAt: null, postRequestedAt: null, postedAt: null, spent: 0, reached: 0 },
+    marketing: { budget: 0, launchedAt: null, postRequestedAt: null, postedAt: null, spent: 0, reached: 0, daily: [], updatedAt: null, note: "" },
     orders: { list: [] },
     reorder: { qty: 0, requestedAt: null },
     pausedAt: null,
@@ -66,7 +66,7 @@ const STAFF_PATHS = [
   "documents.agreementReady", "documents.verifiedAt", "documents.reviewNote",
   "brand.logo.options", "brand.logo.deliveredAt", "brand.page.url", "brand.page.deliveredAt",
   "payment.packagingCost", "payment.websiteFee", "payment.paidAt", "payment.quote", "payment.receivedAmount",
-  "plan.draftedAt", "plan.doc", "name.suggestions", "name.suggestedAt", "marketing.budget", "marketing.launchedAt", "marketing.postedAt", "marketing.spent", "marketing.reached",
+  "plan.draftedAt", "plan.doc", "name.suggestions", "name.suggestedAt", "marketing.budget", "marketing.launchedAt", "marketing.postedAt", "marketing.spent", "marketing.reached", "marketing.daily", "marketing.updatedAt", "marketing.note",
   "shipments", "orders.list",
 ];
 // The few things the owner does to a staff-owned shipment or order.

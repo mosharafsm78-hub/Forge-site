@@ -1,7 +1,7 @@
 // A locked choice can still be changed: the owner asks Forge, Forge reviews it, and Forge unlocks or applies it.
-import { h } from "./ui.js?v=1791376102";
-import { getState, update, saveNow } from "./store.js?v=1791376102";
-import { loadBackend } from "./backend.js?v=1791376102";
+import { h } from "./ui.js?v=1791376428";
+import { getState, update, saveNow } from "./store.js?v=1791376428";
+import { loadBackend } from "./backend.js?v=1791376428";
 
 const LABEL = { industry: "industry", product: "product and quantity", name: "business name", packaging: "packaging", domain: "domain" };
 
