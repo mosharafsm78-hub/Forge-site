@@ -1,30 +1,30 @@
 // Hash routes: #/profile, #/industry, and so on. A stage only opens when the ones before it are complete.
-import { h } from "./ui.js?v=1791375808";
-import { getState, currentUser, subscribe } from "./store.js?v=1791375808";
-import { CONFIG } from "./config.js?v=1791375808";
-import auth, { AUTH_IDS, OPEN_AUTH_IDS } from "./screens/auth.js?v=1791375808";
-import { canFill, blockingStage, isFrozen } from "./rules.js?v=1791375808";
-import { setCurrent } from "./chrome.js?v=1791375808";
-import { changeRequestBox } from "./changeRequest.js?v=1791375808";
-import welcome from "./screens/welcome.js?v=1791375808";
-import profile from "./screens/profile.js?v=1791375808";
-import industry from "./screens/industry.js?v=1791375808";
-import product from "./screens/product.js?v=1791375808";
-import name from "./screens/name.js?v=1791375808";
-import domain from "./screens/domain.js?v=1791375808";
-import brand from "./screens/brand.js?v=1791375808";
-import packaging from "./screens/packaging.js?v=1791375808";
-import documents from "./screens/documents.js?v=1791375808";
-import billing from "./screens/billing.js?v=1791375808";
-import plan from "./screens/plan.js?v=1791375808";
-import freight from "./screens/freight.js?v=1791375808";
-import marketing from "./screens/marketing.js?v=1791375808";
-import orders from "./screens/orders.js?v=1791375808";
-import returns from "./screens/returns.js?v=1791375808";
-import reorder from "./screens/reorder.js?v=1791375808";
-import pause from "./screens/pause.js?v=1791375808";
-import summary from "./screens/summary.js?v=1791375808";
-import accounting from "./screens/accounting.js?v=1791375808";
+import { h } from "./ui.js?v=1791376102";
+import { getState, currentUser, subscribe } from "./store.js?v=1791376102";
+import { CONFIG } from "./config.js?v=1791376102";
+import auth, { AUTH_IDS, OPEN_AUTH_IDS } from "./screens/auth.js?v=1791376102";
+import { canFill, blockingStage, isFrozen } from "./rules.js?v=1791376102";
+import { setCurrent } from "./chrome.js?v=1791376102";
+import { changeRequestBox } from "./changeRequest.js?v=1791376102";
+import welcome from "./screens/welcome.js?v=1791376102";
+import profile from "./screens/profile.js?v=1791376102";
+import industry from "./screens/industry.js?v=1791376102";
+import product from "./screens/product.js?v=1791376102";
+import name from "./screens/name.js?v=1791376102";
+import domain from "./screens/domain.js?v=1791376102";
+import brand from "./screens/brand.js?v=1791376102";
+import packaging from "./screens/packaging.js?v=1791376102";
+import documents from "./screens/documents.js?v=1791376102";
+import billing from "./screens/billing.js?v=1791376102";
+import plan from "./screens/plan.js?v=1791376102";
+import freight from "./screens/freight.js?v=1791376102";
+import marketing from "./screens/marketing.js?v=1791376102";
+import orders from "./screens/orders.js?v=1791376102";
+import returns from "./screens/returns.js?v=1791376102";
+import reorder from "./screens/reorder.js?v=1791376102";
+import pause from "./screens/pause.js?v=1791376102";
+import summary from "./screens/summary.js?v=1791376102";
+import accounting from "./screens/accounting.js?v=1791376102";
 
 const screens = { welcome, profile, industry, product, name, brand, packaging, domain, documents, summary, billing, plan, freight, marketing, orders, returns, reorder, pause, accounting, ...auth };
 
@@ -73,7 +73,7 @@ function lockView(node, id, st) {
   const frozen = isFrozen(id, st);
   const blocker = frozen ? null : blockingStage(id, st);
   const note = frozen
-    ? h("div", { class: "notice notice--forge", role: "note" }, h("p", null, h("b", null, "Locked. "), "You reported your payment, so your product, quantity, name, domain and packaging are fixed. This keeps your bill and your order the same. If you need a change, send Forge a request below."), changeRequestBox(id))
+    ? h("div", { class: "notice notice--locked", role: "note" }, h("p", null, h("b", null, "Locked. "), "You reported your payment, so your product, quantity, name, domain and packaging are fixed. This keeps your bill and your order the same. If you need a change, send Forge a request below."), changeRequestBox(id))
     : h(
     "div",
     { class: "notice notice--forge", role: "note" },

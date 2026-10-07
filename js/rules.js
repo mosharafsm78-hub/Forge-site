@@ -1,9 +1,9 @@
 // Validation and progress rules. Pure functions, no page access, so they are easy to test.
-import { BUILT, PREP, stageById } from "./stages.js?v=1791375808";
-import { CONFIG } from "./config.js?v=1791375808";
-import { industryById } from "./data/industries.js?v=1791375808";
-import { MIN_CAPITAL, MIN_CAPITAL_TEXT } from "./minimum.js?v=1791375808";
-import { budgetFor } from "./budget.js?v=1791375808";
+import { BUILT, PREP, stageById } from "./stages.js?v=1791376102";
+import { CONFIG } from "./config.js?v=1791376102";
+import { industryById } from "./data/industries.js?v=1791376102";
+import { MIN_CAPITAL, MIN_CAPITAL_TEXT } from "./minimum.js?v=1791376102";
+import { budgetFor } from "./budget.js?v=1791376102";
 
 export const PHONE_RE = /^(?:\+?88)?01[3-9]\d{8}$/;
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -218,7 +218,7 @@ export function stageStatus(stageId, st) {
   const stage = stageById(stageId);
   if (!stage.built) return { state: "later", text: "Opens later" };
   if (isComplete(stageId, st)) {
-    if (stageId === "packaging") return { state: "done", text: "Quote asked for" };
+    if (stageId === "packaging") return (st.payment && st.payment.packagingCost > 0) ? { state: "done", text: "Quote ready" } : { state: "done", pending: true, text: "Quote pending" };
     return { state: "done", text: "Done" };
   }
   if (stage.needs.some((id) => !isComplete(id, st))) {

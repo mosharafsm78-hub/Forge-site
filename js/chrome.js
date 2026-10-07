@@ -1,11 +1,11 @@
 // The frame around every screen: top bar, stage list, order sheet.
-import { h } from "./ui.js?v=1791375808";
-import { CONFIG } from "./config.js?v=1791375808";
-import { STAGES, PHASES, stageNumber } from "./stages.js?v=1791375808";
-import { getState, subscribe, isSaved, saveStatus, currentUser, saveNow, testMode, resetTestFile } from "./store.js?v=1791375808";
-import { loadBackend } from "./backend.js?v=1791375808";
-import { canOpen, stageStatus } from "./rules.js?v=1791375808";
-import { renderSheet } from "./sheet.js?v=1791375808";
+import { h } from "./ui.js?v=1791376102";
+import { CONFIG } from "./config.js?v=1791376102";
+import { STAGES, PHASES, stageNumber } from "./stages.js?v=1791376102";
+import { getState, subscribe, isSaved, saveStatus, currentUser, saveNow, testMode, resetTestFile } from "./store.js?v=1791376102";
+import { loadBackend } from "./backend.js?v=1791376102";
+import { canOpen, stageStatus } from "./rules.js?v=1791376102";
+import { renderSheet } from "./sheet.js?v=1791376102";
 
 let currentId = null;
 let railOpen = false;
@@ -96,8 +96,8 @@ function railItem(stage, st) {
   const status = stageStatus(stage.id, st);
   const done = status.state === "done";
   const open = stage.built && canOpen(stage.id, st);
-  const classes = ["rail__item", done ? "is-done" : "", stage.id === currentId ? "is-current" : "", "is-" + status.state].filter(Boolean).join(" ");
-  const marker = h("span", { class: "rail__marker", "aria-hidden": "true" }, done ? checkIcon() : String(index + 1));
+  const classes = ["rail__item", done ? "is-done" : "", status.pending ? "is-pending" : "", stage.id === currentId ? "is-current" : "", "is-" + status.state].filter(Boolean).join(" ");
+  const marker = h("span", { class: "rail__marker", "aria-hidden": "true" }, done && !status.pending ? checkIcon() : String(index + 1));
   let who = status.text;
   if (status.state === "open" && stage.wait) who = stage.wait;
   const text = h(

@@ -1,9 +1,9 @@
-import { h } from "../ui.js?v=1791375808";
-import { getState } from "../store.js?v=1791375808";
-import { previewAction } from "./common.js?v=1791375808";
-import { loadSample } from "../sample.js?v=1791375808";
-import { STAGES, PHASES, stageNumber } from "../stages.js?v=1791375808";
-import { canOpen, canFill, stageStatus } from "../rules.js?v=1791375808";
+import { h } from "../ui.js?v=1791376102";
+import { getState } from "../store.js?v=1791376102";
+import { previewAction } from "./common.js?v=1791376102";
+import { loadSample } from "../sample.js?v=1791376102";
+import { STAGES, PHASES, stageNumber } from "../stages.js?v=1791376102";
+import { canOpen, canFill, stageStatus } from "../rules.js?v=1791376102";
 
 const CHECK = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function tick() {
@@ -32,6 +32,7 @@ const BLURB = {
 };
 
 function turnChip(stage, status) {
+  if (status.pending) return h("span", { class: "chip-turn chip-turn--wait" }, status.text);
   if (status.state === "done") return h("span", { class: "chip-turn chip-turn--done" }, "Done");
   if (status.state === "waiting") return h("span", { class: "chip-turn chip-turn--wait" }, status.text);
   if (status.state === "locked" || status.state === "later") return h("span", { class: "chip-turn chip-turn--lock" }, status.text.replace("Starts after: ", "After: "));
