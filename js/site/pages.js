@@ -22,23 +22,23 @@ function warning(extra) {
 // ---- Specimens: the one bold element, an order sheet and a goods table ----
 function orderSheet() {
   const rows = [
-    ["Product, 200 pieces", "৳ 92,000"],
+    ["Product, 60 pieces", "৳ 11,000"],
     ["Domain, one year", "৳ 1,500"],
-    ["Packaging, bags and box", "৳ 14,000"],
+    ["Packaging, bags and box", "৳ 3,500"],
     ["Website setup", "৳ 8,000"],
   ];
   return h("figure", { class: "sheet", "aria-label": "Example order sheet" },
-    h("figcaption", null, h("strong", null, "Your first bill"), h("span", null, "Example, amounts illustrative")),
+    h("figcaption", null, h("strong", null, "Your first bill"), h("span", null, "Example of a starter order, amounts illustrative")),
     h("dl", { class: "sheet__rows" }, rows.map(([k, v]) => h("div", null, h("dt", null, k), h("dd", null, v)))),
-    h("div", { class: "sheet__total" }, h("span", null, "Total to pay"), h("strong", null, "৳ 115,500")),
-    h("p", { class: "sheet__note" }, "Freight, duty and clearance are not in this bill. They are billed at actual cost once your goods reach Bangladesh."));
+    h("div", { class: "sheet__total" }, h("span", null, "Total to pay"), h("strong", null, "৳ 24,000")),
+    h("p", { class: "sheet__note" }, "Freight, duty and clearance are not in this bill. They are billed at actual cost once your goods reach Bangladesh. This is why the starting minimum of ৳30,000 is more than this bill. You choose how many pieces to order."));
 }
 
 function goodsTable() {
   const rows = [
-    ["Desk lamp", "৳ 92,000", "Paid", "At Bangladesh", "৳ 9,400"],
-    ["Phone stand", "৳ 21,000", "Paid", "Shipped", "Not yet"],
-    ["Kitchen organiser", "৳ 25,000", "Unpaid", "Not shipped", "Not yet"],
+    ["Desk lamp", "৳ 11,000", "Paid", "At Bangladesh", "৳ 2,100"],
+    ["Phone stand", "৳ 7,500", "Paid", "Shipped", "Not yet"],
+    ["Kitchen organiser", "৳ 6,000", "Unpaid", "Not shipped", "Not yet"],
   ];
   return h("figure", { class: "tablefig" },
     h("div", { class: "tablewrap" }, h("table", null,
@@ -145,7 +145,7 @@ function freightExplainer() {
         h("dl", { class: "sheet__rows" }, lines.map(([k, v]) => h("div", null, h("dt", null, k), h("dd", null, v)))),
         h("div", { class: "sheet__total" }, h("span", null, "Total freight"), h("strong", null, "৳ 9,400")))),
     h("div", { class: "formula", role: "group", "aria-label": "What your first batch really costs" },
-      h("div", null, h("span", null, "Your first bill"), h("strong", null, "৳ 115,500")),
+      h("div", null, h("span", null, "Your first bill"), h("strong", null, "৳ 24,000")),
       h("b", { "aria-hidden": "true" }, "+"),
       h("div", null, h("span", null, "Freight, duty and clearance"), h("strong", null, "৳ 9,400")),
       h("b", { "aria-hidden": "true" }, "="),

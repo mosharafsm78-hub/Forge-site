@@ -102,4 +102,24 @@ export const backend = {
   async removeUpload(path) {
     if (path) await sb.storage.from("documents").remove([path]);
   },
+  // ---- Forge team only. The database refuses all of these for anyone who is not on the team. ----
+  async isStaff() {
+    const { data, error } = await sb.rpc("is_staff");
+    return !error && data === true;
+  },
+  async listFiles() {
+    const { data, error } = await sb.from("business_files").select("user_id, owner_data, staff_data, updated_at").order("updated_at", { ascending: false });
+    if (error) throw new Error("Could not load the files.");
+    return data || [];
+  },
+  async staffPatch(userId, patch) {
+    const { data, error } = await sb.rpc("staff_patch_file", { p_user: userId, p_patch: patch });
+    if (error) throw new Error("Could not save. You may not have permission.");
+    return data;
+  },
+  async documentUrl(path) {
+    const { data, error } = await sb.storage.from("documents").createSignedUrl(path, 300);
+    if (error || !data) throw new Error("Could not open the document.");
+    return data.signedUrl;
+  },
 };
