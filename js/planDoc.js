@@ -51,8 +51,8 @@ export function buildPlan(st) {
   const name = (st.name && st.name.chosen && st.name.chosen.trim()) || "Your business";
   const product = st.product ? st.product.name : "your product";
   const owner = (st.profile && st.profile.name && String(st.profile.name).trim().split(/\s+/)[0]) || "you";
-  const base = roundTo(n.landed * 2, 50);
-  const prices = [roundTo(n.landed * 1.5, 50), base, roundTo(n.landed * 2.5, 50)];
+  const base = roundTo(n.landed * 2.5, 50);
+  const prices = [roundTo(n.landed * 2, 50), base, roundTo(n.landed * 3, 50)];
   const rates = [0.15, 0.25, 0.35];
   const mid = batchProfit(n, base, 0.25);
   const cPerDelivered = (price, r) => price - n.goodsPerUnit - (COURIER_FEE + AD_PER_ORDER) / (1 - r);
@@ -67,7 +67,7 @@ export function buildPlan(st) {
       `${name} imports ${product} and sells it in Bangladesh, cash on delivery. You start with ${n.qty} units.`,
       `Money you put in over the first month: about ${bdt(n.total)}. That is your goods, domain, website, packaging, freight and a two-week ad test.`,
       `At a selling price of ${bdt(base)} and 1 in 4 parcels refused, selling all ${n.qty} units would leave you about ${signed(mid)}. This is a worked example, not a forecast.`,
-      be ? `On those numbers you need about ${be} delivered orders to cover the one-off costs.` : `On those numbers the price is too low to cover the costs. Raise the price before you start ads.`,
+      be && be <= n.qty ? `On those numbers about ${be} delivered orders cover your one-off costs, out of the ${n.qty} you hold.` : `On those numbers your first batch does not cover the one-off costs. A higher price, fewer costs or more units would be needed. Do not start ads until the numbers work.`,
       "The two things that decide the result are your selling price and how many parcels come back. Forge tracks both for you.",
     ],
   });
