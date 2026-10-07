@@ -1,6 +1,6 @@
 // Forge's business plan, written from the owner's real file. Plain words, real numbers, honest risks.
 // Every figure is either from the file (marked as such) or a planning assumption that says so.
-import { formatBdt, usdToBdt } from "./ui.js?v=1791345108";
+import { formatBdt, usdToBdt } from "./ui.js?v=1791345196";
 
 const FALLBACK_RATE = 122.76;
 const AD_DAYS = 14;
@@ -215,7 +215,7 @@ export function buildPlan(st) {
     title: "6. How the money comes back, and how you know if you made a profit",
     lines: [
       "The courier collects cash from each customer and pays it into your bank account or bKash, minus its delivery fee.",
-      "Your Orders page shows every order and its status. Your profit on a batch is simple: money received from the courier, minus everything in section 2, minus the courier fees on refused parcels.",
+      "Your Orders page shows every order and its status. Your profit on a batch is simple: money received from the courier, minus everything in \"What you pay, and when\", minus the courier fees on refused parcels.",
       "Forge shows you this as one number once orders are delivered, so you do not need to work it out yourself.",
     ],
   });

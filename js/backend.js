@@ -1,10 +1,10 @@
 // Picks the real service, or the test stand-in. The sample-data preview has no service at all.
-import { CONFIG } from "./config.js?v=1791345108";
+import { CONFIG } from "./config.js?v=1791345196";
 
 let impl = null;
 export async function loadBackend() {
   if (impl) return impl;
-  const mod = CONFIG.fake ? await import("./backend-local.js?v=1791345108") : await import("./backend-supabase.js?v=1791345108");
+  const mod = CONFIG.fake ? await import("./backend-local.js?v=1791345196") : await import("./backend-supabase.js?v=1791345196");
   impl = { ...mod.backend, takeLinkError: mod.takeLinkError };
   return impl;
 }

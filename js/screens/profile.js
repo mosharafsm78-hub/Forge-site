@@ -1,8 +1,8 @@
-import { h } from "../ui.js?v=1791345108";
-import { getState, update } from "../store.js?v=1791345108";
-import { profileRules, validateProfile, ageFrom } from "../rules.js?v=1791345108";
-import { DISTRICTS } from "../data/districts.js?v=1791345108";
-import { head, textField, selectField, radioField, foot } from "./common.js?v=1791345108";
+import { h } from "../ui.js?v=1791345196";
+import { getState, update } from "../store.js?v=1791345196";
+import { profileRules, validateProfile, ageFrom } from "../rules.js?v=1791345196";
+import { DISTRICTS } from "../data/districts.js?v=1791345196";
+import { head, textField, selectField, radioField, foot } from "./common.js?v=1791345196";
 
 const SECTIONS = [
   {

@@ -1,6 +1,6 @@
 // The real account and storage service. Everything the screens need from the server is here.
-import { createClient } from "./vendor/supabase.js?v=1791345108";
-import { CONFIG } from "./config.js?v=1791345108";
+import { createClient } from "./vendor/supabase.js?v=1791345196";
+import { CONFIG } from "./config.js?v=1791345196";
 
 const sb = createClient(CONFIG.authUrl, CONFIG.authKey, {
   auth: { flowType: "pkce", persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
