@@ -21,7 +21,7 @@ export default {
       add(body, h("section", { class: "section" },
         h("div", { class: "section__head" }, h("h2", null, "Your ads"), h("p", null, "Forge runs your ads on Facebook, and tests and improves them as results come in. You see the results here. You and Forge both have admin access to your page.")),
         m.launchedAt
-          ? h("div", null, h("p", null, h("span", { class: "pill pill--ok" }, "Ads are live"), " ", h("span", { class: "field__help" }, "Daily budget set by the team: " + formatBdt(m.budget))),
+          ? h("div", null, h("p", null, h("span", { class: "pill pill--ok" }, "Ads are live"), " ", h("span", { class: "field__help" }, "Daily budget set by Forge: " + formatBdt(m.budget))),
               h("div", { class: "stats" }, [["Spent so far", "৳4,200"], ["Orders", "11"], ["Cost per order", "৳382"], ["People reached", "9,800"]].map(([k, v]) => h("div", { class: "stat" }, h("small", null, k), h("b", { class: "num" }, v)))),
               CONFIG.demo ? h("p", { class: "field__help" }, "Preview: these numbers are samples. Live numbers come from Facebook once your ads run.") : null)
           : h("div", { class: "wait" }, h("h3", null, "Ads start when your goods are with you"), h("p", { class: "field__help" }, "Forge sets your ad budget with you, then starts the ads. Your numbers appear here once they run."),

@@ -52,7 +52,7 @@ function whyForge() {
     ["Nothing starts without a signed agreement", "Forge does no work and takes no money until the agreement is signed. It says who pays for what and who carries which loss, so there are no surprises later."],
     ["You see every number before you pay", "Your first bill lists each line. Freight is never guessed in advance: it is billed at actual cost, only after your goods reach Bangladesh."],
     ["Forge does the work and answers for it", "Forge buys your domain, gets your packaging made, runs your ads and confirms your orders. You can see each step, and you can ask about any of them."],
-    ["One place instead of eight suppliers", "Alone, you would find a designer, a packaging maker, a domain seller, an importer, a freight agent, an ad expert and a courier. Here it is one file and one team."],
+    ["One place instead of eight suppliers", "Alone, you would find a designer, a packaging maker, a domain seller, an importer, a freight agent, an ad expert and a courier. Here it is one file and Forge."],
     ["It is your business, not ours", "Your brand, your Facebook page, your domain and your stock. You can see stock in hand and every order at any time, and you can pause whenever you decide to."],
     ["We tell you the risk first", "Most services only sell the dream. Forge tells you up front that mistakes happen and money can be lost, and shows you how we reduce that risk."],
   ];

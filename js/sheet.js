@@ -29,7 +29,7 @@ export function computeSheet(st) {
       rows.push({ key: "domain", label: d.name, sub: "Domain for 1 year", value: money(Number(d.priceAmount)) });
       add(Number(d.priceAmount));
     } else {
-      rows.push({ key: "domain", label: d.name, sub: "Domain", pending: "Price confirmed by the team" });
+      rows.push({ key: "domain", label: d.name, sub: "Domain", pending: "Price confirmed by Forge" });
     }
   } else {
     rows.push({ key: "domain", label: "Domain", sub: "Not chosen yet", pending: "" });
