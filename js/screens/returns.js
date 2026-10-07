@@ -1,8 +1,8 @@
-import { h, announce, append } from "../ui.js?v=1791345761";
-import { getState, update } from "../store.js?v=1791345761";
-import { head, reviewNote, journeyFoot, dateText } from "./common.js?v=1791345761";
-import { STATUS } from "./orders.js?v=1791345761";
-import { stockFigures } from "../stock.js?v=1791345761";
+import { h, announce, append } from "../ui.js?v=1791345812";
+import { getState, update } from "../store.js?v=1791345812";
+import { head, reviewNote, journeyFoot, dateText } from "./common.js?v=1791345812";
+import { STATUS } from "./orders.js?v=1791345812";
+import { stockFigures } from "../stock.js?v=1791345812";
 
 const add = (el, ...k) => append(el, k);
 

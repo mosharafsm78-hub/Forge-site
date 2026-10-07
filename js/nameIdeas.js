@@ -1,8 +1,8 @@
 // Free name ideas: built from the product, the industry and the owner's first name, then checked for a free .com.
-import { slugify, validateBusinessName } from "./rules.js?v=1791345761";
-import { checkDomains } from "./api.js?v=1791345761";
-import { CONFIG } from "./config.js?v=1791345761";
-import { loadBackend } from "./backend.js?v=1791345761";
+import { slugify, validateBusinessName } from "./rules.js?v=1791345812";
+import { checkDomains } from "./api.js?v=1791345812";
+import { CONFIG } from "./config.js?v=1791345812";
+import { loadBackend } from "./backend.js?v=1791345812";
 
 const WORDS = {
   footwear: { core: ["Step", "Stride", "Sole", "Tread", "Pace", "Kick", "Walk"], tail: ["Footwear", "Shoes", "Steps", "Studio", "House"] },
