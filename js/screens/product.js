@@ -212,7 +212,7 @@ export default {
               { class: "facts" },
               h("dt", null, "In stock"), h("dd", { class: "num" }, p.inventory > 0 ? p.inventory.toLocaleString("en-US") : "Checked before ordering"),
               p.category ? [h("dt", null, "Category"), h("dd", null, p.category)] : null,
-              p.supplier ? [h("dt", null, "Supplier"), h("dd", null, p.supplier)] : null
+              null
             ),
             desc,
             h("div", { class: "field" }, h("label", { class: "field__label", for: "f-qty" }, "How many units?"), h("div", { class: "qty" }, h("button", { type: "button", "aria-label": "Fewer", onclick: () => setQty(qty - 1) }, "−"), qtyInput, h("button", { type: "button", "aria-label": "More", onclick: () => setQty(qty + 1) }, "+")), h("p", { class: "field__help" }, "Start small. You can reorder when this batch sells.")),
