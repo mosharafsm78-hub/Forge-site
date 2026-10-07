@@ -1,8 +1,8 @@
-import { h, formatBdt, announce, append } from "../ui.js";
-import { getState, update } from "../store.js";
-import { sampleOrders, ensureSampleStock } from "../sample.js";
-import { stockFigures } from "../stock.js";
-import { head, previewAction, reviewNote, journeyFoot, dateText } from "./common.js";
+import { h, formatBdt, announce, append } from "../ui.js?v=1791339729";
+import { getState, update } from "../store.js?v=1791339729";
+import { sampleOrders, ensureSampleStock } from "../sample.js?v=1791339729";
+import { stockFigures } from "../stock.js?v=1791339729";
+import { head, previewAction, reviewNote, journeyFoot, dateText } from "./common.js?v=1791339729";
 
 const add = (el, ...k) => append(el, k);
 export const STATUS = { new: "New", confirmed: "Confirmed", handed: "With the courier", delivered: "Delivered", returned: "Coming back", restocked: "Back in stock" };

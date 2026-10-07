@@ -1,13 +1,13 @@
-import { h, announce, append } from "../ui.js";
+import { h, announce, append } from "../ui.js?v=1791339729";
 const add = (el, ...kids) => append(el, kids);
-import { CONFIG } from "../config.js";
-import { getState, update, testMode, syncStaff } from "../store.js";
-import { validateBusinessName, isComplete, nextToDo } from "../rules.js";
-import { HOUR } from "../time.js";
-import { LOGO_TYPES, LOGO_COLORS, suggestionFor, sampleOptions, logoView } from "../logo.js";
-import { industryById } from "../data/industries.js";
-import { head, textField, textareaField, foot } from "./common.js";
-import { waitPanel } from "./wait.js";
+import { CONFIG } from "../config.js?v=1791339729";
+import { getState, update, testMode, syncStaff } from "../store.js?v=1791339729";
+import { validateBusinessName, isComplete, nextToDo } from "../rules.js?v=1791339729";
+import { HOUR } from "../time.js?v=1791339729";
+import { LOGO_TYPES, LOGO_COLORS, suggestionFor, sampleOptions, logoView } from "../logo.js?v=1791339729";
+import { industryById } from "../data/industries.js?v=1791339729";
+import { head, textField, textareaField, foot } from "./common.js?v=1791339729";
+import { waitPanel } from "./wait.js?v=1791339729";
 
 export default {
   id: "brand",

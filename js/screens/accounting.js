@@ -1,7 +1,7 @@
-import { h, formatBdt } from "../ui.js";
-import { getState } from "../store.js";
-import { accounts, COURIER_FEE } from "../accounting.js";
-import { head } from "./common.js";
+import { h, formatBdt } from "../ui.js?v=1791339729";
+import { getState } from "../store.js?v=1791339729";
+import { accounts, COURIER_FEE } from "../accounting.js?v=1791339729";
+import { head } from "./common.js?v=1791339729";
 
 const money = (n) => (n < 0 ? "−" + formatBdt(Math.round(-n)) : formatBdt(Math.round(n)));
 const pct = (n) => Math.round(n * 100) + "%";
