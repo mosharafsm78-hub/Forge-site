@@ -1,8 +1,8 @@
-import { h, formatUsd, formatBdt, usdToBdt, announce } from "../ui.js?v=1791340146";
-import { getState, update, subscribe } from "../store.js?v=1791340146";
-import { industryById } from "../data/industries.js?v=1791340146";
-import { searchProducts, productDetail } from "../api.js?v=1791340146";
-import { head, foot } from "./common.js?v=1791340146";
+import { h, formatUsd, formatBdt, usdToBdt, announce } from "../ui.js?v=1791340302";
+import { getState, update, subscribe } from "../store.js?v=1791340302";
+import { industryById } from "../data/industries.js?v=1791340302";
+import { searchProducts, productDetail } from "../api.js?v=1791340302";
+import { head, foot } from "./common.js?v=1791340302";
 
 function priceLines(usd, fx) {
   const bdt = usdToBdt(usd, fx && fx.rate);
@@ -22,6 +22,7 @@ export default {
     let loading = false;
     let error = "";
     let requestId = 0;
+    let lastLoadAt = 0;
     let lastRate = getState().fx ? getState().fx.rate : null;
 
     const chosenSlot = h("div");
@@ -135,6 +136,7 @@ export default {
         if (!reset) page -= 1;
       }
       loading = false;
+      lastLoadAt = Date.now();
       renderResults();
       if (reset && items.length) announce(`${items.length} products shown.`);
     }
@@ -255,7 +257,7 @@ export default {
     const form = h("form", { class: "searchbar", role: "search", onsubmit: (e) => {
       e.preventDefault();
       runSearch(search.value);
-    } }, search, h("button", { type: "submit", class: "btn" }, "Search"));
+    } }, search, h("button", { type: "submit", class: "btn" }, "Search"), h("button", { type: "button", class: "btn", title: "Load the latest products and prices", onclick: () => { load(true); announce("Refreshing products."); } }, "Refresh"));
 
     const root = h(
       "section",
@@ -278,7 +280,12 @@ export default {
         renderResults();
       }
     });
-    root._dispose = stop;
+    // Coming back to this tab after a while loads the latest products and prices again.
+    const onVisible = () => {
+      if (document.visibilityState === "visible" && industry && !loading && Date.now() - lastLoadAt > 5 * 60 * 1000) load(true);
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    root._dispose = () => { stop(); document.removeEventListener("visibilitychange", onVisible); };
 
     renderChips();
     renderChosen();

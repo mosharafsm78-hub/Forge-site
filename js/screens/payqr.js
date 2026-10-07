@@ -1,6 +1,6 @@
 // Pay by scanning the Bangla QR with any bank or mobile wallet app. Forge checks the payment by hand afterwards.
-import { h } from "../ui.js?v=1791340146";
-import { CONFIG } from "../config.js?v=1791340146";
+import { h } from "../ui.js?v=1791340302";
+import { CONFIG } from "../config.js?v=1791340302";
 
 export const PAY_QR_SRC = CONFIG.payQr || "assets/bangla-qr.png";
 
