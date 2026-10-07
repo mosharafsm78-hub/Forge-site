@@ -1,10 +1,10 @@
-import { h, announce, append, formatBdt } from "../ui.js?v=1791340771";
-import { getState, update } from "../store.js?v=1791340771";
-import { computeSheet } from "../sheet.js?v=1791340771";
-import { addWorkingDays, formatDay } from "../time.js?v=1791340771";
-import { head, previewAction, reviewNote, journeyFoot, dateText, freightNote } from "./common.js?v=1791340771";
-import { makeShipment, freightDue } from "../shipments.js?v=1791340771";
-import { payPanel } from "./payqr.js?v=1791340771";
+import { h, announce, append, formatBdt } from "../ui.js?v=1791343520";
+import { getState, update } from "../store.js?v=1791343520";
+import { computeSheet } from "../sheet.js?v=1791343520";
+import { addWorkingDays, formatDay } from "../time.js?v=1791343520";
+import { head, previewAction, reviewNote, journeyFoot, dateText, freightNote } from "./common.js?v=1791343520";
+import { makeShipment, freightDue } from "../shipments.js?v=1791343520";
+import { payPanel } from "./payqr.js?v=1791343520";
 
 const add = (el, ...k) => append(el, k);
 const DAY = 86400000;
@@ -51,10 +51,10 @@ export default {
         add(body, h("div", { class: "notice notice--warn" }, h("p", null, h("b", null, "Your bill is not final yet.")), h("p", null, "Still waiting for: " + missing.join(", ") + ". Payment opens when everything is on the bill.")),
           previewAction("show a sample final bill", () => { update((s) => { s.payment.packagingCost = 4500; s.payment.websiteFee = 3000; }); paint(); }));
       } else {
-        const payBtn = h("button", { type: "button", class: "btn btn--primary", disabled: !pay.quoteApprovedAt || !signed || String(pay.trxId || "").trim().length < 6, onclick: () => { update((s) => { s.payment.reportedAt = Date.now(); }); announce("Thank you. Forge will check your payment."); paint(); } }, "I have paid in full");
+        const payBtn = h("button", { type: "button", class: "btn btn--primary", disabled: !pay.quoteApprovedAt || !signed || !(sheet.orderTotalNum > 0) || String(pay.trxId || "").trim().length < 6, onclick: () => { update((s) => { s.payment.shownTotal = sheet.orderTotalNum; s.payment.reportedAt = Date.now(); }); announce("Thank you. Forge will check your payment."); paint(); } }, "I have paid in full");
         const trxField = () => {
           const input = h("input", { id: "f-trx", class: "field__control", type: "text", maxlength: "40", autocomplete: "off", value: pay.trxId || "", placeholder: "For example 9H7K2L1M" });
-          input.addEventListener("input", () => { update((s) => { s.payment.trxId = input.value.trim(); }); payBtn.disabled = input.value.trim().length < 6; });
+          input.addEventListener("input", () => { update((s) => { s.payment.trxId = input.value.trim(); }); payBtn.disabled = !(sheet.orderTotalNum > 0) || input.value.trim().length < 6; });
           return h("div", { class: "field", style: "margin-top:16px" }, h("label", { class: "field__label", for: "f-trx" }, "Transaction ID from your app"), input, h("p", { class: "field__help" }, "Forge uses it to find your payment. You can press the button once you have entered it."));
         };
         add(body, h("section", { class: "section" },

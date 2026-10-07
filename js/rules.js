@@ -1,8 +1,8 @@
 // Validation and progress rules. Pure functions, no page access, so they are easy to test.
-import { BUILT, PREP, stageById } from "./stages.js?v=1791340771";
-import { CONFIG } from "./config.js?v=1791340771";
-import { industryById } from "./data/industries.js?v=1791340771";
-import { MIN_CAPITAL, MIN_CAPITAL_TEXT } from "./minimum.js?v=1791340771";
+import { BUILT, PREP, stageById } from "./stages.js?v=1791343520";
+import { CONFIG } from "./config.js?v=1791343520";
+import { industryById } from "./data/industries.js?v=1791343520";
+import { MIN_CAPITAL, MIN_CAPITAL_TEXT } from "./minimum.js?v=1791343520";
 
 export const PHONE_RE = /^(?:\+?88)?01[3-9]\d{8}$/;
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -161,11 +161,21 @@ export function isComplete(stageId, st) {
 }
 
 // A stage opens when it exists and everything it needs is complete.
+// Once the owner has reported a payment, the choices that fix the price and the goods are locked.
+// The database enforces the same rule, so this only makes the page say so plainly.
+export const FROZEN_STAGES = ["industry", "product", "name", "packaging", "domain"];
+export function isFrozen(stageId, st) {
+  if (CONFIG.demo || !FROZEN_STAGES.includes(stageId)) return false;
+  const pay = (st && st.payment) || {};
+  return Boolean(pay.reportedAt || pay.paidAt);
+}
+
 // Whether the owner can fill in a stage. In the live workspace this is strict, one stage after another.
 export function canFill(stageId, st) {
   if (stageId === "welcome" || stageId === "pause" || stageId === "accounting") return true;
   // The sample-data preview lets a reviewer fill every page. The live site never does.
   if (CONFIG.demo) return true;
+  if (isFrozen(stageId, st)) return false;
   if (stageId === "summary") return PREP.every((id) => isComplete(id, st));
   const stage = stageById(stageId);
   if (!stage || !stage.built) return false;

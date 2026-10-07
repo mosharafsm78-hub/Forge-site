@@ -1,9 +1,9 @@
-import { h, formatUsd, formatBdt, usdToBdt, announce, append } from "../ui.js?v=1791340771";
-import { getState, update } from "../store.js?v=1791340771";
-import { head, reviewNote, journeyFoot, dateText } from "./common.js?v=1791340771";
-import { CONFIG } from "../config.js?v=1791340771";
-import { makeShipment } from "../shipments.js?v=1791340771";
-import { stockFigures } from "../stock.js?v=1791340771";
+import { h, formatUsd, formatBdt, usdToBdt, announce, append } from "../ui.js?v=1791343520";
+import { getState, update } from "../store.js?v=1791343520";
+import { head, reviewNote, journeyFoot, dateText } from "./common.js?v=1791343520";
+import { CONFIG } from "../config.js?v=1791343520";
+import { makeShipment } from "../shipments.js?v=1791343520";
+import { stockFigures } from "../stock.js?v=1791343520";
 
 const add = (el, ...k) => append(el, k);
 

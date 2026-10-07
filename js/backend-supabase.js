@@ -1,6 +1,6 @@
 // The real account and storage service. Everything the screens need from the server is here.
-import { createClient } from "./vendor/supabase.js?v=1791340771";
-import { CONFIG } from "./config.js?v=1791340771";
+import { createClient } from "./vendor/supabase.js?v=1791343520";
+import { CONFIG } from "./config.js?v=1791343520";
 
 const sb = createClient(CONFIG.authUrl, CONFIG.authKey, {
   auth: { flowType: "pkce", persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
@@ -124,7 +124,13 @@ export const backend = {
   },
   async staffPatch(userId, patch) {
     const { data, error } = await sb.rpc("staff_patch_file", { p_user: userId, p_patch: patch });
-    if (error) throw new Error("Could not save. You may not have permission.");
+    if (error) {
+      const m = String(error.message || "");
+      if (/received_amount_missing/.test(m)) throw new Error("Enter the amount you received before confirming.");
+      if (/received_amount_mismatch/.test(m)) throw new Error("The amount you entered does not match what the owner reported paying. Check the amount, or ask the owner to pay the difference.");
+      if (/no_reported_payment/.test(m)) throw new Error("The owner has not reported a payment yet, so there is nothing to confirm.");
+      throw new Error("Could not save. You may not have permission.");
+    }
     return data;
   },
   // ---- Test accounts only: play Forge's side on your own file. The database refuses everyone else. ----

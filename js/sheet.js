@@ -1,8 +1,8 @@
 // The order sheet: a running estimate that fills in as the owner decides.
-import { h, formatBdt, formatUsd, usdToBdt } from "./ui.js?v=1791340771";
-import { getState } from "./store.js?v=1791340771";
-import { CONFIG } from "./config.js?v=1791340771";
-import { addWorkingDays, formatDay } from "./time.js?v=1791340771";
+import { h, formatBdt, formatUsd, usdToBdt } from "./ui.js?v=1791343520";
+import { getState } from "./store.js?v=1791343520";
+import { CONFIG } from "./config.js?v=1791343520";
+import { addWorkingDays, formatDay } from "./time.js?v=1791343520";
 
 // Pure calculation. Returns the rows to show and the running total.
 export function computeSheet(st) {
@@ -52,6 +52,7 @@ export function computeSheet(st) {
   }
   const fmtTotal = (t, e) => (rate ? formatBdt(t + e) : e > 0 ? `${formatUsd(t)} + ${formatBdt(e)}` : formatUsd(t));
   const orderTotal = fmtTotal(total, extra); // what the first bill asks for, without freight
+  const orderTotalNum = rate ? Math.round(total + extra) : null; // the same amount as a number, taka
   const freightTotal = (st.shipments || []).filter((x) => x.freight > 0).reduce((n, x) => n + x.freight, 0);
   const freightUnpaid = (st.shipments || []).filter((x) => x.freight > 0 && !x.freightPaidAt).reduce((n, x) => n + x.freight, 0);
   if (freightTotal > 0) {
@@ -61,7 +62,7 @@ export function computeSheet(st) {
     rows.push({ key: "freight", label: "Freight, duty and clearance", pending: "Billed when goods reach Bangladesh" });
   }
 
-  return { orderTotal, rows, total: rate ? formatBdt(total + extra) : extra > 0 ? `${formatUsd(total)} + ${formatBdt(extra)}` : formatUsd(total), hasRate: Boolean(rate), rate };
+  return { orderTotal, orderTotalNum, rows, total: rate ? formatBdt(total + extra) : extra > 0 ? `${formatUsd(total)} + ${formatBdt(extra)}` : formatUsd(total), hasRate: Boolean(rate), rate };
 }
 
 export function renderSheet(open, onToggle) {

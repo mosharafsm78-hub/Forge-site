@@ -1,29 +1,29 @@
 // Hash routes: #/profile, #/industry, and so on. A stage only opens when the ones before it are complete.
-import { h } from "./ui.js?v=1791340771";
-import { getState, currentUser, subscribe } from "./store.js?v=1791340771";
-import { CONFIG } from "./config.js?v=1791340771";
-import auth, { AUTH_IDS, OPEN_AUTH_IDS } from "./screens/auth.js?v=1791340771";
-import { canFill, blockingStage } from "./rules.js?v=1791340771";
-import { setCurrent } from "./chrome.js?v=1791340771";
-import welcome from "./screens/welcome.js?v=1791340771";
-import profile from "./screens/profile.js?v=1791340771";
-import industry from "./screens/industry.js?v=1791340771";
-import product from "./screens/product.js?v=1791340771";
-import name from "./screens/name.js?v=1791340771";
-import domain from "./screens/domain.js?v=1791340771";
-import brand from "./screens/brand.js?v=1791340771";
-import packaging from "./screens/packaging.js?v=1791340771";
-import documents from "./screens/documents.js?v=1791340771";
-import billing from "./screens/billing.js?v=1791340771";
-import plan from "./screens/plan.js?v=1791340771";
-import freight from "./screens/freight.js?v=1791340771";
-import marketing from "./screens/marketing.js?v=1791340771";
-import orders from "./screens/orders.js?v=1791340771";
-import returns from "./screens/returns.js?v=1791340771";
-import reorder from "./screens/reorder.js?v=1791340771";
-import pause from "./screens/pause.js?v=1791340771";
-import summary from "./screens/summary.js?v=1791340771";
-import accounting from "./screens/accounting.js?v=1791340771";
+import { h } from "./ui.js?v=1791343520";
+import { getState, currentUser, subscribe } from "./store.js?v=1791343520";
+import { CONFIG } from "./config.js?v=1791343520";
+import auth, { AUTH_IDS, OPEN_AUTH_IDS } from "./screens/auth.js?v=1791343520";
+import { canFill, blockingStage, isFrozen } from "./rules.js?v=1791343520";
+import { setCurrent } from "./chrome.js?v=1791343520";
+import welcome from "./screens/welcome.js?v=1791343520";
+import profile from "./screens/profile.js?v=1791343520";
+import industry from "./screens/industry.js?v=1791343520";
+import product from "./screens/product.js?v=1791343520";
+import name from "./screens/name.js?v=1791343520";
+import domain from "./screens/domain.js?v=1791343520";
+import brand from "./screens/brand.js?v=1791343520";
+import packaging from "./screens/packaging.js?v=1791343520";
+import documents from "./screens/documents.js?v=1791343520";
+import billing from "./screens/billing.js?v=1791343520";
+import plan from "./screens/plan.js?v=1791343520";
+import freight from "./screens/freight.js?v=1791343520";
+import marketing from "./screens/marketing.js?v=1791343520";
+import orders from "./screens/orders.js?v=1791343520";
+import returns from "./screens/returns.js?v=1791343520";
+import reorder from "./screens/reorder.js?v=1791343520";
+import pause from "./screens/pause.js?v=1791343520";
+import summary from "./screens/summary.js?v=1791343520";
+import accounting from "./screens/accounting.js?v=1791343520";
 
 const screens = { welcome, profile, industry, product, name, brand, packaging, domain, documents, summary, billing, plan, freight, marketing, orders, returns, reorder, pause, accounting, ...auth };
 
@@ -56,11 +56,12 @@ function riskBox() {
 
 let toastTimer = null;
 // The friendly nudge when someone taps a page that is not open yet.
-function lockToast(blocker) {
+function lockToast(blocker, frozen) {
   let t = document.getElementById("locktoast");
   if (!t) { t = h("div", { id: "locktoast", class: "locktoast", role: "status" }); document.body.appendChild(t); }
   const label = blocker ? blocker.label : "the step before it";
-  t.replaceChildren(h("span", null, h("b", null, "Almost there. "), "Please finish ", blocker ? h("a", { href: "#/" + blocker.id }, label) : label, " first. This page opens right after."));
+  if (frozen) t.replaceChildren(h("span", null, h("b", null, "Locked. "), "This choice is fixed because you reported your payment. To change it, ask Forge."));
+  else t.replaceChildren(h("span", null, h("b", null, "Almost there. "), "Please finish ", blocker ? h("a", { href: "#/" + blocker.id }, label) : label, " first. This page opens right after."));
   t.classList.add("is-on");
   window.clearTimeout(toastTimer);
   toastTimer = window.setTimeout(() => t.classList.remove("is-on"), 5000);
@@ -68,8 +69,11 @@ function lockToast(blocker) {
 
 // A page that is not open for filling yet: the owner can read all of it, but nothing can be changed.
 function lockView(node, id, st) {
-  const blocker = blockingStage(id, st);
-  const note = h(
+  const frozen = isFrozen(id, st);
+  const blocker = frozen ? null : blockingStage(id, st);
+  const note = frozen
+    ? h("div", { class: "notice notice--forge", role: "note" }, h("p", null, h("b", null, "Locked. "), "You reported your payment, so your product, quantity, name, domain and packaging are fixed. This keeps your bill and your order the same. If you need a change, ask Forge."))
+    : h(
     "div",
     { class: "notice notice--forge", role: "note" },
     h("p", null, h("b", null, "Preview only. "), blocker ? "You can read this page now. It opens for you once you finish " : "You can read this page now. It opens for you after the steps before it.", blocker ? h("a", { href: "#/" + blocker.id }, blocker.label) : null, blocker ? "." : "")
@@ -82,7 +86,7 @@ function lockView(node, id, st) {
     if (!t || (e.type === "keydown" && ["Tab", "Shift", "Escape"].includes(e.key))) return;
     e.preventDefault();
     e.stopPropagation();
-    lockToast(blocker);
+    lockToast(blocker, frozen);
   };
   ["click", "keydown"].forEach((type) => node.addEventListener(type, stop, true));
   node.prepend(note);

@@ -3,7 +3,7 @@
 //   owner_data: what the owner enters (the server lets only the owner change it)
 //   staff_data: what the Forge team sets (amounts, deliveries, confirmations; the owner cannot change it)
 // The screens see one merged file.
-import { CONFIG } from "./config.js?v=1791340771";
+import { CONFIG } from "./config.js?v=1791343520";
 
 // Sample-data previews keep their own saved file so they never mix with a real one.
 const KEY = CONFIG.demo ? "forge.file.v2.demo" : "forge.file.v2";
@@ -38,7 +38,7 @@ function blank() {
     // Files are described here, not stored. Real storage arrives with the database.
     documents: { nidFront: null, nidBack: null, cheque: null, licence: null, bankName: "", bkash: "", agreementReady: false, agreementSigned: null },
     // After payment. The Forge team sets the amounts and confirms each step; the owner sees and acts on theirs.
-    payment: { packagingCost: 0, websiteFee: 0, quoteApprovedAt: null, reportedAt: null, paidAt: null, trxId: "" },
+    payment: { packagingCost: 0, websiteFee: 0, quoteApprovedAt: null, reportedAt: null, shownTotal: null, paidAt: null, trxId: "" },
     plan: { draftedAt: null, readAt: null, doc: null },
     // One line per batch of goods. The Forge team moves it from "not shipped" to "at Bangladesh" and sets the freight.
     shipments: [],
@@ -64,7 +64,7 @@ function merge(base, extra) {
 const STAFF_PATHS = [
   "documents.agreementReady", "documents.verifiedAt", "documents.reviewNote",
   "brand.logo.options", "brand.logo.deliveredAt", "brand.page.url", "brand.page.deliveredAt",
-  "payment.packagingCost", "payment.websiteFee", "payment.paidAt",
+  "payment.packagingCost", "payment.websiteFee", "payment.paidAt", "payment.quote", "payment.receivedAmount",
   "plan.draftedAt", "plan.doc", "name.suggestions", "name.suggestedAt", "marketing.budget", "marketing.launchedAt", "marketing.postedAt", "marketing.spent", "marketing.reached",
   "shipments", "orders.list",
 ];
