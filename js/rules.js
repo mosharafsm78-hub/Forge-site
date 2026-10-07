@@ -161,14 +161,34 @@ export function isComplete(stageId, st) {
 }
 
 // A stage opens when it exists and everything it needs is complete.
-export function canOpen(stageId, st) {
+// Whether the owner can fill in a stage. In the live workspace this is strict, one stage after another.
+export function canFill(stageId, st) {
   if (stageId === "welcome" || stageId === "pause") return true;
-  // The sample-data preview lets a reviewer open every page. The live site never does.
+  // The sample-data preview lets a reviewer fill every page. The live site never does.
   if (CONFIG.demo) return true;
   if (stageId === "summary") return PREP.every((id) => isComplete(id, st));
   const stage = stageById(stageId);
   if (!stage || !stage.built) return false;
   return stage.needs.every((id) => isComplete(id, st));
+}
+
+// Every built page can be looked at, so the owner sees the whole journey. Filling in follows canFill.
+export function canOpen(stageId, st) {
+  if (stageId === "welcome" || stageId === "pause" || stageId === "summary") return true;
+  const stage = stageById(stageId);
+  return Boolean(stage && stage.built);
+}
+
+// The first unfinished stage that stands in the way of this one, for the "finish this first" note.
+export function blockingStage(stageId, st, seen = new Set()) {
+  if (seen.has(stageId)) return null;
+  seen.add(stageId);
+  const needs = stageId === "summary" ? PREP : (stageById(stageId) || { needs: [] }).needs;
+  for (const id of needs) {
+    if (isComplete(id, st)) continue;
+    return blockingStage(id, st, seen) || stageById(id);
+  }
+  return null;
 }
 
 export function firstOpenStage(st) {

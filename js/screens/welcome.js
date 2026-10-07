@@ -3,7 +3,7 @@ import { getState } from "../store.js";
 import { previewAction } from "./common.js";
 import { loadSample } from "../sample.js";
 import { STAGES, PHASES, stageNumber } from "../stages.js";
-import { canOpen, stageStatus } from "../rules.js";
+import { canOpen, canFill, stageStatus } from "../rules.js";
 
 const CHECK = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function tick() {
@@ -40,7 +40,7 @@ function turnChip(stage, status) {
 }
 
 function nextStage(st) {
-  return STAGES.find((s) => s.built && !s.ongoing && stageStatus(s.id, st).state !== "done" && canOpen(s.id, st)) || null;
+  return STAGES.find((s) => s.built && !s.ongoing && stageStatus(s.id, st).state !== "done" && canFill(s.id, st)) || null;
 }
 
 export default {

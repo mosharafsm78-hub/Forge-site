@@ -1,8 +1,27 @@
-import { h, formatUsd, announce, append } from "../ui.js";
+import { h, announce, append } from "../ui.js";
+import { CONFIG } from "../config.js";
 import { getState, update } from "../store.js";
+import { HOUR } from "../time.js";
+import { buildPlan } from "../planDoc.js";
 import { head, previewAction, reviewNote, journeyFoot } from "./common.js";
+import { waitPanel } from "./wait.js";
 
 const add = (el, ...k) => append(el, k);
+const WAIT = HOUR / 2; // Forge writes the plan within 30 minutes of the payment being confirmed
+
+function renderSection(sec) {
+  const kids = [h("div", { class: "section__head" }, h("h2", null, sec.title))];
+  if (sec.lines && sec.lines.length) kids.push(sec.lines.length === 1 ? h("p", null, sec.lines[0]) : h("ul", { class: "steps" }, sec.lines.map((l) => h("li", null, l))));
+  if (sec.table) {
+    const t = sec.table;
+    kids.push(h("div", { class: "table-wrap" }, h("table", { class: "table table--tight" },
+      h("thead", null, h("tr", null, t.head.map((c) => h("th", null, c)))),
+      h("tbody", null, t.rows.map((r) => h("tr", null, r.map((c, i) => h("td", i === 0 ? { class: "plan__first" } : null, c))))),
+      t.foot ? h("tfoot", null, h("tr", null, t.foot.map((c) => h("th", null, c)))) : null)));
+  }
+  if (sec.note) kids.push(h("p", { class: "field__help" }, sec.note));
+  return h("section", { class: "section plan__sec" + (sec.callout ? " plan__callout" : "") }, kids);
+}
 
 export default {
   id: "plan",
@@ -11,42 +30,42 @@ export default {
   render({ go }) {
     const body = h("div");
     const footSlot = h("div");
-
-    function sections(st) {
-      const name = st.name.chosen.trim() || "Your business";
-      const product = st.product ? st.product.name : "your product";
-      const price = st.product ? formatUsd(st.product.priceUsd) : "the supplier price";
-      return [
-        ["The business", [`${name} sells ${product} to customers in Bangladesh. Customers order on your website or through your Facebook page and pay cash on delivery.`]],
-        ["Your first order", [`${st.qty} units at ${price} each from the supplier, before freight and duty. Start small: you can reorder when this batch sells.`]],
-        ["How you will sell", ["Your website and Facebook page show the product and take orders.", "Forge runs your ads and you watch the results on your marketing page.", "Forge phones each customer to confirm the order.", "You hand each parcel to the courier. Customers pay the courier when it arrives."]],
-        ["Who does what", ["You: receive the goods, hand parcels to the courier, receive returns, reorder.", "Forge: orders and imports your goods, runs ads, confirms orders, answers customers, resells returned items."]],
-        ["What can go wrong", ["Some orders are refused at the door and come back as returns.", "Ads cost money even when they do not bring orders.", "Stock may sell slowly, or not at all.", "Forge does not promise sales or profit. You can lose money."]],
-      ];
-    }
+    let stopper = null;
 
     function paint() {
+      if (stopper) stopper();
       const st = getState();
       body.replaceChildren();
       if (!st.plan.draftedAt) {
-        add(body, h("div", { class: "wait" }, h("h3", null, "Your plan is being written"), h("p", { class: "field__help" }, "Forge drafts it from your file and checks it before you see it. It appears here once your payment is confirmed.")),
-          previewAction("show a sample plan", () => { update((s) => { s.plan.draftedAt = Date.now(); }); paint(); }));
+        const paid = st.payment && st.payment.paidAt;
+        if (paid) {
+          const w = waitPanel({
+            title: "Forge is writing your business plan",
+            requestedAt: paid,
+            durationMs: WAIT,
+            lines: ["Forge writes it from your file: your costs, your freight, your returns risk and your first 90 days. It checks the numbers before you see it.", "It takes about 30 minutes after your payment is confirmed."],
+            lateText: "Forge is checking the numbers. It will appear here in a few minutes.",
+          });
+          stopper = w.stop;
+          add(body, w.el);
+        } else {
+          add(body, h("div", { class: "wait" }, h("h3", null, "Your plan is written after your payment"), h("p", { class: "field__help" }, "Once Forge confirms your payment, it writes your business plan in about 30 minutes. You will read it here before anything is ordered for you.")));
+        }
+        const demo = previewAction("show the finished plan", () => { update((s) => { s.plan.draftedAt = Date.now(); }); paint(); });
+        if (demo) add(body, demo);
       } else {
         add(body,
-          CONFIGDemoNote(),
-          sections(st).map(([title, lines]) => h("section", { class: "section" }, h("div", { class: "section__head" }, h("h2", null, title)), lines.length === 1 ? h("p", null, lines[0]) : h("ul", { class: "steps" }, lines.map((l) => h("li", null, l))))),
+          CONFIG.demo ? h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, "Preview: this sample is built from the sample file.")) : null,
+          buildPlan(st).map(renderSection),
           st.plan.readAt ? h("p", null, h("span", { class: "pill pill--ok" }, "You have read your plan")) : h("button", { type: "button", class: "btn btn--primary", onclick: () => { update((s) => { s.plan.readAt = Date.now(); }); announce("Plan marked as read."); paint(); } }, "I have read my plan")
         );
       }
       footSlot.replaceChildren(journeyFoot("plan", { go, canContinue: Boolean(st.plan.readAt), note: st.plan.readAt ? "" : "Read your plan to continue." }));
     }
 
-    function CONFIGDemoNote() {
-      return h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, "Preview: this sample is built from your file. The real plan is written for your product and your market."));
-    }
-
-    const root = h("section", { class: "screen" }, head("Business plan", "How your business will sell, step by step, and who does what."), reviewNote("plan"), body, footSlot);
+    const root = h("section", { class: "screen" }, head("Business plan", "A plan written for your business, with your real numbers, in plain words."), reviewNote("plan"), body, footSlot);
     paint();
+    root._dispose = () => { if (stopper) stopper(); };
     return root;
   },
 };

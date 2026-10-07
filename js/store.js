@@ -16,7 +16,7 @@ function blank() {
     industryNote: "",
     product: null,
     qty: 10,
-    name: { chosen: "", alt1: "", alt2: "", wantsSuggestions: false },
+    name: { chosen: "", alt1: "", alt2: "", wantsSuggestions: false, suggestRequestedAt: null, suggestions: [], suggestedAt: null },
     domain: null,
     // Logo and Facebook page. Each is requested, then delivered by the Forge team.
     brand: {
@@ -65,7 +65,7 @@ const STAFF_PATHS = [
   "documents.agreementReady", "documents.verifiedAt", "documents.reviewNote",
   "brand.logo.options", "brand.logo.deliveredAt", "brand.page.url", "brand.page.deliveredAt",
   "payment.packagingCost", "payment.websiteFee", "payment.paidAt",
-  "plan.draftedAt", "marketing.budget", "marketing.launchedAt", "marketing.postedAt",
+  "plan.draftedAt", "name.suggestions", "name.suggestedAt", "marketing.budget", "marketing.launchedAt", "marketing.postedAt",
   "shipments", "orders.list",
 ];
 // The few things the owner does to a staff-owned shipment or order.

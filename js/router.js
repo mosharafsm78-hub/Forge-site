@@ -3,7 +3,7 @@ import { h } from "./ui.js";
 import { getState, currentUser, subscribe } from "./store.js";
 import { CONFIG } from "./config.js";
 import auth, { AUTH_IDS, OPEN_AUTH_IDS } from "./screens/auth.js";
-import { canOpen, firstOpenStage } from "./rules.js";
+import { canFill, blockingStage } from "./rules.js";
 import { setCurrent } from "./chrome.js";
 import welcome from "./screens/welcome.js";
 import profile from "./screens/profile.js";
@@ -46,6 +46,25 @@ function fallbackScreen() {
 }
 
 let currentNode = null;
+let lastLocked = false;
+
+// On every page: a plain reminder, like the one under an AI chat box.
+function riskBox() {
+  return h("p", { class: "riskbox", role: "note" }, h("b", null, "Forge can make mistakes, and a business can lose money. "), "Forge does not promise sales or profit. Check every amount before you pay, and tell Forge if something looks wrong. ", h("a", { href: "#/pause" }, "Pause or exit anytime"), ".");
+}
+
+// A page that is not open for filling yet: the owner can read all of it, but nothing can be changed.
+function lockView(node, id, st) {
+  const blocker = blockingStage(id, st);
+  const note = h(
+    "div",
+    { class: "notice notice--lock", role: "note" },
+    h("p", null, h("b", null, "Preview only. "), blocker ? "You can read this page now. It opens for you once you finish " : "You can read this page now. It opens for you after the steps before it.", blocker ? h("a", { href: "#/" + blocker.id }, blocker.label) : null, blocker ? "." : "")
+  );
+  node.classList.add("is-preview");
+  node.querySelectorAll("input, select, textarea, button").forEach((el) => { el.disabled = true; });
+  node.prepend(note);
+}
 
 function show() {
   let id = idFromHash();
@@ -57,13 +76,8 @@ function show() {
   }
   document.body.classList.toggle("auth", AUTH_IDS.includes(id));
   const st = getState();
-  if (!AUTH_IDS.includes(id) && !canOpen(id, st)) {
-    const target = firstOpenStage(st);
-    if (target !== id) {
-      window.location.replace("#/" + target);
-      return;
-    }
-  }
+  const locked = !AUTH_IDS.includes(id) && !canFill(id, st);
+  lastLocked = locked;
   const screen = screens[id];
   const main = document.getElementById("main");
   let node;
@@ -73,9 +87,10 @@ function show() {
     console.error(error);
     node = fallbackScreen();
   }
+  if (locked) lockView(node, id, st);
   if (currentNode && typeof currentNode._dispose === "function") currentNode._dispose();
   currentNode = node;
-  main.replaceChildren(node);
+  main.replaceChildren(node, ...(AUTH_IDS.includes(id) ? [] : [riskBox()]));
   document.title = screen.title ? `${screen.title} | Forge` : "Forge";
   setCurrent(screen.stage || null);
   main.focus({ preventScroll: true });
@@ -91,7 +106,7 @@ export function startRouter() {
   // If the Forge team changes something that closes the page you are on (a document needs checking again), step back.
   subscribe((st) => {
     const id = idFromHash();
-    if (CONFIG.live && screens[id] && !AUTH_IDS.includes(id) && !canOpen(id, st)) show();
+    if (CONFIG.live && screens[id] && !AUTH_IDS.includes(id) && !canFill(id, st) !== lastLocked) show();
   });
   show();
 }

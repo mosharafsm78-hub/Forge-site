@@ -1,7 +1,10 @@
 import { h } from "../ui.js";
 import { getState, update } from "../store.js";
 import { validateBusinessName } from "../rules.js";
-import { head, textField, checkField, foot } from "./common.js";
+import { head, textField, foot, previewAction } from "./common.js";
+import { HOUR } from "../time.js";
+import { waitPanel } from "./wait.js";
+import { append } from "../ui.js";
 
 export default {
   id: "name",
@@ -55,13 +58,33 @@ export default {
       alt2: mk("alt2", "A third name (optional)"),
     };
 
-    const suggest = checkField({
-      id: "f-name-suggest",
-      label: "Ask Forge to suggest names",
-      help: "The team will send ideas based on your product. You still choose the final name.",
-      checked: st.name.wantsSuggestions,
-      onChange: (v) => set("wantsSuggestions", v),
-    });
+    // Forge suggests names from the product. The owner still chooses.
+    const ideasBox = h("div", { class: "section" });
+    let stopper = null;
+    function paintIdeas() {
+      if (stopper) stopper();
+      const n = getState().name;
+      ideasBox.replaceChildren();
+      append(ideasBox, [h("div", { class: "section__head" }, h("h2", null, "Not sure what to call it?"))]);
+      if (n.suggestions && n.suggestions.length) {
+        append(ideasBox, [
+          h("p", { class: "field__help" }, "Forge suggests these for your product. Tap one to use it. You can still type your own."),
+          h("div", { class: "chips" }, n.suggestions.map((x) => h("button", { type: "button", class: "btn btn--small" + (n.chosen === x ? " btn--primary" : ""), onclick: () => { set("chosen", x); fields.chosen.input.value = x; setPreview(); paintIdeas(); } }, x))),
+        ]);
+      } else if (n.suggestRequestedAt) {
+        const w = waitPanel({ title: "Forge is thinking of names", requestedAt: n.suggestRequestedAt, durationMs: HOUR, lines: ["Forge checks that each name is free to use and fits your product. About 1 hour."], lateText: "Forge is finishing your name ideas. They will appear here soon." });
+        stopper = w.stop;
+        append(ideasBox, [w.el]);
+        const d = previewAction("show sample name ideas", () => { update((s) => { s.name.suggestions = ["Urban Stride", "Step Nest", "Daily Tread", "Pathik Footwear"]; s.name.suggestedAt = Date.now(); }); paintIdeas(); });
+        if (d) append(ideasBox, [d]);
+      } else {
+        append(ideasBox, [
+          h("p", { class: "field__help" }, "Ask Forge for ideas based on your product. You do not need to wait: you can type your own name now and change it later."),
+          h("button", { type: "button", class: "btn", onclick: () => { update((s) => { s.name.suggestRequestedAt = Date.now(); s.name.wantsSuggestions = true; }); paintIdeas(); } }, "Ask Forge for name ideas"),
+        ]);
+      }
+    }
+    paintIdeas();
 
     const next = h(
       "button",
@@ -87,7 +110,8 @@ export default {
       "section",
       { class: "screen" },
       head("Name your business", "Your name is used for your logo, Facebook page, domain and trade licence."),
-      h("div", { class: "section" }, fields.chosen.el, preview, fields.alt1.el, fields.alt2.el, suggest),
+      h("div", { class: "section" }, fields.chosen.el, preview, fields.alt1.el, fields.alt2.el),
+      ideasBox,
       foot({ back: "product", next })
     );
   },
