@@ -1,9 +1,9 @@
 // Building blocks shared by the screens: headings, form fields and the footer.
-import { h } from "../ui.js?v=1791340075";
-import { CONFIG } from "../config.js?v=1791340075";
-import { getState, testMode, syncStaff } from "../store.js?v=1791340075";
-import { isComplete } from "../rules.js?v=1791340075";
-import { stageById, STAGES, PHASES, stageNumber } from "../stages.js?v=1791340075";
+import { h } from "../ui.js?v=1791340146";
+import { CONFIG } from "../config.js?v=1791340146";
+import { getState, testMode, syncStaff } from "../store.js?v=1791340146";
+import { isComplete } from "../rules.js?v=1791340146";
+import { stageById, STAGES, PHASES, stageNumber } from "../stages.js?v=1791340146";
 
 // Where the owner is: part, step and whose turn it is. Read from the address so every screen shows it.
 function crumb() {
