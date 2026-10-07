@@ -29,6 +29,7 @@ function header(current) {
     menu));
 }
 
+const DEMO = (typeof WORKSPACE === "string" ? WORKSPACE.split("#")[0] : "workspace.html") + "?demo#/welcome";
 function footer() {
   return h("footer", { class: "foot" }, h("div", { class: "wrap" },
     h("div", { class: "foot__grid" },
@@ -37,7 +38,8 @@ function footer() {
       h("nav", { "aria-label": "Explore" }, h("h2", { class: "foot__h" }, "Explore"), h("ul", null, NAV.map(([id, label]) => h("li", null, h("a", { href: "#/" + id }, label))))),
       h("nav", { "aria-label": "Your account" }, h("h2", { class: "foot__h" }, "Your account"), h("ul", null,
         h("li", null, h("a", { href: WORKSPACE }, "Join Now")),
-        LOGIN ? h("li", null, h("a", { href: LOGIN }, "Log in")) : null))),
+        LOGIN ? h("li", null, h("a", { href: LOGIN }, "Log in")) : null,
+        h("li", null, h("a", { href: DEMO }, "Try the demo")))),
     h("p", { class: "foot__risk" }, "Forge can make mistakes, and a business can lose money. Forge does not promise sales or profit. Costs and bills shown on this site are examples."),
     h("p", { class: "foot__copy" }, "\u00a9 " + new Date().getFullYear() + " Forge. Chattogram, Bangladesh.")));
 }

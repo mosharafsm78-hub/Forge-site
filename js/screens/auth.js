@@ -79,7 +79,8 @@ const login = {
     return card("Log in", "Pick up your business file where you left it.",
       msg ? h("div", { class: "notice", role: "status" }, h("p", null, msg)) : null, f.el,
       h("p", { class: "auth__alt" }, h("a", { href: "#/forgot" }, "Forgot your password?")),
-      h("p", { class: "auth__alt" }, "New to Forge? ", h("a", { href: "#/signup" }, "Join now")));
+      h("p", { class: "auth__alt" }, "New to Forge? ", h("a", { href: "#/signup" }, "Join now")),
+      h("p", { class: "auth__alt" }, "Want to look around first? ", h("a", { href: "workspace.html?demo#/welcome" }, "Try the demo"), " (sample data, pretend payments)"));
   },
 };
 

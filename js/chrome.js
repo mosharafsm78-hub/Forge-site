@@ -44,7 +44,7 @@ export function mountChrome(root) {
   const shell = h("div", { class: "shell" }, els.top, els.rail, els.main, els.sheet);
   root.replaceChildren(
     ...(CONFIG.demo
-      ? [h("div", { class: "demo-banner", role: "note" }, "Preview with sample data. Live products, prices and domains appear when the site is connected to the supplier and domain services.")]
+      ? [h("div", { class: "demo-banner", role: "note" }, "Demo: sample data and pretend payments. Nothing here is real and nothing is saved to an account. Use the \"Demo\" buttons to play Forge's side, such as confirming a payment.")]
       : []),
     shell,
     els.live
