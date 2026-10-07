@@ -20,7 +20,7 @@ export default {
       const p = st.product;
       body.replaceChildren();
       if (!p) {
-        add(body, h("div", { class: "notice" }, h("p", null, "Choose a product first."), h("a", { class: "btn", href: "#/product" }, "Open the product page")));
+        add(body, h("div", { class: "notice notice--warn" }, h("p", null, "Choose a product first."), h("a", { class: "btn", href: "#/product" }, "Open the product page")));
         footSlot.replaceChildren(journeyFoot("reorder", { go }));
         return;
       }

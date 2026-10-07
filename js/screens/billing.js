@@ -42,19 +42,19 @@ export default {
       if (pay.paidAt) {
         const due = pay.paidAt + 30 * DAY;
         add(body, h("div", { class: "notice notice--ok" }, h("p", null, h("b", null, "Payment confirmed"), " on " + dateText(pay.paidAt) + ". Forge now orders your goods.")),
-          h("div", { class: "notice", style: "margin-top:16px" }, h("p", null, h("b", null, "Upload your trade licence by " + dateText(due) + "."), " That is 30 days from today. If it is not uploaded, Forge stops the process of doing business."), st.documents.licence ? h("p", null, "Your licence is uploaded.") : h("p", null, h("a", { href: "#/documents" }, "Upload it on the documents page"))));
+          h("div", { class: "notice notice--info", style: "margin-top:16px" }, h("p", null, h("b", null, "Upload your trade licence by " + dateText(due) + "."), " That is 30 days from today. If it is not uploaded, Forge stops the process of doing business."), st.documents.licence ? h("p", null, "Your licence is uploaded.") : h("p", null, h("a", { href: "#/documents" }, "Upload it on the documents page"))));
       } else if (pay.reportedAt) {
-        add(body, h("div", { class: "notice" }, h("p", null, h("b", null, "Waiting for Forge to confirm your payment.")), h("p", null, "You told us you paid on " + dateText(pay.reportedAt) + ". You will see it here when it is confirmed.")),
+        add(body, h("div", { class: "notice notice--forge" }, h("p", null, h("b", null, "Waiting for Forge to confirm your payment.")), h("p", null, "You told us you paid on " + dateText(pay.reportedAt) + ". You will see it here when it is confirmed.")),
           previewAction("confirm the payment", () => { update((s) => { s.payment.paidAt = Date.now(); if (s.product && !s.shipments.length) s.shipments.push(makeShipment(s, "first")); }); announce("Payment confirmed."); paint(); paintFoot(); }));
       } else if (!final) {
-        add(body, h("div", { class: "notice" }, h("p", null, h("b", null, "Your bill is not final yet.")), h("p", null, "Still waiting for: " + missing.join(", ") + ". Payment opens when everything is on the bill.")),
+        add(body, h("div", { class: "notice notice--warn" }, h("p", null, h("b", null, "Your bill is not final yet.")), h("p", null, "Still waiting for: " + missing.join(", ") + ". Payment opens when everything is on the bill.")),
           previewAction("show a sample final bill", () => { update((s) => { s.payment.packagingCost = 4500; s.payment.websiteFee = 3000; }); paint(); }));
       } else {
         add(body, h("section", { class: "section" },
           h("div", { class: "section__head" }, h("h2", null, "Approve and pay")),
           pay.quoteApprovedAt
             ? h("p", null, h("span", { class: "pill pill--ok" }, "Packaging quote approved"))
-            : h("div", { class: "notice" }, h("p", null, "Your packaging quote and design are ready. Approve them to add the cost to your bill."), h("button", { type: "button", class: "btn", onclick: () => { update((s) => { s.payment.quoteApprovedAt = Date.now(); }); paint(); } }, "Approve packaging quote")),
+            : h("div", { class: "notice notice--warn" }, h("p", null, "Your packaging quote and design are ready. Approve them to add the cost to your bill."), h("button", { type: "button", class: "btn", onclick: () => { update((s) => { s.payment.quoteApprovedAt = Date.now(); }); paint(); } }, "Approve packaging quote")),
           h("p", { class: "field__help" }, "Forge sends payment details here once the quote is approved. After you pay, press the button below."),
           h("button", { type: "button", class: "btn btn--primary", disabled: !pay.quoteApprovedAt || !signed, onclick: () => { update((s) => { s.payment.reportedAt = Date.now(); }); announce("Thank you. Forge will confirm your payment."); paint(); } }, "I have paid in full")
         ));

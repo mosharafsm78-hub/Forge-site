@@ -71,7 +71,7 @@ function lockView(node, id, st) {
   const blocker = blockingStage(id, st);
   const note = h(
     "div",
-    { class: "notice notice--lock", role: "note" },
+    { class: "notice notice--forge", role: "note" },
     h("p", null, h("b", null, "Preview only. "), blocker ? "You can read this page now. It opens for you once you finish " : "You can read this page now. It opens for you after the steps before it.", blocker ? h("a", { href: "#/" + blocker.id }, blocker.label) : null, blocker ? "." : "")
   );
   node.classList.add("is-preview");

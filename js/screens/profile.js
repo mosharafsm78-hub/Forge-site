@@ -88,7 +88,7 @@ export default {
       return message;
     };
 
-    const stockNotice = h("div", { class: "notice", hidden: true }, h("p", null, "Without a place for stock and someone to pass parcels to the courier, running this business will be hard. Talk to Forge before you continue."));
+    const stockNotice = h("div", { class: "notice notice--warn", hidden: true }, h("p", null, "Without a place for stock and someone to pass parcels to the courier, running this business will be hard. Talk to Forge before you continue."));
     const ageNotice = h("div", { class: "notice notice--error", hidden: true });
 
     function build(def) {

@@ -29,7 +29,7 @@ export default {
       const d = s.documents;
       if (documentsChecked(s)) add(checkBox, h("div", { class: "notice notice--ok", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Your documents are checked.")), h("p", null, "The next stages are open.")));
       else if (d.reviewNote && !d.verifiedAt) add(checkBox, h("div", { class: "notice notice--error", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Forge needs a change.")), h("p", null, d.reviewNote)));
-      else add(checkBox, h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Forge is checking your documents.")), h("p", null, "This page updates by itself when they are done. You can close it and come back.")));
+      else add(checkBox, h("div", { class: "notice notice--forge", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Forge is checking your documents.")), h("p", null, "This page updates by itself when they are done. You can close it and come back.")));
     }
 
     function paintList() {
@@ -88,7 +88,7 @@ export default {
       agreementBox.replaceChildren();
       if (!d.agreementReady) {
         add(agreementBox, 
-          h("div", { class: "notice" }, h("p", null, h("b", null, "Your agreement is not ready yet.")), h("p", null, "Forge places it here. Then you download it, print it, sign it, scan it and upload it back.")),
+          h("div", { class: "notice notice--info" }, h("p", null, h("b", null, "Your agreement is not ready yet.")), h("p", null, "Forge places it here. Then you download it, print it, sign it, scan it and upload it back.")),
           previewAction("show the agreement as ready", () => { update((s) => { s.documents.agreementReady = true; }); paintAgreement(); refresh(); })
         );
       } else {
@@ -108,7 +108,7 @@ export default {
       { class: "screen" },
       head("Documents and agreement", "Forge needs these to import your goods and set up your courier account."),
       h("div", { class: "notice notice--error", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Nothing starts without your signed agreement."), " Forge does not make your logo, page or packaging, register your domain, order your goods or take payment until your signed agreement is uploaded here. The next stages stay closed until then.")),
-      CONFIG.demo ? h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, "Preview: files you choose here are not sent anywhere. Secure storage is connected before real documents are collected.")) : h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Your files are private."), " They are stored securely and only you and the Forge staff who handle your file can open them.")),
+      CONFIG.demo ? h("div", { class: "notice notice--info", style: "margin-bottom:24px" }, h("p", null, "Preview: files you choose here are not sent anywhere. Secure storage is connected before real documents are collected.")) : h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Your files are private."), " They are stored securely and only you and the Forge staff who handle your file can open them.")),
       !CONFIG.demo ? previewAction("add sample documents so I can test", () => {
         const f = (n) => ({ name: n, size: 120000, type: "image/jpeg", at: Date.now() });
         update((s) => {
@@ -127,7 +127,7 @@ export default {
       section("Where your sales money goes", `You chose: ${st.profile.payout}.`, need.bank ? [bankName.el, cheque.el] : null, need.bkash ? bkash.el : null),
       section("Agreement with Forge", "You sign one agreement with Forge before you pay.", agreementBox),
       section("Trade licence", null,
-        h("div", { class: "notice" }, h("p", null, h("b", null, "Upload your trade licence within 30 days of starting the business. Otherwise Forge stops the process of doing business.")), h("p", null, "The licence must be in your business name. The 30 days start when your payment is confirmed.")),
+        h("div", { class: "notice notice--warn" }, h("p", null, h("b", null, "Upload your trade licence within 30 days of starting the business. Otherwise Forge stops the process of doing business.")), h("p", null, "The licence must be in your business name. The 30 days start when your payment is confirmed.")),
         licence.el
       ),
       footSlot

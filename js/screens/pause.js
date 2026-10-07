@@ -24,13 +24,13 @@ export default {
       body.replaceChildren();
       add(body,
         st.pausedAt
-          ? h("div", { class: "notice" }, h("p", null, h("b", null, "Your business is paused"), " since " + dateText(st.pausedAt) + ". Ads and new order confirmations are stopped."), h("button", { type: "button", class: "btn btn--primary", onclick: () => { update((s) => { s.pausedAt = null; }); announce("Business resumed."); paint(); } }, "Resume my business"))
+          ? h("div", { class: "notice notice--warn" }, h("p", null, h("b", null, "Your business is paused"), " since " + dateText(st.pausedAt) + ". Ads and new order confirmations are stopped."), h("button", { type: "button", class: "btn btn--primary", onclick: () => { update((s) => { s.pausedAt = null; }); announce("Business resumed."); paint(); } }, "Resume my business"))
           : h("div", null, h("button", { type: "button", class: "btn", onclick: () => { update((s) => { s.pausedAt = Date.now(); }); announce("Business paused."); paint(); } }, "Pause my business"), h("p", { class: "field__help", style: "margin-top:8px" }, "You can resume at any time.")),
         h("section", { class: "section", style: "margin-top:28px" }, h("div", { class: "section__head" }, h("h2", null, "What happens at each point")), h("div", { class: "file" }, RULES.map(([k, v]) => h("div", { class: "rule" }, h("b", null, k), h("p", null, v)))))
       );
     }
     const root = h("section", { class: "screen" }, head("Pause or exit", "You can pause your business or stop at any point. This is what happens at each one."),
-      h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Draft for review."), " These rules must be confirmed by a lawyer and written into the agreement before owners see them.")),
+      h("div", { class: "notice notice--info", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Draft for review."), " These rules must be confirmed by a lawyer and written into the agreement before owners see them.")),
       body);
     paint();
     return root;

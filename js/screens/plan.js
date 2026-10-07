@@ -11,6 +11,7 @@ import { waitPanel } from "./wait.js";
 const add = (el, ...k) => append(el, k);
 const WAIT = HOUR / 2;
 let asked = false;
+const AUTO_WRITER = false; // the paid plan writer is switched off; the built-in plan is used
 
 // Once payment is confirmed, ask the plan writer to prepare this owner's plan. If it cannot, the built-in plan is shown at the promised time.
 async function askForPlan(st, repaint) {
@@ -62,7 +63,7 @@ export default {
       body.replaceChildren();
       const due = st.payment && st.payment.paidAt && Date.now() >= st.payment.paidAt + WAIT;
       const ready = (st.plan.draftedAt && st.plan.draftedAt <= Date.now()) || due;
-      if (st.payment && st.payment.paidAt) askForPlan(st, paint);
+      if (AUTO_WRITER && st.payment && st.payment.paidAt) askForPlan(st, paint);
       if (!ready) {
         const paid = st.payment && st.payment.paidAt;
         if (paid) {
@@ -83,7 +84,7 @@ export default {
         if (demo) add(body, demo);
       } else {
         add(body,
-          CONFIG.demo ? h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, "Preview: this sample is built from the sample file.")) : null,
+          CONFIG.demo ? h("div", { class: "notice notice--info", style: "margin-bottom:24px" }, h("p", null, "Preview: this sample is built from the sample file.")) : null,
           (st.plan.doc && Array.isArray(st.plan.doc.sections) && st.plan.doc.sections.length ? st.plan.doc.sections : buildPlan(st)).map(renderSection),
           st.plan.readAt ? h("p", null, h("span", { class: "pill pill--ok" }, "You have read your plan")) : h("button", { type: "button", class: "btn btn--primary", onclick: () => { update((s) => { s.plan.readAt = Date.now(); }); announce("Plan marked as read."); paint(); } }, "I have read my plan")
         );

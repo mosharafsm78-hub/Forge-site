@@ -141,7 +141,7 @@ export function journeyFoot(stageId, { go, canContinue = true, note } = {}) {
 
 // Plain-words definition of freight, shown wherever freight appears.
 export function freightNote() {
-  return h("div", { class: "notice", style: "margin-top:20px" },
+  return h("div", { class: "notice notice--info", style: "margin-top:20px" },
     h("p", null, h("b", null, "What is freight? "), "Freight is everything it costs to bring your goods from the supplier's country into your hands in Bangladesh. It has four parts, and each one is shown as its own line:"),
     h("ul", null,
       h("li", null, h("b", null, "International shipping"), ", by air or sea, charged by weight or size."),

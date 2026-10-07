@@ -19,7 +19,7 @@ export default {
     const row = (key, value, stage, extra) =>
       h("div", { class: "file__row" }, h("span", { class: "file__key" }, key), h("span", { class: "file__val" }, value, extra || null), h("a", { class: "btn btn--small btn--quiet", href: "#/" + stage, "aria-label": "Change " + key.toLowerCase() }, "Change"));
 
-    const confirm = h("div", { class: "notice", hidden: true }, h("p", null, "This clears everything you entered on this device."), h("div", { style: "display:flex;gap:8px" }, h("button", { type: "button", class: "btn", onclick: () => { reset(); go("welcome"); } }, "Yes, start over"), h("button", { type: "button", class: "btn btn--quiet", onclick: () => (confirm.hidden = true) }, "Keep my file")));
+    const confirm = h("div", { class: "notice notice--warn", hidden: true }, h("p", null, "This clears everything you entered on this device."), h("div", { style: "display:flex;gap:8px" }, h("button", { type: "button", class: "btn", onclick: () => { reset(); go("welcome"); } }, "Yes, start over"), h("button", { type: "button", class: "btn btn--quiet", onclick: () => (confirm.hidden = true) }, "Keep my file")));
 
     return h(
       "section",

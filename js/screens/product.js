@@ -82,7 +82,7 @@ export default {
         return;
       }
       if (!items.length) {
-        results.append(h("div", { class: "notice" }, h("b", null, `No products found for "${keyword}".`), h("p", null, "Try a different word, or choose one of the suggested searches.")));
+        results.append(h("div", { class: "notice notice--info" }, h("b", null, `No products found for "${keyword}".`), h("p", null, "Try a different word, or choose one of the suggested searches.")));
         return;
       }
       const grid = h(

@@ -77,7 +77,7 @@ export default {
     function renderList() {
       list.replaceChildren();
       if (!order.length) {
-        list.append(h("div", { class: "notice" }, h("b", null, "Your business name has no English letters, so there are no domain ideas yet."), h("p", null, "Type the domain you want in the box above.")));
+        list.append(h("div", { class: "notice notice--info" }, h("b", null, "Your business name has no English letters, so there are no domain ideas yet."), h("p", null, "Type the domain you want in the box above.")));
         return;
       }
       const current = getState().domain;
@@ -86,7 +86,7 @@ export default {
           h("div", { class: "notice notice--error", style: "margin-bottom:12px" }, h("b", null, "Domains could not be checked."), h("p", null, failure), h("p", null, "You can retry, or ask Forge to check a domain for you."), h("button", { type: "button", class: "btn", onclick: () => run(order) }, "Try again"))
         );
       } else if (results.size && [...results.values()].every((r) => r.status === "setup_required")) {
-        list.append(h("div", { class: "notice", style: "margin-bottom:12px" }, h("b", null, "Live domain search is not connected yet."), h("p", null, "Ask Forge to check the domain you want.")));
+        list.append(h("div", { class: "notice notice--info", style: "margin-bottom:12px" }, h("b", null, "Live domain search is not connected yet."), h("p", null, "Ask Forge to check the domain you want.")));
       }
       const extra = current && !order.includes(current.name) ? [current.name] : [];
       list.append(h("div", { class: "domain-list", role: "list" }, [...extra, ...order].map((d) => h("div", { role: "listitem", style: "display:contents" }, row(d)))));

@@ -46,7 +46,7 @@ export default {
       add(logoBox, h("div", { class: "section__head" }, h("h2", null, "Logo"), h("p", null, "Forge designs your logo. You choose the kind, and then pick from the designs we make.")));
 
       if (logo.forName && logo.forName !== businessName()) {
-        add(logoBox, h("div", { class: "notice" }, h("p", null, `These logos were made for "${logo.forName}". Your business name is now "${businessName()}". Check that the logo still fits.`)));
+        add(logoBox, h("div", { class: "notice notice--warn" }, h("p", null, `These logos were made for "${logo.forName}". Your business name is now "${businessName()}". Check that the logo still fits.`)));
       }
 
       if (!logo.requestedAt) {

@@ -28,7 +28,7 @@ export default {
           : [];
 
       if (!rows.length) {
-        add(body, h("div", { class: "notice" }, h("p", null, "No goods yet. Choose a product first."), h("a", { class: "btn", href: "#/product" }, "Open the product page")));
+        add(body, h("div", { class: "notice notice--warn" }, h("p", null, "No goods yet. Choose a product first."), h("a", { class: "btn", href: "#/product" }, "Open the product page")));
       } else {
         add(body, h("div", { class: "table-wrap" }, h("table", { class: "table table--tight" },
           h("thead", null, h("tr", null, ["Goods", "Price", "Status", "Freight"].map((t) => h("th", { scope: "col" }, t)))),
@@ -45,7 +45,7 @@ export default {
 
       for (const sh of st.shipments) {
         if (freightDue(sh)) {
-          add(body, h("div", { class: "notice", style: "margin-top:16px" }, h("p", null, h("b", null, sh.name + " is at Bangladesh."), ` Your freight bill of ${formatBdt(sh.freight)} is ready.`), h("a", { class: "btn btn--primary", href: "#/billing" }, "Go to billing to pay")));
+          add(body, h("div", { class: "notice notice--info", style: "margin-top:16px" }, h("p", null, h("b", null, sh.name + " is at Bangladesh."), ` Your freight bill of ${formatBdt(sh.freight)} is ready.`), h("a", { class: "btn btn--primary", href: "#/billing" }, "Go to billing to pay")));
         } else if (sh.freightPaidAt && !sh.receivedAt) {
           add(body, h("div", { class: "notice notice--ok", style: "margin-top:16px" }, h("p", null, h("b", null, "Freight paid. Your goods are released."), " Press the button when you have received them."), h("button", { type: "button", class: "btn btn--primary", onclick: () => { update((s) => { s.shipments.find((x) => x.id === sh.id).receivedAt = Date.now(); }); announce("Goods received."); paint(); paintFoot(); } }, "I have received these goods")));
         } else if (sh.receivedAt) {

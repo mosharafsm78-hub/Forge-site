@@ -39,8 +39,8 @@ export default {
       add(body, h("section", { class: "section" },
         h("div", { class: "section__head" }, h("h2", null, "Your weekly Facebook post"), h("p", null, "A page that posts every week keeps customers coming back. Press the button and Forge posts for you.")),
         m.postedAt ? h("p", null, h("span", { class: "pill pill--ok" }, "Posted"), " " + timeText(m.postedAt) + ". Next reminder in 7 days.")
-        : posting ? h("div", { class: "notice" }, h("p", null, "Forge is posting for you. It will show here when it is done."))
-        : h("div", { class: "notice" }, h("p", null, h("b", null, "This week's post is due.")), h("button", { type: "button", class: "btn btn--primary", onclick: () => { update((s) => { s.marketing.postRequestedAt = Date.now(); }); paint(); } }, "Post now")),
+        : posting ? h("div", { class: "notice notice--forge" }, h("p", null, "Forge is posting for you. It will show here when it is done."))
+        : h("div", { class: "notice notice--warn" }, h("p", null, h("b", null, "This week's post is due.")), h("button", { type: "button", class: "btn btn--primary", onclick: () => { update((s) => { s.marketing.postRequestedAt = Date.now(); }); paint(); } }, "Post now")),
         posting ? previewAction("show it as posted", () => { update((s) => { s.marketing.postedAt = Date.now(); }); paint(); }) : null
       ));
       footSlot.replaceChildren(journeyFoot("marketing", { go, canContinue: Boolean(m.launchedAt), note: m.launchedAt ? "" : "Opens when your ads are live." }));

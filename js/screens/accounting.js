@@ -68,7 +68,7 @@ export default {
       need ? h("p", { class: "field__help" }, have >= need ? "Your one-off costs are covered. Orders from here add to your profit." : `${need - have} more delivered orders to cover your domain, website and packaging.`) : null,
       h("p", null, h("a", { class: "btn", href: "#/plan" }, "Read your business plan")));
 
-    const how = h("div", { class: "notice" }, h("p", null, h("b", null, "How to read this page. ")), h("ul", null,
+    const how = h("div", { class: "notice notice--info" }, h("p", null, h("b", null, "How to read this page. ")), h("ul", null,
       h("li", null, "Money arrives only after the courier delivers and pays out. Parcels still with the courier are not counted as received."),
       h("li", null, "A refused parcel earns nothing and still costs a courier fee."),
       h("li", null, "Stock you still hold is shown separately. It is not a loss, and it is not cash until it sells."),

@@ -11,6 +11,52 @@ const COURIER_FEE = 120; // planning figure per parcel; check the courier rate c
 const AD_PER_ORDER = 380; // planning figure; the real number comes from your own ads
 const MIN_CAPITAL = 30000;
 
+// Plain, practical know-how for each kind of product. No numbers and no promises: it is guidance, not a forecast.
+const KNOW = {
+  footwear: {
+    buyers: "Young men and women in towns and cities who buy shoes online after seeing them on Facebook. Many buy for work, college or daily walking.",
+    show: ["Photos of the shoe from the side, the sole and on a foot, in daylight.", "A short video of someone walking in them.", "A size chart in centimetres, beside the photos."],
+    asks: ["What sizes are there, and how do I measure?", "Is it the same as in the photo?", "Can I change the size if it does not fit?"],
+    refuse: "Wrong size is the most common reason a pair comes back. A clear size chart and a confirmation call about size cut this the most.",
+  },
+  bags: {
+    buyers: "Students, office workers and travellers. Women buy handbags, men and students buy backpacks, and many buy as gifts.",
+    show: ["Photos of the bag open, closed and worn, so the size is clear.", "A hand or a laptop beside the bag for size.", "A video showing the zip, straps and inside pockets."],
+    asks: ["How big is it? Will my laptop fit?", "Is the material strong?", "What colours are in stock?"],
+    refuse: "A bag smaller or looser than the customer imagined. Show real size and say the material honestly.",
+  },
+  fragrance: {
+    buyers: "Women and families who want a nicer home, and people buying gifts for weddings and festivals.",
+    show: ["Photos in a real room, with soft light.", "A short video of the product being lit or used.", "The gift box and what comes inside."],
+    asks: ["How long does the scent last?", "Is it strong?", "Is it safe around children?"],
+    refuse: "A scent the customer did not expect. Describe the smell in simple words and say how strong it is.",
+  },
+  watches: {
+    buyers: "Young men and women who want a smart look at a fair price, and gift buyers.",
+    show: ["Close photos of the face, the strap and the clasp.", "The watch on a wrist, so the size is clear.", "A video showing the hands moving and the light on the face."],
+    asks: ["Is it original?", "How long is the warranty?", "What is the strap made of?"],
+    refuse: "A watch that looks different from the photo, or a size that feels wrong on the wrist. Show it on a wrist and give the case size.",
+  },
+  beauty: {
+    buyers: "Women, and a growing number of men, who buy skin care and personal care tools online.",
+    show: ["Clear photos of the product and its label.", "Before-use and in-use pictures that are honest.", "A short video showing how to use it."],
+    asks: ["Is it safe for my skin?", "How do I use it?", "How long does one last?"],
+    refuse: "A product the customer expected to work faster. Say honestly what to expect and how long it takes.",
+  },
+  fitness: {
+    buyers: "People starting to exercise at home, and young people at gyms who want bands, mats and small equipment.",
+    show: ["The item in use, with a simple exercise.", "A size and weight guide.", "A video of one easy workout."],
+    asks: ["Is it strong enough for me?", "How big is the mat or band?", "Does it come with instructions?"],
+    refuse: "Equipment that feels weaker or smaller than expected. Show real size and say who it suits.",
+  },
+};
+const KNOW_DEFAULT = {
+  buyers: "People in Bangladesh who buy this kind of product online after seeing it on Facebook.",
+  show: ["Clear photos in daylight from several sides.", "A short video of the product in use.", "A simple size or detail guide."],
+  asks: ["Is it the same as in the photo?", "How long does delivery take?", "Can I return it?"],
+  refuse: "A product that looks different from the photo or feels smaller than expected. Show it honestly.",
+};
+
 const roundTo = (n, step) => Math.round(n / step) * step;
 const bdt = (n) => formatBdt(Math.round(n));
 const signed = (n) => (n < 0 ? "−" + bdt(-n) : bdt(n));
@@ -81,6 +127,19 @@ export function buildPlan(st) {
     ],
   });
 
+  const k = KNOW[st.industryId] || KNOW_DEFAULT;
+  sections.push({
+    title: "Who buys this, and how to sell it",
+    lines: [
+      `Your likely buyers: ${k.buyers}`,
+      "What to show on your page and in your ads:",
+      ...k.show.map((x) => "• " + x),
+      "Questions customers will ask. Forge answers them, and your page should answer them too:",
+      ...k.asks.map((x) => "• " + x),
+    ],
+    note: "This is guidance from how online selling usually works. It does not promise that these customers will buy from you.",
+  });
+
   sections.push({
     title: "2. What you pay, and when",
     lines: ["Every amount below comes from your file, except the lines marked as an allowance. The allowance is replaced by the real bill."],
@@ -120,6 +179,7 @@ export function buildPlan(st) {
     lines: [
       "With cash on delivery, some customers refuse the parcel at the door. This is normal in Bangladesh, and it is the biggest risk in this business.",
       "A refused parcel comes back to you. You mark it received and the item goes back into stock to be sold again. You still pay the courier for the trip.",
+      `For this product: ${k.refuse}`,
       "Forge phones every customer before the parcel leaves. That confirmation call is the main way to keep refusals down.",
     ],
   });
@@ -138,6 +198,17 @@ export function buildPlan(st) {
       ],
     },
     note: "Dates move with shipping and customs. Forge tells you on your file when anything changes.",
+  });
+
+  sections.push({
+    title: "Your weekly routine",
+    lines: [
+      "Monday: look at Marketing. How many orders came in, and what did each one cost?",
+      "Tuesday: look at Orders. Are confirmed parcels waiting for you to hand to the courier?",
+      "Midweek: post once on your Facebook page. Use the Post now button and Forge does it.",
+      "Friday: look at Accounting. Is money coming in faster than it goes out?",
+      "Any day a parcel comes back: mark it received in Returns so your stock stays correct.",
+    ],
   });
 
   sections.push({
@@ -183,5 +254,7 @@ export function buildPlan(st) {
     ],
   });
 
-  return sections;
+  // Number the middle sections in order. The first (at a glance) and last (please read) stay unnumbered.
+  let n2 = 0;
+  return sections.map((sec, i) => (i === 0 || i === sections.length - 1 ? { ...sec, title: sec.title.replace(/^\d+\.\s*/, "") } : { ...sec, title: `${++n2}. ${sec.title.replace(/^\d+\.\s*/, "")}` }));
 }

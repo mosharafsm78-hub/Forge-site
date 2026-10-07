@@ -41,7 +41,7 @@ export default {
           stat("Coming back", f.comingBack),
           stat("New, not yet confirmed", f.newOrders)),
         f.onTheWay ? h("p", { class: "field__help" }, `${f.onTheWay} more units are on the way. See shipment and freight.`) : null,
-        h("div", { class: "notice", style: "margin:20px 0" }, h("p", null, h("b", null, "Who does what."), " Forge phones each customer to confirm the order and answers customer questions. You hand confirmed parcels to the courier and receive any that come back. Cash from delivered orders reaches your bank or bKash through the courier's payout."))
+        h("div", { class: "notice notice--info", style: "margin:20px 0" }, h("p", null, h("b", null, "Who does what."), " Forge phones each customer to confirm the order and answers customer questions. You hand confirmed parcels to the courier and receive any that come back. Cash from delivered orders reaches your bank or bKash through the courier's payout."))
       );
 
       if (!list.length) {
