@@ -782,7 +782,7 @@ a.task:hover { background: var(--paper); }
 .notice--forge { background: var(--warn-bg); border-color: var(--warn-line); border-left-color: var(--warn); color: var(--warn); }
 .notice--forge p > b:first-child { color: var(--warn); }
 .notice--forge p { color: var(--ink); }
-.notice--locked { background: var(--paper); border: 1px solid var(--line-strong); border-left: 5px solid var(--muted); border-radius: var(--r-m); padding: 14px 16px; }
+.notice--locked { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a5 5 0 00-5 5v3H6a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2v-8a2 2 0 00-2-2h-1V7a5 5 0 00-5-5zm-3 8V7a3 3 0 016 0v3H9z'/%3E%3C/svg%3E"); background: var(--surface); border: 1px solid var(--line-strong); border-left: 4px solid var(--muted); color: var(--muted); border-radius: var(--r-s); padding: 14px 16px 14px 48px; margin-bottom: 20px; }
 .notice--locked p > b:first-child { color: var(--ink); }
 .chip-turn:not(.chip-turn--forge):not(.chip-turn--done):not(.chip-turn--wait):not(.chip-turn--lock) { background: var(--brand); color: #fff; }
 .chip-turn--wait { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-line); }

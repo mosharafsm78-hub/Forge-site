@@ -1,9 +1,9 @@
 // Validation and progress rules. Pure functions, no page access, so they are easy to test.
-import { BUILT, PREP, stageById } from "./stages.js?v=1791376723";
-import { CONFIG } from "./config.js?v=1791376723";
-import { industryById } from "./data/industries.js?v=1791376723";
-import { MIN_CAPITAL, MIN_CAPITAL_TEXT } from "./minimum.js?v=1791376723";
-import { budgetFor } from "./budget.js?v=1791376723";
+import { BUILT, PREP, stageById } from "./stages.js?v=1791376988";
+import { CONFIG } from "./config.js?v=1791376988";
+import { industryById } from "./data/industries.js?v=1791376988";
+import { MIN_CAPITAL, MIN_CAPITAL_TEXT } from "./minimum.js?v=1791376988";
+import { budgetFor } from "./budget.js?v=1791376988";
 
 export const PHONE_RE = /^(?:\+?88)?01[3-9]\d{8}$/;
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -173,7 +173,8 @@ export function isComplete(stageId, st) {
 export const FROZEN_STAGES = ["industry", "product", "packaging"];
 export function isFrozen(stageId, st) {
   if (CONFIG.demo || !FROZEN_STAGES.includes(stageId)) return false;
-  return Boolean(st && Array.isArray(st.shipments) && st.shipments.length > 0);
+  // "Ordered" means Forge has placed the order with the supplier (orderedAt) or the goods have moved on.
+  return Boolean(st && Array.isArray(st.shipments) && st.shipments.some((x) => x.orderedAt || (x.status && x.status !== "not_shipped")));
 }
 // Everything the owner has paid so far: the first payment plus any extra payments for changes.
 export function paidTotal(st) {

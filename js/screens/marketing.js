@@ -1,8 +1,8 @@
-import { h, formatBdt, announce, append } from "../ui.js?v=1791376723";
-import { CONFIG } from "../config.js?v=1791376723";
-import { getState, update, subscribe } from "../store.js?v=1791376723";
-import { head, previewAction, reviewNote, journeyFoot, timeText, dateText } from "./common.js?v=1791376723";
-import { statusLabel } from "../shipments.js?v=1791376723";
+import { h, formatBdt, announce, append } from "../ui.js?v=1791376988";
+import { CONFIG } from "../config.js?v=1791376988";
+import { getState, update, subscribe } from "../store.js?v=1791376988";
+import { head, previewAction, reviewNote, journeyFoot, timeText, dateText } from "./common.js?v=1791376988";
+import { statusLabel } from "../shipments.js?v=1791376988";
 
 const add = (el, ...k) => append(el, k);
 const DAY = 86400000;

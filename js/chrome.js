@@ -1,11 +1,11 @@
 // The frame around every screen: top bar, stage list, order sheet.
-import { h } from "./ui.js?v=1791376723";
-import { CONFIG } from "./config.js?v=1791376723";
-import { STAGES, PHASES, stageNumber } from "./stages.js?v=1791376723";
-import { getState, subscribe, isSaved, saveStatus, currentUser, saveNow, testMode, resetTestFile } from "./store.js?v=1791376723";
-import { loadBackend } from "./backend.js?v=1791376723";
-import { canOpen, stageStatus } from "./rules.js?v=1791376723";
-import { renderSheet } from "./sheet.js?v=1791376723";
+import { h } from "./ui.js?v=1791376988";
+import { CONFIG } from "./config.js?v=1791376988";
+import { STAGES, PHASES, stageNumber } from "./stages.js?v=1791376988";
+import { getState, subscribe, isSaved, saveStatus, currentUser, saveNow, testMode, resetTestFile } from "./store.js?v=1791376988";
+import { loadBackend } from "./backend.js?v=1791376988";
+import { canOpen, stageStatus } from "./rules.js?v=1791376988";
+import { renderSheet } from "./sheet.js?v=1791376988";
 
 let currentId = null;
 let railOpen = false;
