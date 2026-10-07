@@ -1,13 +1,13 @@
-import { h, announce, append } from "../ui.js?v=1791345812";
+import { h, announce, append } from "../ui.js?v=1791374586";
 const add = (el, ...kids) => append(el, kids);
-import { CONFIG } from "../config.js?v=1791345812";
-import { getState, update, testMode, syncStaff } from "../store.js?v=1791345812";
-import { validateBusinessName, isComplete, nextToDo } from "../rules.js?v=1791345812";
-import { HOUR } from "../time.js?v=1791345812";
-import { LOGO_TYPES, LOGO_COLORS, suggestionFor, sampleOptions, logoView } from "../logo.js?v=1791345812";
-import { industryById } from "../data/industries.js?v=1791345812";
-import { head, textField, textareaField, foot } from "./common.js?v=1791345812";
-import { waitPanel } from "./wait.js?v=1791345812";
+import { CONFIG } from "../config.js?v=1791374586";
+import { getState, update, testMode, syncStaff } from "../store.js?v=1791374586";
+import { validateBusinessName, isComplete, nextToDo } from "../rules.js?v=1791374586";
+import { HOUR } from "../time.js?v=1791374586";
+import { LOGO_TYPES, LOGO_COLORS, suggestionFor, sampleOptions, logoView } from "../logo.js?v=1791374586";
+import { industryById } from "../data/industries.js?v=1791374586";
+import { head, textField, textareaField, foot } from "./common.js?v=1791374586";
+import { waitPanel } from "./wait.js?v=1791374586";
 
 export default {
   id: "brand",

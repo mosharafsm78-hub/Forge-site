@@ -1,6 +1,6 @@
 // The real account and storage service. Everything the screens need from the server is here.
-import { createClient } from "./vendor/supabase.js?v=1791345812";
-import { CONFIG } from "./config.js?v=1791345812";
+import { createClient } from "./vendor/supabase.js?v=1791374586";
+import { CONFIG } from "./config.js?v=1791374586";
 
 const sb = createClient(CONFIG.authUrl, CONFIG.authKey, {
   auth: { flowType: "pkce", persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
@@ -81,6 +81,11 @@ export const backend = {
   async forgeAi(task, body) {
     const { data, error } = await sb.functions.invoke("forge-ai", { body: { ...body, task } });
     return { data, error: error ? String(error.message || error) : data && data.error ? String(data.error) : "" };
+  },
+  // Tells Forge by email that a payment was reported or a change was requested. The server checks the file itself.
+  async notifyForge(kind) {
+    const { data, error } = await sb.functions.invoke("forge-notify", { body: { kind } });
+    return { ok: !error && data && data.ok === true };
   },
   async loadFile(userId) {
     const { data, error } = await sb.from("business_files").select("owner_data, staff_data").eq("user_id", userId).maybeSingle();

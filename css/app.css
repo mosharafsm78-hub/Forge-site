@@ -755,3 +755,9 @@ a.task:hover { background: var(--paper); }
 .payqr__how h3{margin:0 0 8px}
 .payqr__how ol{margin:0 0 8px 20px;padding:0;display:grid;gap:6px}
 
+
+/* Request a change on a locked step */
+.changereq { margin-top: 12px; }
+.changereq__list { margin: 0 0 12px; padding-left: 18px; font-size: 14px; }
+.changereq__list li { margin-bottom: 6px; }
+.changereq__form textarea { width: 100%; box-sizing: border-box; }
