@@ -56,7 +56,7 @@ export default {
       } else {
         add(body,
           CONFIG.demo ? h("div", { class: "notice", style: "margin-bottom:24px" }, h("p", null, "Preview: this sample is built from the sample file.")) : null,
-          buildPlan(st).map(renderSection),
+          (st.plan.doc && Array.isArray(st.plan.doc.sections) && st.plan.doc.sections.length ? st.plan.doc.sections : buildPlan(st)).map(renderSection),
           st.plan.readAt ? h("p", null, h("span", { class: "pill pill--ok" }, "You have read your plan")) : h("button", { type: "button", class: "btn btn--primary", onclick: () => { update((s) => { s.plan.readAt = Date.now(); }); announce("Plan marked as read."); paint(); } }, "I have read my plan")
         );
       }

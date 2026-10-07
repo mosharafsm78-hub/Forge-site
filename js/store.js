@@ -39,7 +39,7 @@ function blank() {
     documents: { nidFront: null, nidBack: null, cheque: null, licence: null, bankName: "", bkash: "", agreementReady: false, agreementSigned: null },
     // After payment. The Forge team sets the amounts and confirms each step; the owner sees and acts on theirs.
     payment: { packagingCost: 0, websiteFee: 0, quoteApprovedAt: null, reportedAt: null, paidAt: null },
-    plan: { draftedAt: null, readAt: null },
+    plan: { draftedAt: null, readAt: null, doc: null },
     // One line per batch of goods. The Forge team moves it from "not shipped" to "at Bangladesh" and sets the freight.
     shipments: [],
     marketing: { budget: 0, launchedAt: null, postRequestedAt: null, postedAt: null, spent: 0, reached: 0 },
@@ -65,7 +65,7 @@ const STAFF_PATHS = [
   "documents.agreementReady", "documents.verifiedAt", "documents.reviewNote",
   "brand.logo.options", "brand.logo.deliveredAt", "brand.page.url", "brand.page.deliveredAt",
   "payment.packagingCost", "payment.websiteFee", "payment.paidAt",
-  "plan.draftedAt", "name.suggestions", "name.suggestedAt", "marketing.budget", "marketing.launchedAt", "marketing.postedAt", "marketing.spent", "marketing.reached",
+  "plan.draftedAt", "plan.doc", "name.suggestions", "name.suggestedAt", "marketing.budget", "marketing.launchedAt", "marketing.postedAt", "marketing.spent", "marketing.reached",
   "shipments", "orders.list",
 ];
 // The few things the owner does to a staff-owned shipment or order.
