@@ -1,8 +1,8 @@
-import { h, formatUsd, formatBdt, usdToBdt, announce } from "../ui.js?v=1791343911";
-import { getState, update, subscribe } from "../store.js?v=1791343911";
-import { industryById } from "../data/industries.js?v=1791343911";
-import { searchProducts, productDetail } from "../api.js?v=1791343911";
-import { head, foot } from "./common.js?v=1791343911";
+import { h, formatUsd, formatBdt, usdToBdt, announce } from "../ui.js?v=1791344009";
+import { getState, update, subscribe } from "../store.js?v=1791344009";
+import { industryById } from "../data/industries.js?v=1791344009";
+import { searchProducts, productDetail } from "../api.js?v=1791344009";
+import { head, foot } from "./common.js?v=1791344009";
 
 function priceLines(usd, fx) {
   const bdt = usdToBdt(usd, fx && fx.rate);

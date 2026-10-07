@@ -1,10 +1,10 @@
 // A single file slot: choose, replace or remove one file. On the live site the file goes to private storage
 // and only its description and location are kept in the owner's file. In the sample preview nothing is sent.
-import { h, announce, append } from "../ui.js?v=1791343911";
+import { h, announce, append } from "../ui.js?v=1791344009";
 const add = (el, ...kids) => append(el, kids);
-import { getState, update, currentUser, saveNow } from "../store.js?v=1791343911";
-import { CONFIG } from "../config.js?v=1791343911";
-import { loadBackend } from "../backend.js?v=1791343911";
+import { getState, update, currentUser, saveNow } from "../store.js?v=1791344009";
+import { CONFIG } from "../config.js?v=1791344009";
+import { loadBackend } from "../backend.js?v=1791344009";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 const OK_TYPES = ["image/jpeg", "image/png", "application/pdf"];
