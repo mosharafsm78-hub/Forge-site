@@ -1,10 +1,10 @@
-import { h, announce, append, formatBdt } from "../ui.js?v=1791344498";
-import { getState, update, subscribe } from "../store.js?v=1791344498";
-import { computeSheet } from "../sheet.js?v=1791344498";
-import { addWorkingDays, formatDay } from "../time.js?v=1791344498";
-import { head, previewAction, reviewNote, journeyFoot, dateText, freightNote } from "./common.js?v=1791344498";
-import { makeShipment, freightDue } from "../shipments.js?v=1791344498";
-import { payPanel } from "./payqr.js?v=1791344498";
+import { h, announce, append, formatBdt } from "../ui.js?v=1791344718";
+import { getState, update, subscribe } from "../store.js?v=1791344718";
+import { computeSheet } from "../sheet.js?v=1791344718";
+import { addWorkingDays, formatDay } from "../time.js?v=1791344718";
+import { head, previewAction, reviewNote, journeyFoot, dateText, freightNote } from "./common.js?v=1791344718";
+import { makeShipment, freightDue } from "../shipments.js?v=1791344718";
+import { payPanel } from "./payqr.js?v=1791344718";
 
 const add = (el, ...k) => append(el, k);
 const DAY = 86400000;
@@ -36,7 +36,7 @@ export default {
         h("section", { class: "section", style: "margin-top:24px" },
           h("div", { class: "section__head" }, h("h2", null, "Your bill"), h("p", null, "You pay the full amount first. Forge orders your goods after payment is confirmed and you have read your business plan. Freight and duty are billed later, at the actual cost, when the goods reach Bangladesh.")),
           h("div", { class: "bill" }, sheet.rows.filter((r) => r.key !== "freight").map((r) => h("div", { class: "bill__row" }, h("span", null, h("b", null, r.label), r.sub ? h("small", null, r.sub) : null), h("span", { class: "num" }, r.value || r.pending || ""))), h("div", { class: "bill__total" }, h("span", null, "Total to pay now"), h("b", { class: "num" }, sheet.orderTotal))),
-          h("p", { class: "field__help" }, sheet.hasRate ? (getState().fx && getState().fx.source === "estimate" ? `Product and domain prices are in taka at a planning rate of US$1 = ৳${sheet.rate}. Today's rate is still loading; this page updates when it arrives. ` : `Product and domain prices are in taka at US$1 = ৳${sheet.rate}. `) + "The amount on this bill is the amount you pay." : "Product and domain prices are in US dollars until the exchange rate loads.")
+          h("p", { class: "field__help" }, sheet.hasRate ? (getState().fx && getState().fx.source === "estimate" ? `Product and domain prices are in taka at a planning rate of US$1 = ৳${Number(sheet.rate).toFixed(2)}. Today's rate is still loading; this page updates when it arrives. ` : `Product and domain prices are in taka at US$1 = ৳${Number(sheet.rate).toFixed(2)}. `) + "The amount on this bill is the amount you pay." : "Product and domain prices are in US dollars until the exchange rate loads.")
         )
       );
 
