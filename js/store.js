@@ -42,7 +42,7 @@ function blank() {
     plan: { draftedAt: null, readAt: null },
     // One line per batch of goods. The Forge team moves it from "not shipped" to "at Bangladesh" and sets the freight.
     shipments: [],
-    marketing: { budget: 0, launchedAt: null, postRequestedAt: null, postedAt: null },
+    marketing: { budget: 0, launchedAt: null, postRequestedAt: null, postedAt: null, spent: 0, reached: 0 },
     orders: { list: [] },
     reorder: { qty: 0, requestedAt: null },
     pausedAt: null,
@@ -65,7 +65,7 @@ const STAFF_PATHS = [
   "documents.agreementReady", "documents.verifiedAt", "documents.reviewNote",
   "brand.logo.options", "brand.logo.deliveredAt", "brand.page.url", "brand.page.deliveredAt",
   "payment.packagingCost", "payment.websiteFee", "payment.paidAt",
-  "plan.draftedAt", "name.suggestions", "name.suggestedAt", "marketing.budget", "marketing.launchedAt", "marketing.postedAt",
+  "plan.draftedAt", "name.suggestions", "name.suggestedAt", "marketing.budget", "marketing.launchedAt", "marketing.postedAt", "marketing.spent", "marketing.reached",
   "shipments", "orders.list",
 ];
 // The few things the owner does to a staff-owned shipment or order.

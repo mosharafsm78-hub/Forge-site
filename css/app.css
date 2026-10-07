@@ -699,3 +699,22 @@ a.task:hover { background: var(--paper); }
 /* Reminder at the foot of every page */
 .riskbox{margin:36px auto 8px;max-width:760px;padding:12px 16px;border:1px solid var(--line,#c9d3ce);border-radius:10px;background:var(--surface-2,#f4f6f5);font-size:.85rem;line-height:1.5;color:var(--muted,#44514a)}
 .riskbox a{text-decoration:underline}
+
+/* Accounting */
+.acct__hero{display:grid;grid-template-columns:1.6fr 1fr;gap:20px;padding:24px;border:1px solid var(--line);border-radius:var(--r-l,14px);background:var(--surface);margin-bottom:8px}
+.acct__hero.is-up{border-color:#9fcbb2;background:#eef6f1}
+.acct__hero.is-down{border-color:#e3b2ab;background:#fbf0ee}
+.acct__k{margin:0;font-weight:600;color:var(--muted)}
+.acct__v{margin:4px 0;font-family:var(--font-display);font-size:2.4rem;font-weight:800;line-height:1.1}
+.acct__hero.is-up .acct__v{color:#0b3b28}
+.acct__hero.is-down .acct__v{color:#9a2a1c}
+.acct__n{margin:0;color:var(--muted);max-width:52ch}
+.acct__side{display:grid;gap:14px;align-content:center;border-left:1px solid var(--line);padding-left:20px}
+.acct__side p{margin:0;display:grid;gap:2px}
+.acct__side small{color:var(--muted)}
+.acct__side b{font-size:1.25rem}
+.stat__note{color:var(--muted);font-size:.8rem}
+.acct__bar{height:10px;border-radius:99px;background:#dfe6e2;overflow:hidden;margin:12px 0 6px}
+.acct__bar span{display:block;height:100%;background:var(--brand,#0e7a4b);border-radius:99px}
+@media (max-width:700px){.acct__hero{grid-template-columns:1fr}.acct__side{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:14px}.topbar__acct{display:inline-flex}}
+@media (max-width:600px){.topbar__site{display:none}}

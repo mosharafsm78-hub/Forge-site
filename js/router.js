@@ -23,8 +23,9 @@ import returns from "./screens/returns.js";
 import reorder from "./screens/reorder.js";
 import pause from "./screens/pause.js";
 import summary from "./screens/summary.js";
+import accounting from "./screens/accounting.js";
 
-const screens = { welcome, profile, industry, product, name, brand, packaging, domain, documents, summary, billing, plan, freight, marketing, orders, returns, reorder, pause, ...auth };
+const screens = { welcome, profile, industry, product, name, brand, packaging, domain, documents, summary, billing, plan, freight, marketing, orders, returns, reorder, pause, accounting, ...auth };
 
 function idFromHash() {
   const match = window.location.hash.match(/^#\/([a-z]+)/);

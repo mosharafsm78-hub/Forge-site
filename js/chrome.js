@@ -34,6 +34,7 @@ export function mountChrome(root) {
     h("a", { class: "btn btn--small btn--quiet topbar__site", href: (typeof window !== "undefined" && window.__SITE_URL__) || "index.html" }, h("span", { class: "long" }, "Back to Forge website"), h("span", { class: "short" }, "Website")),
     els.save,
     els.account,
+    h("a", { class: "btn btn--small btn--quiet topbar__acct", href: "#/accounting" }, "Accounting"),
     h("a", { class: "btn btn--small btn--quiet topbar__pause", href: "#/pause" }, h("span", { class: "long" }, "Pause or exit"), h("span", { class: "short" }, "Pause")),
     els.stepBtn
   );

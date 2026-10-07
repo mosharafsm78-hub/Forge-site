@@ -163,7 +163,7 @@ export function isComplete(stageId, st) {
 // A stage opens when it exists and everything it needs is complete.
 // Whether the owner can fill in a stage. In the live workspace this is strict, one stage after another.
 export function canFill(stageId, st) {
-  if (stageId === "welcome" || stageId === "pause") return true;
+  if (stageId === "welcome" || stageId === "pause" || stageId === "accounting") return true;
   // The sample-data preview lets a reviewer fill every page. The live site never does.
   if (CONFIG.demo) return true;
   if (stageId === "summary") return PREP.every((id) => isComplete(id, st));
@@ -174,7 +174,7 @@ export function canFill(stageId, st) {
 
 // Every built page can be looked at, so the owner sees the whole journey. Filling in follows canFill.
 export function canOpen(stageId, st) {
-  if (stageId === "welcome" || stageId === "pause" || stageId === "summary") return true;
+  if (stageId === "welcome" || stageId === "pause" || stageId === "summary" || stageId === "accounting") return true;
   const stage = stageById(stageId);
   return Boolean(stage && stage.built);
 }
