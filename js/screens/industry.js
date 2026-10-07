@@ -1,7 +1,7 @@
-import { h } from "../ui.js?v=1791344718";
-import { getState, update } from "../store.js?v=1791344718";
-import { INDUSTRIES } from "../data/industries.js?v=1791344718";
-import { head, textareaField, foot } from "./common.js?v=1791344718";
+import { h } from "../ui.js?v=1791345108";
+import { getState, update } from "../store.js?v=1791345108";
+import { INDUSTRIES } from "../data/industries.js?v=1791345108";
+import { head, textareaField, foot } from "./common.js?v=1791345108";
 
 export default {
   id: "industry",

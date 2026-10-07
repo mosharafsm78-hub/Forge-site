@@ -1,29 +1,29 @@
 // Hash routes: #/profile, #/industry, and so on. A stage only opens when the ones before it are complete.
-import { h } from "./ui.js?v=1791344718";
-import { getState, currentUser, subscribe } from "./store.js?v=1791344718";
-import { CONFIG } from "./config.js?v=1791344718";
-import auth, { AUTH_IDS, OPEN_AUTH_IDS } from "./screens/auth.js?v=1791344718";
-import { canFill, blockingStage, isFrozen } from "./rules.js?v=1791344718";
-import { setCurrent } from "./chrome.js?v=1791344718";
-import welcome from "./screens/welcome.js?v=1791344718";
-import profile from "./screens/profile.js?v=1791344718";
-import industry from "./screens/industry.js?v=1791344718";
-import product from "./screens/product.js?v=1791344718";
-import name from "./screens/name.js?v=1791344718";
-import domain from "./screens/domain.js?v=1791344718";
-import brand from "./screens/brand.js?v=1791344718";
-import packaging from "./screens/packaging.js?v=1791344718";
-import documents from "./screens/documents.js?v=1791344718";
-import billing from "./screens/billing.js?v=1791344718";
-import plan from "./screens/plan.js?v=1791344718";
-import freight from "./screens/freight.js?v=1791344718";
-import marketing from "./screens/marketing.js?v=1791344718";
-import orders from "./screens/orders.js?v=1791344718";
-import returns from "./screens/returns.js?v=1791344718";
-import reorder from "./screens/reorder.js?v=1791344718";
-import pause from "./screens/pause.js?v=1791344718";
-import summary from "./screens/summary.js?v=1791344718";
-import accounting from "./screens/accounting.js?v=1791344718";
+import { h } from "./ui.js?v=1791345108";
+import { getState, currentUser, subscribe } from "./store.js?v=1791345108";
+import { CONFIG } from "./config.js?v=1791345108";
+import auth, { AUTH_IDS, OPEN_AUTH_IDS } from "./screens/auth.js?v=1791345108";
+import { canFill, blockingStage, isFrozen } from "./rules.js?v=1791345108";
+import { setCurrent } from "./chrome.js?v=1791345108";
+import welcome from "./screens/welcome.js?v=1791345108";
+import profile from "./screens/profile.js?v=1791345108";
+import industry from "./screens/industry.js?v=1791345108";
+import product from "./screens/product.js?v=1791345108";
+import name from "./screens/name.js?v=1791345108";
+import domain from "./screens/domain.js?v=1791345108";
+import brand from "./screens/brand.js?v=1791345108";
+import packaging from "./screens/packaging.js?v=1791345108";
+import documents from "./screens/documents.js?v=1791345108";
+import billing from "./screens/billing.js?v=1791345108";
+import plan from "./screens/plan.js?v=1791345108";
+import freight from "./screens/freight.js?v=1791345108";
+import marketing from "./screens/marketing.js?v=1791345108";
+import orders from "./screens/orders.js?v=1791345108";
+import returns from "./screens/returns.js?v=1791345108";
+import reorder from "./screens/reorder.js?v=1791345108";
+import pause from "./screens/pause.js?v=1791345108";
+import summary from "./screens/summary.js?v=1791345108";
+import accounting from "./screens/accounting.js?v=1791345108";
 
 const screens = { welcome, profile, industry, product, name, brand, packaging, domain, documents, summary, billing, plan, freight, marketing, orders, returns, reorder, pause, accounting, ...auth };
 
@@ -83,6 +83,7 @@ function lockView(node, id, st) {
   node.querySelectorAll("button").forEach((el) => el.setAttribute("aria-disabled", "true"));
   const stop = (e) => {
     const t = e.target.closest ? e.target.closest("input, select, textarea, button, label, .logo-card") : null;
+    if (frozen && t && t.closest(".screen__foot")) return; // moving on is always allowed
     if (!t || (e.type === "keydown" && ["Tab", "Shift", "Escape"].includes(e.key))) return;
     e.preventDefault();
     e.stopPropagation();
