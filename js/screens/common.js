@@ -3,10 +3,21 @@ import { h } from "../ui.js";
 import { CONFIG } from "../config.js";
 import { getState } from "../store.js";
 import { isComplete } from "../rules.js";
-import { stageById } from "../stages.js";
+import { stageById, STAGES, PHASES, stageNumber } from "../stages.js";
+
+// Where the owner is: part, step and whose turn it is. Read from the address so every screen shows it.
+function crumb() {
+  const id = (typeof location !== "undefined" ? location.hash : "").replace(/^#\/?/, "").split(/[/?]/)[0];
+  const stage = STAGES.find((s) => s.id === id);
+  if (!stage) return null;
+  const phase = PHASES.find((p) => p.id === stage.phase);
+  const done = isComplete(stage.id, getState());
+  const chip = done ? h("span", { class: "chip-turn chip-turn--done" }, "Done") : stage.who === "forge" ? h("span", { class: "chip-turn chip-turn--forge" }, "Forge's turn") : h("span", { class: "chip-turn" }, "Your turn");
+  return h("p", { class: "crumb" }, h("a", { href: "#/welcome" }, "Your business file"), h("span", { "aria-hidden": "true" }, "/"), h("span", null, `Part ${PHASES.indexOf(phase) + 1} of ${PHASES.length}: ${phase.label}`), h("span", { "aria-hidden": "true" }, "/"), h("span", null, `Step ${stageNumber(stage.id)} of ${STAGES.length}`), chip);
+}
 
 export function head(title, lede) {
-  return h("div", { class: "screen__head" }, h("h1", null, title), lede ? h("p", { class: "screen__lede" }, lede) : null);
+  return h("div", { class: "screen__head" }, crumb(), h("h1", null, title), lede ? h("p", { class: "screen__lede" }, lede) : null);
 }
 
 function wrap({ id, label, help, full, tag = "div", labelTag = "label", control }) {
