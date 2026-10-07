@@ -43,9 +43,9 @@ export function mountChrome(root) {
 
   const shell = h("div", { class: "shell" }, els.top, els.rail, els.main, els.sheet);
   root.replaceChildren(
-    CONFIG.demo
-      ? h("div", { class: "demo-banner", role: "note" }, "Preview with sample data. Live products, prices and domains appear when the site is connected to the supplier and domain services.")
-      : null,
+    ...(CONFIG.demo
+      ? [h("div", { class: "demo-banner", role: "note" }, "Preview with sample data. Live products, prices and domains appear when the site is connected to the supplier and domain services.")]
+      : []),
     shell,
     els.live
   );
