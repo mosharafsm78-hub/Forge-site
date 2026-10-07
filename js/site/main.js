@@ -19,12 +19,13 @@ function idFromHash() {
 
 function header(current) {
   const links = NAV.map(([id, label]) => h("a", { href: "#/" + id, class: "nav__link", "aria-current": current === id ? "page" : null }, label));
-  const menu = h("details", { class: "nav__menu" }, h("summary", { class: "btn btn--small" }, "Menu"), h("div", { class: "nav__panel" }, links, LOGIN ? h("a", { class: "nav__link", href: LOGIN }, "Log in") : null, h("a", { class: "btn btn--primary", href: WORKSPACE }, "Start your business file")));
+  const menu = h("details", { class: "nav__menu" }, h("summary", { class: "btn btn--small" }, "Menu"), h("div", { class: "nav__panel" }, links, LOGIN ? h("a", { class: "nav__link", href: LOGIN }, "Log in") : null, h("a", { class: "btn btn--primary", href: WORKSPACE }, "Join Now")));
   return h("header", { class: "top" }, h("div", { class: "wrap top__in" },
     h("a", { class: "word", href: "#/" }, "Forge"),
     h("nav", { class: "nav", "aria-label": "Main" }, links),
     LOGIN ? h("a", { class: "nav__link top__login", href: LOGIN }, "Log in") : null,
-    h("a", { class: "btn btn--primary top__cta", href: WORKSPACE }, "Start your business file"),
+    h("a", { class: "btn btn--primary top__cta", href: WORKSPACE }, "Join Now"),
+    h("a", { class: "btn btn--primary btn--small top__join", href: WORKSPACE }, "Join Now"),
     menu));
 }
 

@@ -1,7 +1,7 @@
 // Pages of the public Forge site. Every figure shown here is labelled as an example.
 import { h } from "../ui.js";
 
-const cta = (ws, label = "Start your business file", cls = "btn btn--primary") => h("a", { class: cls, href: ws }, label);
+const cta = (ws, label = "Join Now", cls = "btn btn--primary") => h("a", { class: cls, href: ws }, label);
 const link = (id, label, cls = "btn") => h("a", { class: cls, href: "#/" + id }, label);
 
 function intro(title, lede) {
@@ -149,7 +149,7 @@ function freightExplainer() {
       h("b", { "aria-hidden": "true" }, "+"),
       h("div", null, h("span", null, "Freight, duty and clearance"), h("strong", null, "৳ 9,400")),
       h("b", { "aria-hidden": "true" }, "="),
-      h("div", { class: "formula__sum" }, h("span", null, "What your first batch really costs"), h("strong", null, "৳ 124,900"))),
+      h("div", { class: "formula__sum" }, h("span", null, "What your first batch really costs"), h("strong", null, "৳ 33,400"))),
     h("p", { class: "small muted" }, "Example, amounts illustrative. Your real figures depend on your product and quantity."));
 }
 
@@ -222,59 +222,71 @@ function watchParts(root) {
   }, 0);
 }
 
+function trustStrip() {
+  const items = [
+    ["Nothing starts before you sign", "No work is done and no money is taken until your agreement is signed."],
+    ["You see every cost first", "Each line of your first bill is shown before you pay. Freight is billed at actual cost."],
+    ["You can pause any time", "The exact terms are written in your agreement before you sign it."],
+  ];
+  return h("ul", { class: "trust" }, items.map(([t, d]) => h("li", null, h("strong", null, t), h("span", null, d))));
+}
+
+function secHead(title, lead, more) {
+  return h("div", { class: "sec__head" }, h("h2", null, title), lead ? h("p", { class: "sec__lead" }, lead) : null, more || null);
+}
+
+function sec(id, ...kids) {
+  return h("section", { class: "sec", id: "sec-" + id }, h("div", { class: "wrap" }, ...kids));
+}
+
+function costGlance() {
+  const rows = [
+    ["Minimum to start", "৳30,000", "The least you must have ready. It buys a small first batch. Not a fee, and not paid to Forge."],
+    ["Your first bill", "Itemised", "Product, domain, packaging and website setup, shown line by line before you pay."],
+    ["Freight and customs", "At actual cost", "Billed after your goods reach Bangladesh, because the real number is only known then."],
+    ["Advertising", "Your budget", "You decide how much to spend. Our team runs the ads."],
+  ];
+  return h("dl", { class: "glance" }, rows.map(([k, v, d]) => h("div", null, h("dt", null, k), h("dd", { class: "glance__v" }, v), h("dd", { class: "glance__d" }, d))));
+}
+
+function homeFaq() {
+  const pick = ["Do I need business experience?", "How much money do I need?", "Are there any hidden costs?", "What if my goods do not sell?", "Can I stop?"];
+  const rows = QA.filter(([q]) => pick.includes(q));
+  return h("div", { class: "faq" }, rows.map(([q, a]) => h("details", null, h("summary", null, q), h("p", null, a))));
+}
+
 const home = {
   title: "Home",
   render({ workspace }) {
-    const root = h("div", null,
+    return h("div", null,
       h("section", { class: "hero" }, h("div", { class: "wrap hero__in" },
         h("div", { class: "hero__text" },
           h("h1", null, "You make the decisions. Forge handles the hassle."),
-          h("p", { class: "lede" }, "Every business is two jobs: deciding and doing. Deciding is yours: what to sell, what to call it, how much to risk. Doing is Forge's: sourcing, branding, packaging, shipping, customs, ads and orders. We use AI for speed and real people for accountability. You sell cash on delivery."),
-          h("div", { class: "actions" }, cta(workspace), link("how", "See every stage"))),
+          h("p", { class: "lede" }, "Starting an import business means deciding and doing. You decide what to sell and how much to risk. Our team does the sourcing, branding, packaging, shipping, ads and order confirmation. You sell cash on delivery."),
+          h("div", { class: "actions" }, cta(workspace), link("how", "See how it works")),
+          h("p", { class: "hero__fine" }, "Forge can make mistakes, and a business can lose money. Forge does not promise sales or profit.")),
         orderSheet())),
 
-      h("section", { class: "wrap readnote" }, h("div", { class: "readnote__box" },
-        h("strong", null, "Please read this page from top to bottom"),
-        h("p", null, "There are six short parts, and each one builds on the one before. It takes about five minutes. If you skip parts, you may not understand how Forge works, and you could expect something we do not offer."))),
+      h("section", { class: "wrap trustrow" }, trustStrip()),
 
-      progress(),
+      sec("who", secHead("Deciding is yours. Doing is Forge's.", "Every business is two jobs. Forge takes the one where the hassle lives."), whoDoes()),
 
-      part(1, "Deciding is yours. Doing is Forge's.", "Every business is two jobs. Deciding: what to sell, what to call it, how much to risk. Doing: suppliers, designers, paperwork, shipping, customs, ads and customers. The doing is where the hassle lives. Forge takes it.",
-        h("p", { class: "narrow" }, "The AI does the fast work: drafts, suggestions and checks. Real people do the work that needs judgment and hands. We put everything into making your business work, and we tell you honestly that nobody can guarantee success."),
-        whoDoes(),
-        bridge("That is the idea: your decisions, our execution. Next: why you can trust us with it.")),
+      sec("how", secHead("How it works", "Six steps from your first question to your first parcel.", link("how", "See all 15 stages")),
+        h("ol", { class: "steps steps--track" }, STEPS.map(([t, d]) => h("li", null, h("strong", null, t), h("span", null, d))))),
 
-      part(2, "Why trust Forge", "Every first-time owner has the same worries. Here is each worry, and what Forge does about it.",
-        worries(),
-        h("p", { class: "proof" }, "These are not slogans. Each one is a rule built into your business file, which is why nothing moves forward until the step before it is done."),
-        bridge("Now let us show how that works in order.")),
+      sec("cost", secHead("What it costs", "You need at least ৳30,000 ready. Here is where the money goes.", link("costs", "See every cost")), costGlance()),
 
-      part(3, "How it works", "Six steps, from your first question to your first parcel. The full list of 15 stages is on its own page.",
-        h("ol", { class: "steps steps--track" }, STEPS.map(([t, d]) => h("li", null, h("strong", null, t), h("span", null, d)))),
-        h("p", { class: "narrow" }, "Each item you import appears in one table. The freight cell stays blank until your goods reach Bangladesh."),
-        goodsTable(),
-        h("p", null, link("how", "Read all 15 stages in detail")),
-        bridge("You have seen the steps. Next: what you pay, and when.")),
+      sec("faq", secHead("Questions people ask first", null, link("faq", "See all questions")), homeFaq()),
 
-      part(4, "What you pay", "Here is every cost we know of, when you pay it, and how you learn the amount.",
-        costTable(),
-        freightExplainer(),
-        h("p", null, link("costs", "See this on its own page")),
-        bridge("One last part, and the most important: the risk.")),
-
-      part(5, "The honest risk", "We would rather you hear this from us now than find out later.",
+      sec("risk", secHead("The honest risk", "We would rather you hear this from us now than find out later."),
         warning("Your agreement says who pays for what and who carries which loss."),
-        h("p", { class: "narrow" }, "Products may not sell. Customers refuse some parcels. Ads cost money. Shipments run late. Freight can come in higher than you expected. These can happen to any business. Forge reduces the work and the surprises. It cannot remove the risk."),
-        h("p", null, link("risk", "Read more about the risks")),
-        bridge("If you have read this far and it still makes sense, you are ready.")),
+        h("p", { class: "narrow", style: "margin-top:18px" }, "Products may not sell. Customers refuse some parcels. Ads cost money. Shipments run late. Forge reduces the work and the surprises. It cannot remove the risk."),
+        h("p", null, link("risk", "Read about the risks"))),
 
-      h("section", { class: "final part", id: "part-begin", "data-part": "begin" }, h("div", { class: "wrap" },
-        h("p", { class: "part__no" }, "Part 6 of 6"),
-        h("h2", null, "Open your business file"),
+      h("section", { class: "final" }, h("div", { class: "wrap" },
+        h("h2", null, "Ready to open your business file?"),
         h("p", { class: "lede" }, "Answer the first questions now. Nothing is charged until you have signed the agreement and approved your first bill."),
         cta(workspace))));
-    watchParts(root);
-    return root;
   },
 };
 
@@ -383,6 +395,7 @@ const how = {
               h("div", null, h("dt", null, "Your part"), h("dd", null, st.you)),
               h("div", null, h("dt", null, "Forge's part"), h("dd", null, st.we)),
               h("div", null, h("dt", null, "What you get"), h("dd", null, st.get)))))))),
+      band("Your goods table", h("div", null, h("p", { class: "narrow" }, "Each item you import appears in one table. The freight cell stays blank until your goods reach Bangladesh."), goodsTable())),
       band("Doing it alone, or with Forge", alone()),
       h("section", { class: "wrap warnrow" }, warning("You can pause at any time. The exact terms are in your agreement.")),
       h("section", { class: "final" }, h("div", { class: "wrap" }, h("h2", null, "See it for yourself"), cta(workspace))));
@@ -426,6 +439,7 @@ const risk = {
     return h("div", null,
       intro("Before you start", "Starting a business can lose money. Forge does not promise sales or profit, and no honest service can."),
       h("section", { class: "wrap warnrow" }, warning()),
+      band("Common worries, answered", worries()),
       band("What can go wrong", h("div", { class: "factlist" }, risks.map(([t, d]) => h("div", null, h("h3", null, t), h("p", null, d))))),
       band("What Forge puts in place", h("ul", { class: "ticks" }, protections.map((p) => h("li", null, p)))),
       band("Who should not start", h("p", { class: "narrow" }, "Do not start if you cannot afford to lose the money in your first bill, if you are under 18, or if you expect guaranteed income.")),
