@@ -1,0 +1,288 @@
+import { h, formatUsd, formatBdt, usdToBdt, announce } from "../ui.js";
+import { getState, update, subscribe } from "../store.js";
+import { industryById } from "../data/industries.js";
+import { searchProducts, productDetail } from "../api.js";
+import { head, foot } from "./common.js";
+
+function priceLines(usd, fx) {
+  const bdt = usdToBdt(usd, fx && fx.rate);
+  return { usd: formatUsd(usd), bdt: bdt === null ? "" : "about " + formatBdt(bdt) };
+}
+
+export default {
+  id: "product",
+  stage: "product",
+  title: "Product",
+  render({ go }) {
+    const industry = industryById(getState().industryId);
+    let keyword = industry ? industry.keywords[0] : "";
+    let page = 1;
+    let pageCount = 1;
+    let items = [];
+    let loading = false;
+    let error = "";
+    let requestId = 0;
+    let lastRate = getState().fx ? getState().fx.rate : null;
+
+    const chosenSlot = h("div");
+    const results = h("div", { "aria-live": "polite" });
+    const search = h("input", { class: "input", id: "f-search", type: "search", value: keyword, placeholder: "Search products, for example men sneakers", "aria-label": "Search products" });
+    const chipsEl = h("div", { class: "chips", role: "group", "aria-label": "Suggested searches" });
+    const nextBtn = h("button", { type: "button", class: "btn btn--primary", onclick: () => go("name") }, "Continue");
+
+    // ---------- chosen product bar ----------
+    function renderChosen() {
+      const st = getState();
+      chosenSlot.replaceChildren();
+      if (!st.product) {
+        nextBtn.disabled = true;
+        return;
+      }
+      nextBtn.disabled = false;
+      const p = st.product;
+      const total = priceLines(p.priceUsd * st.qty, st.fx);
+      chosenSlot.append(
+        h(
+          "div",
+          { class: "chosen-bar" },
+          h("img", { src: p.image, alt: "", width: 56, height: 56 }),
+          h("div", null, h("div", { class: "chosen-bar__name" }, p.name), h("div", { class: "chosen-bar__meta num" }, `${st.qty} units, ${total.usd}${total.bdt ? ", " + total.bdt : ""}`)),
+          h("button", { type: "button", class: "btn btn--small", onclick: () => openDetail(p) }, "Change quantity")
+        )
+      );
+    }
+
+    // ---------- chips ----------
+    function renderChips() {
+      chipsEl.replaceChildren(
+        ...(industry ? industry.keywords : []).map((k) =>
+          h("button", { type: "button", class: "chip", "aria-pressed": k === keyword ? "true" : "false", onclick: () => runSearch(k) }, k)
+        )
+      );
+    }
+
+    // ---------- grid ----------
+    function skeletonCards(n) {
+      return Array.from({ length: n }, () =>
+        h("div", { class: "skeleton-card", "aria-hidden": "true" }, h("div", { class: "skeleton" }), h("div", { class: "skeleton-card__lines" }, h("div", { class: "skeleton skeleton-line" }), h("div", { class: "skeleton skeleton-line skeleton-line--short" })))
+      );
+    }
+
+    function renderResults() {
+      const st = getState();
+      results.replaceChildren();
+      if (loading && !items.length) {
+        results.append(h("div", { class: "product-grid" }, skeletonCards(8)));
+        return;
+      }
+      if (error && !items.length) {
+        results.append(
+          h("div", { class: "notice notice--error" }, h("b", null, "Products could not be loaded."), h("p", null, error), h("button", { type: "button", class: "btn", onclick: () => load(true) }, "Try again"))
+        );
+        return;
+      }
+      if (!items.length) {
+        results.append(h("div", { class: "notice" }, h("b", null, `No products found for "${keyword}".`), h("p", null, "Try a different word, or choose one of the suggested searches.")));
+        return;
+      }
+      const grid = h(
+        "div",
+        { class: "product-grid" },
+        items.map((p) => {
+          const price = priceLines(p.priceUsd, st.fx);
+          return h(
+            "button",
+            { type: "button", class: "product", "aria-pressed": st.product && st.product.id === p.id ? "true" : "false", onclick: () => openDetail(p) },
+            h("img", { class: "product__img", src: p.image, alt: p.name, loading: "lazy", width: 400, height: 400 }),
+            h(
+              "span",
+              { class: "product__body" },
+              h("span", { class: "product__name" }, p.name),
+              h("span", { class: "product__price num" }, price.usd, " ", h("span", { class: "product__bdt" }, "each")),
+              price.bdt ? h("span", { class: "product__bdt num" }, price.bdt) : null,
+              h("span", { class: "product__facts" }, p.inventory > 0 ? `${p.inventory.toLocaleString("en-US")} in stock` : "Stock checked before ordering")
+            )
+          );
+        })
+      );
+      results.append(grid);
+      if (error) results.append(h("div", { class: "notice notice--error", style: "margin-top:16px" }, h("p", null, error)));
+      if (page < pageCount) {
+        results.append(h("div", { class: "more" }, h("button", { type: "button", class: "btn", disabled: loading, onclick: () => load(false) }, loading ? "Loading" : "Show more products")));
+      }
+    }
+
+    async function load(reset) {
+      const mine = ++requestId;
+      if (reset) {
+        page = 1;
+        items = [];
+      } else {
+        page += 1;
+      }
+      loading = true;
+      error = "";
+      renderResults();
+      try {
+        const r = await searchProducts({ keyword, page });
+        if (mine !== requestId) return;
+        const seen = new Set(items.map((p) => p.id));
+        items = items.concat(r.products.filter((p) => !seen.has(p.id)));
+        pageCount = r.pageCount;
+      } catch (e) {
+        if (mine !== requestId) return;
+        error = e.message || "The supplier catalogue could not be reached.";
+        if (!reset) page -= 1;
+      }
+      loading = false;
+      renderResults();
+      if (reset && items.length) announce(`${items.length} products shown.`);
+    }
+
+    function runSearch(k) {
+      const q = String(k || "").trim();
+      if (!q) return;
+      keyword = q;
+      search.value = q;
+      renderChips();
+      load(true);
+    }
+
+    // ---------- detail dialog ----------
+    function openDetail(p) {
+      const st = getState();
+      const same = st.product && st.product.id === p.id;
+      const maxQty = p.inventory > 0 ? p.inventory : 9999;
+      let qty = same ? st.qty : Math.min(10, maxQty);
+
+      const hero = h("img", { class: "dialog__hero", src: p.image, alt: p.name });
+      const thumbs = h("div", { class: "dialog__thumbs" });
+      const desc = h("div", { class: "desc" }, h("div", { class: "skeleton skeleton-line", style: "margin-bottom:8px" }), h("div", { class: "skeleton skeleton-line skeleton-line--short" }));
+      const costEl = h("p", { class: "num", style: "font-weight:600" });
+      const qtyInput = h("input", { type: "number", id: "f-qty", min: 1, max: maxQty, value: qty, inputmode: "numeric", "aria-label": "Quantity" });
+
+      const dialog = h("dialog", { class: "dialog", "aria-labelledby": "dlg-title" });
+
+      const setQty = (n) => {
+        const v = Math.max(1, Math.min(maxQty, Math.floor(Number(n)) || 1));
+        qty = v;
+        qtyInput.value = String(v);
+        const t = priceLines(p.priceUsd * v, getState().fx);
+        costEl.textContent = `Product cost: ${t.usd}${t.bdt ? ", " + t.bdt : ""}`;
+      };
+      qtyInput.addEventListener("change", () => setQty(qtyInput.value));
+      qtyInput.addEventListener("input", () => {
+        if (qtyInput.value !== "") setQty(qtyInput.value);
+      });
+      setQty(qty);
+
+      const unit = priceLines(p.priceUsd, getState().fx);
+      const choose = h(
+        "button",
+        {
+          type: "button",
+          class: "btn btn--primary",
+          onclick: () => {
+            setQty(qtyInput.value);
+            update((s) => {
+              s.product = { id: p.id, name: p.name, image: p.image, priceUsd: p.priceUsd, category: p.category, supplier: p.supplier, inventory: p.inventory, industryId: s.industryId };
+              s.qty = qty;
+            });
+            dialog.close();
+            renderChosen();
+            renderResults();
+            announce(`${p.name} chosen, ${qty} units.`);
+          },
+        },
+        same ? "Save quantity" : "Choose this product"
+      );
+
+      dialog.append(
+        h(
+          "div",
+          { class: "dialog__inner" },
+          h("div", { class: "dialog__media" }, hero, thumbs),
+          h(
+            "div",
+            { class: "dialog__body" },
+            h("h2", { id: "dlg-title" }, p.name),
+            h("p", { class: "product__price num" }, unit.usd, " each", unit.bdt ? h("span", { class: "product__bdt" }, ", " + unit.bdt) : null),
+            h(
+              "dl",
+              { class: "facts" },
+              h("dt", null, "In stock"), h("dd", { class: "num" }, p.inventory > 0 ? p.inventory.toLocaleString("en-US") : "Checked before ordering"),
+              p.category ? [h("dt", null, "Category"), h("dd", null, p.category)] : null,
+              p.supplier ? [h("dt", null, "Supplier"), h("dd", null, p.supplier)] : null
+            ),
+            desc,
+            h("div", { class: "field" }, h("label", { class: "field__label", for: "f-qty" }, "How many units?"), h("div", { class: "qty" }, h("button", { type: "button", "aria-label": "Fewer", onclick: () => setQty(qty - 1) }, "−"), qtyInput, h("button", { type: "button", "aria-label": "More", onclick: () => setQty(qty + 1) }, "+")), h("p", { class: "field__help" }, "Start small. You can reorder when this batch sells.")),
+            costEl,
+            h("p", { class: "field__help" }, "Freight, duty and clearance are billed when your goods reach Bangladesh, at the actual cost."),
+            h("div", { style: "display:flex;gap:10px;flex-wrap:wrap" }, choose, h("button", { type: "button", class: "btn", onclick: () => dialog.close() }, "Close"))
+          )
+        )
+      );
+      dialog.addEventListener("click", (e) => {
+        if (e.target === dialog) dialog.close();
+      });
+      dialog.addEventListener("close", () => dialog.remove());
+      root.append(dialog);
+      dialog.showModal();
+
+      productDetail(p.id)
+        .then((d) => {
+          if (!dialog.isConnected) return;
+          desc.replaceChildren(d.description || "No description from the supplier.");
+          const pics = [p.image, ...d.images].filter((src, i, all) => src && all.indexOf(src) === i).slice(0, 6);
+          if (pics.length > 1) {
+            thumbs.replaceChildren(
+              ...pics.map((src, i) =>
+                h("button", { type: "button", class: "dialog__thumb", "aria-label": "Picture " + (i + 1), "aria-current": i === 0 ? "true" : "false", onclick: (e) => {
+                  hero.src = src;
+                  thumbs.querySelectorAll(".dialog__thumb").forEach((b) => b.setAttribute("aria-current", "false"));
+                  e.currentTarget.setAttribute("aria-current", "true");
+                } }, h("img", { src, alt: "" }))
+              )
+            );
+          }
+        })
+        .catch(() => {
+          if (dialog.isConnected) desc.replaceChildren("The description could not be loaded. You can still choose this product.");
+        });
+    }
+
+    // ---------- page ----------
+    const form = h("form", { class: "searchbar", role: "search", onsubmit: (e) => {
+      e.preventDefault();
+      runSearch(search.value);
+    } }, search, h("button", { type: "submit", class: "btn" }, "Search"));
+
+    const root = h(
+      "section",
+      { class: "screen screen--wide" },
+      head("Choose your product", "Prices come from the supplier's live catalogue in US dollars, with an estimate in taka. You choose one product and how many to start with."),
+      industry ? null : h("div", { class: "notice notice--error" }, h("p", null, "Choose an industry first."), h("a", { class: "btn", href: "#/industry" }, "Go to industry")),
+      chosenSlot,
+      form,
+      chipsEl,
+      results,
+      foot({ back: "industry", next: nextBtn, note: "Freight and duty are billed when the goods arrive." })
+    );
+
+    // Refresh prices when the exchange rate arrives.
+    const stop = subscribe((s) => {
+      const rate = s.fx ? s.fx.rate : null;
+      if (rate !== lastRate) {
+        lastRate = rate;
+        renderChosen();
+        renderResults();
+      }
+    });
+    root._dispose = stop;
+
+    renderChips();
+    renderChosen();
+    if (industry) load(true);
+    return root;
+  },
+};
