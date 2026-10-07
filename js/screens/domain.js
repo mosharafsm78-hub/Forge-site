@@ -1,8 +1,8 @@
-import { h, formatUsd, formatBdt, usdToBdt, announce } from "../ui.js?v=1791340302";
-import { getState, update, subscribe } from "../store.js?v=1791340302";
-import { slugify, normalizeDomain, isValidDomain, nextToDo } from "../rules.js?v=1791340302";
-import { checkDomains } from "../api.js?v=1791340302";
-import { head, textField, foot } from "./common.js?v=1791340302";
+import { h, formatUsd, formatBdt, usdToBdt, announce } from "../ui.js?v=1791340485";
+import { getState, update, subscribe } from "../store.js?v=1791340485";
+import { slugify, normalizeDomain, isValidDomain, nextToDo } from "../rules.js?v=1791340485";
+import { checkDomains } from "../api.js?v=1791340485";
+import { head, textField, foot } from "./common.js?v=1791340485";
 
 const TLDS = ["com", "shop", "store", "net", "co"];
 
@@ -69,7 +69,7 @@ export default {
       let action;
       if (chosen) action = h("span", { class: "pill pill--ok" }, "Chosen");
       else if (result && result.status === "available") action = h("button", { type: "button", class: "btn btn--small", onclick: () => choose(domain, result) }, "Choose");
-      else if (!loading && (!result || result.status === "unsupported" || result.status === "unknown" || result.status === "setup_required")) action = h("button", { type: "button", class: "btn btn--small", onclick: () => choose(domain, null) }, "Ask the team to check");
+      else if (!loading && (!result || result.status === "unsupported" || result.status === "unknown" || result.status === "setup_required")) action = h("button", { type: "button", class: "btn btn--small", onclick: () => choose(domain, null) }, "Ask Forge to check");
       else action = null;
       return h("div", { class: "domain" + (chosen ? " is-selected" : "") }, h("span", { class: "domain__name" }, domain), pill(result), price, h("div", { class: "domain__action" }, action));
     }

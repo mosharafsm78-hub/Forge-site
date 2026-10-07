@@ -1,10 +1,9 @@
-import { h } from "../ui.js?v=1791340302";
-import { getState, update } from "../store.js?v=1791340302";
-import { validateBusinessName } from "../rules.js?v=1791340302";
-import { head, textField, foot, previewAction } from "./common.js?v=1791340302";
-import { HOUR } from "../time.js?v=1791340302";
-import { waitPanel } from "./wait.js?v=1791340302";
-import { append } from "../ui.js?v=1791340302";
+import { h } from "../ui.js?v=1791340485";
+import { getState, update } from "../store.js?v=1791340485";
+import { validateBusinessName } from "../rules.js?v=1791340485";
+import { head, textField, foot } from "./common.js?v=1791340485";
+import { nameIdeas } from "../nameIdeas.js?v=1791340485";
+import { append } from "../ui.js?v=1791340485";
 
 export default {
   id: "name",
@@ -60,29 +59,42 @@ export default {
 
     // Forge suggests names from the product. The owner still chooses.
     const ideasBox = h("div", { class: "section" });
-    let stopper = null;
+    let busy = false;
+    let ideas = [];
+    let round = 0;
     function paintIdeas() {
-      if (stopper) stopper();
       const n = getState().name;
       ideasBox.replaceChildren();
       append(ideasBox, [h("div", { class: "section__head" }, h("h2", null, "Not sure what to call it?"))]);
-      if (n.suggestions && n.suggestions.length) {
-        append(ideasBox, [
-          h("p", { class: "field__help" }, "Forge suggests these for your product. Tap one to use it. You can still type your own."),
-          h("div", { class: "chips" }, n.suggestions.map((x) => h("button", { type: "button", class: "btn btn--small" + (n.chosen === x ? " btn--primary" : ""), onclick: () => { set("chosen", x); fields.chosen.input.value = x; setPreview(); paintIdeas(); } }, x))),
-        ]);
-      } else if (n.suggestRequestedAt) {
-        const w = waitPanel({ title: "Forge is thinking of names", requestedAt: n.suggestRequestedAt, durationMs: HOUR, lines: ["Forge checks that each name is free to use and fits your product. About 1 hour."], lateText: "Forge is finishing your name ideas. They will appear here soon." });
-        stopper = w.stop;
-        append(ideasBox, [w.el]);
-        const d = previewAction("show sample name ideas", () => { update((s) => { s.name.suggestions = ["Urban Stride", "Step Nest", "Daily Tread", "Pathik Footwear"]; s.name.suggestedAt = Date.now(); }); paintIdeas(); });
-        if (d) append(ideasBox, [d]);
-      } else {
-        append(ideasBox, [
-          h("p", { class: "field__help" }, "Ask Forge for ideas based on your product. You do not need to wait: you can type your own name now and change it later."),
-          h("button", { type: "button", class: "btn", onclick: () => { update((s) => { s.name.suggestRequestedAt = Date.now(); s.name.wantsSuggestions = true; }); paintIdeas(); } }, "Ask Forge for name ideas"),
-        ]);
+      if (busy) {
+        append(ideasBox, [h("p", { class: "field__help" }, "Forge is thinking of names and checking that the web address is free...")]);
+        return;
       }
+      if (ideas.length) {
+        append(ideasBox, [
+          h("p", { class: "field__help" }, "Forge suggests these for your product. Tap one to use it. A tick means its .com web address was free when Forge checked."),
+          h("div", { class: "chips" }, ideas.map((x) => h("button", { type: "button", class: "btn btn--small" + (n.chosen === x.name ? " btn--primary" : ""), onclick: () => { set("chosen", x.name); fields.chosen.input.value = x.name; setPreview(); paintIdeas(); } }, x.com ? "✓ " + x.name : x.name))),
+          h("p", null, h("button", { type: "button", class: "btn btn--small btn--quiet", onclick: () => getIdeas() }, "Show other ideas")),
+        ]);
+        return;
+      }
+      append(ideasBox, [
+        h("p", { class: "field__help" }, "Forge can suggest names for your product in a few seconds. You can also type your own above."),
+        h("button", { type: "button", class: "btn", onclick: () => getIdeas() }, "Suggest names for me"),
+      ]);
+    }
+    async function getIdeas() {
+      busy = true;
+      round += 1;
+      paintIdeas();
+      const st2 = getState();
+      try {
+        ideas = await nameIdeas({ industryId: st2.industryId, productName: st2.product ? st2.product.name : "", ownerFirst: String((st2.profile && st2.profile.fullName) || "").split(/\s+/)[0], seed: round * 3 });
+      } catch {
+        ideas = [];
+      }
+      busy = false;
+      paintIdeas();
     }
     paintIdeas();
 
