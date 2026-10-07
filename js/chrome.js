@@ -1,11 +1,11 @@
 // The frame around every screen: top bar, stage list, order sheet.
-import { h } from "./ui.js?v=1791374586";
-import { CONFIG } from "./config.js?v=1791374586";
-import { STAGES, PHASES, stageNumber } from "./stages.js?v=1791374586";
-import { getState, subscribe, isSaved, saveStatus, currentUser, saveNow, testMode, resetTestFile } from "./store.js?v=1791374586";
-import { loadBackend } from "./backend.js?v=1791374586";
-import { canOpen, stageStatus } from "./rules.js?v=1791374586";
-import { renderSheet } from "./sheet.js?v=1791374586";
+import { h } from "./ui.js?v=1791375337";
+import { CONFIG } from "./config.js?v=1791375337";
+import { STAGES, PHASES, stageNumber } from "./stages.js?v=1791375337";
+import { getState, subscribe, isSaved, saveStatus, currentUser, saveNow, testMode, resetTestFile } from "./store.js?v=1791375337";
+import { loadBackend } from "./backend.js?v=1791375337";
+import { canOpen, stageStatus } from "./rules.js?v=1791375337";
+import { renderSheet } from "./sheet.js?v=1791375337";
 
 let currentId = null;
 let railOpen = false;
@@ -140,7 +140,8 @@ function renderRail() {
   els.rail.replaceChildren(
     h("p", { class: "rail__title" }, "Your business file"),
     h("p", { class: "rail__lede" }, "Four parts, in order. Nothing starts until your documents and signed agreement are in. Ask for the packaging quote first: it takes the longest."),
-    ...groups
+    ...groups,
+    h("p", { class: "rail__more" }, h("a", { href: "#/accounting" }, "Accounting"), " · ", h("a", { href: "#/pause" }, "Pause or exit"))
   );
 }
 

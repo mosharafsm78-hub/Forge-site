@@ -761,3 +761,13 @@ a.task:hover { background: var(--paper); }
 .changereq__list { margin: 0 0 12px; padding-left: 18px; font-size: 14px; }
 .changereq__list li { margin-bottom: 6px; }
 .changereq__form textarea { width: 100%; box-sizing: border-box; }
+
+/* Narrow phones: keep every top-bar button whole */
+@media (max-width: 480px) {
+  .topbar { padding: 0 10px; gap: 6px; }
+  .topbar .btn { padding: 6px 9px; font-size: 0.8rem; }
+  .brand__word { font-size: 1.15rem; }
+}
+.rail__more { margin: 18px 0 8px; font-size: 0.9rem; }
+@media (max-width: 480px) { .topbar__acct { display: none; } }
+@media (min-width: 481px) { .rail__more { display: none; } }

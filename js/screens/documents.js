@@ -1,10 +1,11 @@
-import { h, announce, append } from "../ui.js?v=1791374586";
+import { h, announce, append } from "../ui.js?v=1791375337";
 const add = (el, ...kids) => append(el, kids);
-import { CONFIG } from "../config.js?v=1791374586";
-import { getState, update, subscribe, testMode } from "../store.js?v=1791374586";
-import { payoutNeeds, validateBkash, documentsMissing, documentsChecked, isComplete, nextToDo } from "../rules.js?v=1791374586";
-import { head, textField, foot, previewAction } from "./common.js?v=1791374586";
-import { fileSlot } from "./files.js?v=1791374586";
+import { CONFIG } from "../config.js?v=1791375337";
+import { getState, update, subscribe, testMode } from "../store.js?v=1791375337";
+import { pingForge } from "../changeRequest.js?v=1791375337";
+import { payoutNeeds, validateBkash, documentsMissing, documentsChecked, isComplete, nextToDo } from "../rules.js?v=1791375337";
+import { head, textField, foot, previewAction } from "./common.js?v=1791375337";
+import { fileSlot } from "./files.js?v=1791375337";
 
 const LABELS = { nidFront: "NID, front", nidBack: "NID, back", cheque: "Cheque leaf", bkash: "bKash number", agreementSigned: "Signed agreement" };
 
@@ -25,6 +26,7 @@ export default {
       const s = getState();
       checkBox.replaceChildren();
       if (CONFIG.demo || documentsMissing(s).length) return;
+      if (!documentsChecked(s)) pingForge("documents"); // tells Forge once that everything is in
       if (!documentsChecked(s)) add(checkBox, previewAction("Forge confirms my documents", () => { update((x) => { x.documents.verifiedAt = Date.now(); x.documents.agreementReady = true; x.documents.reviewNote = ""; }); refresh(); }));
       const d = s.documents;
       if (documentsChecked(s)) add(checkBox, h("div", { class: "notice notice--ok", style: "margin-bottom:24px" }, h("p", null, h("b", null, "Your documents are checked.")), h("p", null, "The next stages are open.")));
@@ -86,15 +88,15 @@ export default {
     function paintAgreement() {
       const d = getState().documents;
       agreementBox.replaceChildren();
-      if (!d.agreementReady) {
-        add(agreementBox, 
+      if (CONFIG.demo && !d.agreementReady) {
+        add(agreementBox,
           h("div", { class: "notice notice--info" }, h("p", null, h("b", null, "Your agreement is not ready yet.")), h("p", null, "Forge places it here. Then you download it, print it, sign it, scan it and upload it back.")),
           previewAction("show the agreement as ready", () => { update((s) => { s.documents.agreementReady = true; }); paintAgreement(); refresh(); })
         );
       } else {
-        add(agreementBox, 
+        add(agreementBox,
           h("ol", { class: "steps" }, h("li", null, "Download the agreement."), h("li", null, "Print it and sign every page."), h("li", null, "Scan or photograph the signed pages.")),
-          CONFIG.demo ? h("p", { class: "field__help" }, "Preview: the real agreement is not written yet, so there is nothing to download here.") : null,
+          h("p", null, h("a", { class: "btn btn--small", href: "assets/forge-agreement.pdf", target: "_blank", rel: "noopener" }, "Download the agreement (PDF)")),
           signed.el
         );
       }
@@ -126,7 +128,7 @@ export default {
       checkBox,
       section("What you need", null, checklist),
       section("Your NID", "Needed to register you as the owner and to open your courier account.", nidFront.el, nidBack.el),
-      section("Where your sales money goes", `You chose: ${st.profile.payout}.`, need.bank ? [bankName.el, cheque.el] : null, need.bkash ? bkash.el : null),
+      section("Where your sales money goes", st.profile.payout ? `You chose: ${st.profile.payout}.` : "Choose how you want to be paid on your details page.", need.bank ? [bankName.el, cheque.el] : null, need.bkash ? bkash.el : null),
       section("Agreement with Forge", "You sign one agreement with Forge before you pay.", agreementBox),
       section("Trade licence", null,
         h("div", { class: "notice notice--warn" }, h("p", null, h("b", null, "Upload your trade licence within 30 days of starting the business. Otherwise Forge stops the process of doing business.")), h("p", null, "The licence must be in your business name. The 30 days start when your payment is confirmed.")),

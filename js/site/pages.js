@@ -1,5 +1,5 @@
 // Pages of the public Forge site. Every figure shown here is labelled as an example.
-import { h } from "../ui.js?v=1791374586";
+import { h } from "../ui.js?v=1791375337";
 
 const cta = (ws, label = "Join Now", cls = "btn btn--primary") => h("a", { class: cls, href: ws }, label);
 const link = (id, label, cls = "btn") => h("a", { class: cls, href: "#/" + id }, label);
@@ -22,21 +22,21 @@ function warning(extra) {
 // ---- Specimens: the one bold element, an order sheet and a goods table ----
 function orderSheet() {
   const rows = [
-    ["Product, 60 pieces", "৳ 11,000"],
+    ["Product, 20 pieces", "৳ 5,400"],
     ["Domain, one year", "৳ 1,500"],
-    ["Packaging, bags and box", "৳ 3,500"],
-    ["Website setup", "৳ 8,000"],
+    ["Packaging, bags and box", "৳ 4,500"],
+    ["Website setup", "৳ 3,000"],
   ];
   return h("figure", { class: "sheet", "aria-label": "Example order sheet" },
     h("figcaption", null, h("strong", null, "Your first bill"), h("span", null, "Example of a starter order, amounts illustrative")),
     h("dl", { class: "sheet__rows" }, rows.map(([k, v]) => h("div", null, h("dt", null, k), h("dd", null, v)))),
-    h("div", { class: "sheet__total" }, h("span", null, "Total to pay"), h("strong", null, "৳ 24,000")),
+    h("div", { class: "sheet__total" }, h("span", null, "Total to pay"), h("strong", null, "৳ 14,400")),
     h("p", { class: "sheet__note" }, "Freight, duty and clearance are not in this bill. They are billed at actual cost once your goods reach Bangladesh. This is why the starting minimum of ৳30,000 is more than this bill. You choose how many pieces to order."));
 }
 
 function goodsTable() {
   const rows = [
-    ["Desk lamp", "৳ 11,000", "Paid", "At Bangladesh", "৳ 2,100"],
+    ["Desk lamp", "৳ 5,400", "Paid", "At Bangladesh", "৳ 3,000"],
     ["Phone stand", "৳ 7,500", "Paid", "Shipped", "Not yet"],
     ["Kitchen organiser", "৳ 6,000", "Unpaid", "Not shipped", "Not yet"],
   ];
@@ -122,10 +122,10 @@ function freightExplainer() {
     ["Delivery to Forge stock", "Transport from the port or airport to Forge's stock room.", "The transport company"],
   ];
   const lines = [
-    ["International shipping", "৳ 5,200"],
-    ["Customs duty and taxes", "৳ 2,600"],
-    ["Clearance and port charges", "৳ 900"],
-    ["Delivery to Forge stock", "৳ 700"],
+    ["International shipping", "৳ 1,800"],
+    ["Customs duty and taxes", "৳ 700"],
+    ["Clearance and port charges", "৳ 300"],
+    ["Delivery to Forge stock", "৳ 200"],
   ];
   return h("div", { class: "freight" },
     h("h3", null, "What is freight?"),
@@ -143,13 +143,13 @@ function freightExplainer() {
       h("figure", { class: "sheet sheet--small", "aria-label": "Example freight bill" },
         h("figcaption", null, h("strong", null, "Your freight bill"), h("span", null, "Example, amounts illustrative")),
         h("dl", { class: "sheet__rows" }, lines.map(([k, v]) => h("div", null, h("dt", null, k), h("dd", null, v)))),
-        h("div", { class: "sheet__total" }, h("span", null, "Total freight"), h("strong", null, "৳ 9,400")))),
+        h("div", { class: "sheet__total" }, h("span", null, "Total freight"), h("strong", null, "৳ 3,000")))),
     h("div", { class: "formula", role: "group", "aria-label": "What your first batch really costs" },
-      h("div", null, h("span", null, "Your first bill"), h("strong", null, "৳ 24,000")),
+      h("div", null, h("span", null, "Your first bill"), h("strong", null, "৳ 14,400")),
       h("b", { "aria-hidden": "true" }, "+"),
-      h("div", null, h("span", null, "Freight, duty and clearance"), h("strong", null, "৳ 9,400")),
+      h("div", null, h("span", null, "Freight, duty and clearance"), h("strong", null, "৳ 3,000")),
       h("b", { "aria-hidden": "true" }, "="),
-      h("div", { class: "formula__sum" }, h("span", null, "What your first batch really costs"), h("strong", null, "৳ 33,400"))),
+      h("div", { class: "formula__sum" }, h("span", null, "What your first batch really costs"), h("strong", null, "৳ 17,400"))),
     h("p", { class: "small muted" }, "Example, amounts illustrative. Your real figures depend on your product and quantity."));
 }
 
@@ -235,9 +235,9 @@ function icon(name) {
 
 function moneyBar() {
   const parts = [
-    ["bill", "Your first bill", 24000, "Product, domain, packaging and website setup. Paid once, before ordering."],
+    ["bill", "Your first bill", 14400, "Product, domain, packaging and website setup. Paid once, before ordering."],
     ["freight", "Freight and customs", 3000, "Billed at actual cost after your goods reach Bangladesh."],
-    ["ads", "Ads and spare cash", 3000, "Your ad budget and room for returned parcels. You decide."],
+    ["ads", "Ads and spare cash", 12600, "About ৳9,700 for two weeks of test ads, and the rest as spare cash for refused parcels. You decide."],
   ];
   const total = parts.reduce((n, x) => n + x[2], 0);
   return h("figure", { class: "money", "aria-label": "Example of where a starting amount can go" },
@@ -332,7 +332,7 @@ const STAGES = [
   { t: "Your details", by: "You", time: "5 minutes",
     what: "We learn who you are and how much experience you have, so the rest of the plan fits you.",
     you: "Give your name, mobile number, email, date of birth (you must be 18 or older) and your city.",
-    we: "Nothing yet. Your answers are saved on your device as you go.",
+    we: "Nothing yet. Your answers are saved to your account as you go.",
     get: "Your business file is opened." },
   { t: "Industry", by: "You, with Forge", time: "Same day",
     what: "You decide what kind of business you will run.",
@@ -342,7 +342,7 @@ const STAGES = [
   { t: "Product", by: "You, with Forge", time: "Same day",
     what: "You decide what you will sell and how many to start with.",
     you: "Pick a product from the supplier catalogue, and a quantity. Start small: you can reorder when it sells.",
-    we: "We show live supplier prices with an estimate in taka.",
+    we: "We show live supplier prices with an estimate in taka, and check your quantity against the money you told us you have.",
     get: "A chosen product, with a price estimate on your order sheet." },
   { t: "Business name", by: "You", time: "Same day",
     what: "Your business needs a name that works as a domain and as a Facebook page.",
@@ -364,20 +364,20 @@ const STAGES = [
     you: "Choose a polythene bag, a box, and optionally a sticker or card. Ask for the quote right away, because it takes the longest.",
     we: "We get your packaging made locally in Bangladesh and send you the quote.",
     get: "A packaging quote you approve when you pay." },
-  { t: "Domain", by: "You choose, team buys", time: "Same day",
+  { t: "Domain", by: "You choose, Forge buys", time: "Same day",
     what: "Your web address, such as yourbrand.com.",
     you: "Choose the name and check that it is available.",
-    we: "Our staff buy the domain for you.",
+    we: "Forge buys the domain for you.",
     get: "A domain registered for your business." },
   { t: "Your first bill", by: "You", time: "Pay once, in full",
     what: "Everything you have chosen, in one bill.",
     you: "Check each line. Pay product price times quantity, the domain, the packaging and the website setup.",
-    we: "We confirm your payment and start your shipment. Freight, duty and clearance are not in this bill. They come later, at actual cost.",
-    get: "Your goods are ordered." },
-  { t: "Business plan", by: "Forge, then you", time: "Same day",
+    we: "Forge confirms your payment by hand. Your goods are not ordered yet: Forge orders them after you have read your business plan. Freight, duty and clearance are not in this bill. They come later, at actual cost.",
+    get: "Your payment confirmed, and your business plan on its way." },
+  { t: "Business plan", by: "Forge, then you", time: "About 30 minutes after payment is confirmed",
     what: "A plain plan for your business, in writing.",
     you: "Read it. Ask us about anything unclear.",
-    we: "Forge drafts the plan from your choices and goes through it with you.",
+    we: "Forge writes the plan from your saved bill and choices. It is released about 30 minutes after your payment is confirmed. Forge orders your goods once you have read it.",
     get: "A business plan on your file." },
   { t: "Shipping and freight", by: "Forge", time: "Depends on the shipment",
     what: "Your goods travel to Bangladesh.",
@@ -460,6 +460,7 @@ const risk = {
   render({ workspace }) {
     const risks = [
       ["Products may not sell", "A product that looks good can sell slowly or not at all. Unsold goods are yours."],
+      ["No refunds, no cancellations", "Once you pay, your payment is not refunded and your order is not cancelled. Only pay what you can afford to lose."],
       ["Parcels can be refused", "On cash on delivery, some customers refuse the parcel. Returned goods can be resold, but delivery costs are lost."],
       ["Ads cost money", "Ad spend is paid whether or not it brings orders."],
       ["Shipments can be late", "Customs, suppliers and weather can delay goods."],
@@ -471,7 +472,7 @@ const risk = {
       "Itemised bills. Nothing is charged that you have not seen.",
       "A table showing every item, its payment, its status and its freight.",
       "Stock in hand and every order visible to you at all times.",
-      "You can pause at any time. The exact exit terms are written in your agreement.",
+      "You can pause at any time. Payments are not refunded and orders are not cancelled. The full terms are written in your agreement.",
     ];
     return h("div", null,
       intro("Before you start", "Starting a business can lose money. Forge does not promise sales or profit, and no honest service can."),
@@ -486,7 +487,7 @@ const risk = {
 
 // ---- FAQ ----
 const QA = [
-  ["Who is Forge for?", "First-time owners in Bangladesh who want to import and sell a product on cash on delivery and want a team to do the setup with them."],
+  ["Who is Forge for?", "First-time owners in Bangladesh who want to import and sell a product on cash on delivery and want Forge to do the setup with them."],
   ["Do I need business experience?", "No. Each stage tells you what to do and what we do."],
   ["How much money do I need?", "At least ৳30,000 ready before you start. This is a firm minimum, and a starting floor: it buys a small first batch. More money means a bigger batch and room for ads and returned parcels. Your first bill covers the product, domain, packaging and website setup. The amount depends on the product and quantity you choose, and you see it before paying. Freight, duty and clearance are billed separately once goods arrive."],
   ["What is freight?", "Freight is the total cost of getting your goods from the supplier's country into your hands in Bangladesh. It includes international shipping, customs duty and taxes, clearance and port charges, and delivery to Forge stock. Each part is shown as its own line on your bill."],
@@ -500,7 +501,7 @@ const QA = [
   ["What happens to refused or returned parcels?", "You receive them from Pathao and hand them over as Forge directs. Returned goods go back to stock and are resold."],
   ["What do I do each day?", "Hand confirmed parcels to Pathao, receive returns, and post on your Facebook page once a week when reminded. Forge confirms orders and runs the ads."],
   ["Who owns my Facebook page?", "You do. You add Forge as an admin of your own profile so we can set it up, and you can remove us."],
-  ["Can I stop?", "Yes, you can pause at any time. The exact terms for pausing or leaving are in your agreement."],
+  ["Can I stop?", "You can pause at any time. Payments are not refunded and orders are not cancelled, so only pay what you can afford to lose. The full terms are in your agreement."],
   ["Does Forge promise profit?", "No. Forge can make mistakes and a business can lose money. We promise a clear agreement and numbers you can check."],
 ];
 

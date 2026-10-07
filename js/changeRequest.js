@@ -1,12 +1,16 @@
 // A locked choice can still be changed: the owner asks Forge, Forge reviews it, and Forge unlocks or applies it.
-import { h } from "./ui.js?v=1791374586";
-import { getState, update, saveNow } from "./store.js?v=1791374586";
-import { loadBackend } from "./backend.js?v=1791374586";
+import { h } from "./ui.js?v=1791375337";
+import { getState, update, saveNow } from "./store.js?v=1791375337";
+import { loadBackend } from "./backend.js?v=1791375337";
 
 const LABEL = { industry: "industry", product: "product and quantity", name: "business name", packaging: "packaging", domain: "domain" };
 
+const lastPing = {};
 export async function pingForge(kind) {
+  if (Date.now() - (lastPing[kind] || 0) < 20000) return; // the server also sends each message only once
+  lastPing[kind] = Date.now();
   try {
+    await saveNow(); // the server reads the saved file, so it must be up to date
     const b = await loadBackend();
     if (b && b.notifyForge) await b.notifyForge(kind);
   } catch {
@@ -37,7 +41,7 @@ export function changeRequestBox(stageId) {
       paint();
     } }, "Send to Forge");
     wrap.replaceChildren(
-      mine.length ? h("ul", { class: "changereq__list" }, items) : null,
+      ...(mine.length ? [h("ul", { class: "changereq__list" }, items)] : []),
       open
         ? h("div", { class: "changereq__form" }, h("label", { class: "field__label" }, "Change your " + (LABEL[stageId] || "choice")), area, h("p", { class: "field__help" }, "Forge reads every request. If your payment is not confirmed yet, Forge can unlock this step so you can change it and report your payment again. Payments already made are not refunded."), h("div", { style: "display:flex;gap:8px;margin-top:8px" }, send, h("button", { type: "button", class: "btn btn--small", onclick: () => { open = false; paint(); } }, "Cancel")))
         : h("button", { type: "button", class: "btn btn--small", onclick: () => { open = true; paint(); } }, "Request a change")

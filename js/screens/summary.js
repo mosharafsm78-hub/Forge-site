@@ -1,8 +1,8 @@
-import { h, formatUsd, formatBdt, usdToBdt } from "../ui.js?v=1791374586";
-import { getState, reset } from "../store.js?v=1791374586";
-import { industryById } from "../data/industries.js?v=1791374586";
-import { head, foot } from "./common.js?v=1791374586";
-import { addWorkingDays, formatDay } from "../time.js?v=1791374586";
+import { h, formatUsd, formatBdt, usdToBdt } from "../ui.js?v=1791375337";
+import { getState, reset } from "../store.js?v=1791375337";
+import { industryById } from "../data/industries.js?v=1791375337";
+import { head, foot } from "./common.js?v=1791375337";
+import { addWorkingDays, formatDay } from "../time.js?v=1791375337";
 
 export default {
   id: "summary",
@@ -28,7 +28,7 @@ export default {
       h(
         "div",
         { class: "file" },
-        row("Name", st.profile.fullName, "profile", h("span", { class: "field__help" }, `${st.profile.district}, ${st.profile.phone}`)),
+        row("Name", st.profile.fullName, "profile", h("span", { class: "field__help" }, [st.profile.district, st.profile.phone].filter(Boolean).join(", "))),
         row("Industry", industry ? industry.name : ""),
         row("Product", p ? p.name : "", "product", p ? h("span", { class: "field__help num" }, `${st.qty} units at ${formatUsd(p.priceUsd)}${bdt !== null ? ", about " + formatBdt(bdt) : ""}`) : null),
         row("Business name", st.name.chosen.trim(), "name"),

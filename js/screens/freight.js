@@ -1,8 +1,8 @@
-import { h, formatBdt, formatUsd, usdToBdt, announce, append } from "../ui.js?v=1791374586";
-import { getState, update } from "../store.js?v=1791374586";
-import { freightNote } from "./common.js?v=1791374586";
-import { statusLabel, productPaid, freightDue } from "../shipments.js?v=1791374586";
-import { head, previewAction, reviewNote, journeyFoot, dateText } from "./common.js?v=1791374586";
+import { h, formatBdt, formatUsd, usdToBdt, announce, append } from "../ui.js?v=1791375337";
+import { getState, update } from "../store.js?v=1791375337";
+import { freightNote } from "./common.js?v=1791375337";
+import { statusLabel, productPaid, freightDue } from "../shipments.js?v=1791375337";
+import { head, previewAction, reviewNote, journeyFoot, dateText } from "./common.js?v=1791375337";
 
 const add = (el, ...k) => append(el, k);
 
@@ -38,7 +38,7 @@ export default {
             h("td", null, h("span", { class: "pill " + (sh.receivedAt ? "pill--ok" : "") }, statusLabel(sh))),
             h("td", { class: "num" }, sh.freight > 0 ? [formatBdt(sh.freight), h("div", { style: "margin-top:6px" }, sh.freightPaidAt ? h("span", { class: "pill pill--ok" }, "Paid") : h("span", { class: "pill pill--warn" }, "Unpaid"))] : h("span", { class: "field__help" }, "Not billed yet"))
           ))))));
-        if (rows[0].projected) add(body, h("p", { class: "field__help" }, "Your goods are ordered after your first bill is paid. Until then this table shows what you chose."));
+        if (rows[0].projected) add(body, h("p", { class: "field__help" }, "Forge orders your goods after your payment is confirmed and you have read your business plan. Until then this table shows what you chose."));
       }
 
       add(body, freightNote());
