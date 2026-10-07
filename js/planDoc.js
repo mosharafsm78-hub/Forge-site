@@ -1,6 +1,6 @@
 // Forge's business plan, written from the owner's real file. Plain words, real numbers, honest risks.
 // Every figure is either from the file (marked as such) or a planning assumption that says so.
-import { formatBdt, usdToBdt } from "./ui.js?v=1791344009";
+import { formatBdt, usdToBdt } from "./ui.js?v=1791344184";
 
 const FALLBACK_RATE = 122.76;
 const AD_DAYS = 14;
@@ -189,7 +189,7 @@ export function buildPlan(st) {
     table: {
       head: ["When", "What happens", "Who"],
       rows: [
-        ["Week 1", "Forge orders your goods. Your website and Facebook page are ready.", "Forge"],
+        ["Week 1", "Forge orders your goods once you have read this plan. Your website and Facebook page are ready.", "Forge"],
         ["Weeks 2 to 4", "Goods travel to Bangladesh. You get the freight bill and pay it in Billing.", "Forge, then you"],
         ["Week 5", "Goods arrive. You confirm you received them. Ads start.", "You, then Forge"],
         ["Weeks 5 to 6", "Two-week ad test. You watch orders and cost per order on your Marketing page.", "Forge, you watch"],

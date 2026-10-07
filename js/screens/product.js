@@ -1,8 +1,9 @@
-import { h, formatUsd, formatBdt, usdToBdt, announce } from "../ui.js?v=1791344009";
-import { getState, update, subscribe } from "../store.js?v=1791344009";
-import { industryById } from "../data/industries.js?v=1791344009";
-import { searchProducts, productDetail } from "../api.js?v=1791344009";
-import { head, foot } from "./common.js?v=1791344009";
+import { h, formatUsd, formatBdt, usdToBdt, announce } from "../ui.js?v=1791344184";
+import { getState, update, subscribe } from "../store.js?v=1791344184";
+import { industryById, productRisks } from "../data/industries.js?v=1791344184";
+import { budgetFor, cashLeft } from "../budget.js?v=1791344184";
+import { searchProducts, productDetail } from "../api.js?v=1791344184";
+import { head, foot } from "./common.js?v=1791344184";
 
 function priceLines(usd, fx) {
   const bdt = usdToBdt(usd, fx && fx.rate);
@@ -154,8 +155,16 @@ export default {
     function openDetail(p) {
       const st = getState();
       const same = st.product && st.product.id === p.id;
-      const maxQty = p.inventory > 0 ? p.inventory : 9999;
-      let qty = same ? st.qty : Math.min(10, maxQty);
+      const inventoryMax = p.inventory > 0 ? p.inventory : 9999;
+      const bud = budgetFor(st, p.priceUsd);
+      const hasMoney = bud.capital > 0 && bud.maxQty !== null;
+      const tooBig = hasMoney && bud.maxQty < 1; // even one unit is more than this owner's money supports
+      const maxQty = hasMoney ? Math.max(1, Math.min(inventoryMax, bud.maxQty)) : inventoryMax;
+      const rec = hasMoney ? Math.max(1, Math.round(maxQty * 0.7)) : 10;
+      let qty = same ? Math.min(st.qty, maxQty) : Math.min(rec, maxQty);
+      const moneyBox = h("div", { class: "notice notice--info", style: "margin:12px 0" });
+      const risks = productRisks(st.industryId, p.name);
+      const risksBox = risks.length ? h("div", { class: "notice notice--warn", style: "margin:12px 0" }, h("p", null, h("b", null, "Before you choose. ")), risks.map((r) => h("p", null, r))) : null;
 
       const hero = h("img", { class: "dialog__hero", src: p.image, alt: p.name });
       const thumbs = h("div", { class: "dialog__thumbs" });
@@ -171,6 +180,21 @@ export default {
         qtyInput.value = String(v);
         const t = priceLines(p.priceUsd * v, getState().fx);
         costEl.textContent = `Product cost: ${t.usd}${t.bdt ? ", " + t.bdt : ""}`;
+        paintMoney();
+      };
+      const paintMoney = () => {
+        if (!hasMoney) { moneyBox.replaceChildren(h("p", null, "Enter your available money on the details page so Forge can check how much you can safely order.")); return; }
+        const tk = (n) => "৳" + Math.round(n).toLocaleString("en-US");
+        if (tooBig) { moneyBox.className = "notice notice--error"; moneyBox.replaceChildren(h("p", null, h("b", null, "This product does not fit your money. "), `One unit with freight is about ${tk(bud.landedUnit)}, and after setup, ads and a cash reserve you have about ${tk(Math.max(0, bud.goodsBudget))} left for goods. Choose a cheaper product.`)); return; }
+        moneyBox.className = "notice notice--info";
+        const left = cashLeft(bud, qty);
+        moneyBox.replaceChildren(
+          h("p", null, h("b", null, "Your money check")),
+          h("p", { class: "num" }, `Your money ${tk(bud.capital)}. Set aside for domain, packaging and website setup about ${tk(bud.setup)}, for 14 days of test ads about ${tk(bud.ads)}, and ${tk(bud.buffer)} kept back for refused parcels and surprises. That leaves about ${tk(Math.max(0, bud.goodsBudget))} for goods and freight.`),
+          h("p", { class: "num" }, `Most you can order: ${maxQty.toLocaleString("en-US")} units. Forge suggests starting with about ${rec}.`),
+          h("p", { class: "num", style: "font-weight:600" }, `With ${qty} units you keep about ${tk(left)} in cash.`),
+          h("p", { class: "field__help" }, "These are planning figures. Your real bill and real freight replace them. Forge does not promise sales or profit.")
+        );
       };
       qtyInput.addEventListener("change", () => setQty(qtyInput.value));
       qtyInput.addEventListener("input", () => {
@@ -198,6 +222,7 @@ export default {
         },
         same ? "Save quantity" : "Choose this product"
       );
+      if (tooBig) { choose.disabled = true; choose.setAttribute("aria-disabled", "true"); }
 
       dialog.append(
         h(
@@ -219,6 +244,8 @@ export default {
             desc,
             h("div", { class: "field" }, h("label", { class: "field__label", for: "f-qty" }, "How many units?"), h("div", { class: "qty" }, h("button", { type: "button", "aria-label": "Fewer", onclick: () => setQty(qty - 1) }, "−"), qtyInput, h("button", { type: "button", "aria-label": "More", onclick: () => setQty(qty + 1) }, "+")), h("p", { class: "field__help" }, "Start small. You can reorder when this batch sells.")),
             costEl,
+            moneyBox,
+            risksBox,
             h("p", { class: "field__help" }, "Freight, duty and clearance are billed when your goods reach Bangladesh, at the actual cost."),
             h("div", { style: "display:flex;gap:10px;flex-wrap:wrap" }, choose, h("button", { type: "button", class: "btn", onclick: () => dialog.close() }, "Close"))
           )

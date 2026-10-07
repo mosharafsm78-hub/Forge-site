@@ -28,7 +28,7 @@ export const STAGES = [
   { id: "domain", phase: "setup", label: "Domain", who: "you", built: true, needs: ["documents"] },
   { id: "billing", phase: "pay", label: "Billing", who: "you", built: true, needs: ["brand", "packaging", "domain", "documents"] },
   { id: "plan", phase: "pay", label: "Business plan", who: "forge", built: true, needs: ["billing"] },
-  { id: "freight", phase: "pay", label: "Shipment and freight", who: "forge", built: true, needs: ["billing"] },
+  { id: "freight", phase: "pay", label: "Shipment and freight", who: "forge", built: true, needs: ["billing", "plan"] },
   { id: "marketing", phase: "run", label: "Marketing", who: "forge", built: true, needs: ["freight"] },
   { id: "orders", phase: "run", label: "Orders and customers", who: "forge", built: true, ongoing: true, needs: ["marketing"] },
   { id: "returns", phase: "run", label: "Returns and stock", who: "you", built: true, ongoing: true, needs: ["marketing"] },

@@ -42,3 +42,23 @@ export const INDUSTRIES = [
 export function industryById(id) {
   return INDUSTRIES.find((i) => i.id === id) || null;
 }
+
+// Plain warnings shown when an owner looks at a product. They are guidance, not legal advice.
+const INDUSTRY_RISK = {
+  beauty: "Skin care and cosmetics may need approval to sell or import in Bangladesh (for example BSTI or DGDA). Never say a product treats, cures or removes anything. Ask Forge before you order.",
+  watches: "Smart watches and anything with a battery can be held at customs and may need approval. Ask Forge before you order.",
+  footwear: "Wrong size is the most common reason parcels come back. Give a clear size chart and plan for some returns.",
+  fitness: "Heavy or bulky items cost more to ship and return. Check the weight before you order.",
+  fragrance: "Candles, oils and liquids can be restricted in air freight. Ask Forge before you order.",
+};
+const NAME_RISK = [
+  [/\b(battery|batteries|charger|power ?bank|earbud|earphone|speaker|bluetooth|led|lamp|trimmer|shaver|smart ?watch)\b/i, "Electronics and batteries can be held at customs and may need approval. Ask Forge before you order."],
+  [/\b(cream|serum|lotion|whitening|acne|pimple|patch|mask|oil|perfume|spray)\b/i, "This looks like a skin care or personal care product. It may need approval (BSTI or DGDA), and you must not claim it treats or removes anything. Ask Forge before you order."],
+  [/\b(knife|blade|pepper|taser|gun|laser)\b/i, "Some products like this are restricted. Ask Forge before you order."],
+];
+export function productRisks(industryId, productName) {
+  const out = [];
+  if (INDUSTRY_RISK[industryId]) out.push(INDUSTRY_RISK[industryId]);
+  NAME_RISK.forEach(([re, text], i) => { if (i === 1 && industryId === "beauty") return; if (re.test(String(productName || "")) && !out.includes(text)) out.push(text); });
+  return out;
+}

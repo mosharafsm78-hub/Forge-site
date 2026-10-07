@@ -1,8 +1,8 @@
 // Calls to the Forge backend functions: supplier products, exchange rate and domain checks.
 // Every call has a time limit, one retry for network problems, and returns clean data or a readable error.
-import { CONFIG } from "./config.js?v=1791344009";
-import * as demo from "./demo.js?v=1791344009";
-import { plainText } from "./ui.js?v=1791344009";
+import { CONFIG } from "./config.js?v=1791344184";
+import * as demo from "./demo.js?v=1791344184";
+import { plainText } from "./ui.js?v=1791344184";
 
 export class ApiError extends Error {
   constructor(message, kind) {

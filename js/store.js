@@ -3,7 +3,7 @@
 //   owner_data: what the owner enters (the server lets only the owner change it)
 //   staff_data: what the Forge team sets (amounts, deliveries, confirmations; the owner cannot change it)
 // The screens see one merged file.
-import { CONFIG } from "./config.js?v=1791344009";
+import { CONFIG } from "./config.js?v=1791344184";
 
 // Sample-data previews keep their own saved file so they never mix with a real one.
 const KEY = CONFIG.demo ? "forge.file.v2.demo" : "forge.file.v2";

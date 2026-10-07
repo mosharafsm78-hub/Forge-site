@@ -1,8 +1,9 @@
 // Validation and progress rules. Pure functions, no page access, so they are easy to test.
-import { BUILT, PREP, stageById } from "./stages.js?v=1791344009";
-import { CONFIG } from "./config.js?v=1791344009";
-import { industryById } from "./data/industries.js?v=1791344009";
-import { MIN_CAPITAL, MIN_CAPITAL_TEXT } from "./minimum.js?v=1791344009";
+import { BUILT, PREP, stageById } from "./stages.js?v=1791344184";
+import { CONFIG } from "./config.js?v=1791344184";
+import { industryById } from "./data/industries.js?v=1791344184";
+import { MIN_CAPITAL, MIN_CAPITAL_TEXT } from "./minimum.js?v=1791344184";
+import { budgetFor } from "./budget.js?v=1791344184";
 
 export const PHONE_RE = /^(?:\+?88)?01[3-9]\d{8}$/;
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -51,7 +52,7 @@ export const profileRules = {
   goal: pick,
   license: pick,
   payout: pick,
-  stock: pick,
+  stock: (v) => (v === "No" ? "Forge's way of working needs you to receive the goods and hand parcels to a courier yourself. Without that, Forge is not the right fit for you yet." : pick(v)),
 };
 
 export function validateProfile(profile = {}) {
@@ -134,8 +135,13 @@ export function isComplete(stageId, st) {
       return Object.keys(validateProfile(st.profile)).length === 0;
     case "industry":
       return Boolean(industryById(st.industryId));
-    case "product":
-      return Boolean(st.product && st.product.id) && Number.isInteger(st.qty) && st.qty >= 1;
+    case "product": {
+      if (!(st.product && st.product.id) || !Number.isInteger(st.qty) || st.qty < 1) return false;
+      // The quantity must fit the owner's own money, after setup, ads and a cash reserve.
+      if (CONFIG.demo) return true;
+      const b = budgetFor(st, st.product.priceUsd);
+      return b.maxQty === null || st.qty <= b.maxQty;
+    }
     case "name":
       return !validateBusinessName(st.name && st.name.chosen);
     case "brand":

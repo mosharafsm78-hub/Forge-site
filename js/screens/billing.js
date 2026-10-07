@@ -1,10 +1,10 @@
-import { h, announce, append, formatBdt } from "../ui.js?v=1791344009";
-import { getState, update } from "../store.js?v=1791344009";
-import { computeSheet } from "../sheet.js?v=1791344009";
-import { addWorkingDays, formatDay } from "../time.js?v=1791344009";
-import { head, previewAction, reviewNote, journeyFoot, dateText, freightNote } from "./common.js?v=1791344009";
-import { makeShipment, freightDue } from "../shipments.js?v=1791344009";
-import { payPanel } from "./payqr.js?v=1791344009";
+import { h, announce, append, formatBdt } from "../ui.js?v=1791344184";
+import { getState, update } from "../store.js?v=1791344184";
+import { computeSheet } from "../sheet.js?v=1791344184";
+import { addWorkingDays, formatDay } from "../time.js?v=1791344184";
+import { head, previewAction, reviewNote, journeyFoot, dateText, freightNote } from "./common.js?v=1791344184";
+import { makeShipment, freightDue } from "../shipments.js?v=1791344184";
+import { payPanel } from "./payqr.js?v=1791344184";
 
 const add = (el, ...k) => append(el, k);
 const DAY = 86400000;
@@ -34,7 +34,7 @@ export default {
       add(body,
         h("div", { class: "notice " + (signed ? "notice--ok" : "notice--error") }, h("p", null, signed ? h("span", null, h("b", null, "Signed agreement received"), " on " + dateText(signed.at) + ". Work can start once your payment is confirmed.") : h("span", null, h("b", null, "No signed agreement yet."), " Nothing can start, and nothing can be paid, until your signed agreement is uploaded."), " ", h("a", { href: "#/documents" }, "Open documents"))),
         h("section", { class: "section", style: "margin-top:24px" },
-          h("div", { class: "section__head" }, h("h2", null, "Your bill"), h("p", null, "You pay the full amount before Forge orders your goods. Freight and duty are billed later, at the actual cost, when the goods reach Bangladesh.")),
+          h("div", { class: "section__head" }, h("h2", null, "Your bill"), h("p", null, "You pay the full amount first. Forge orders your goods after payment is confirmed and you have read your business plan. Freight and duty are billed later, at the actual cost, when the goods reach Bangladesh.")),
           h("div", { class: "bill" }, sheet.rows.filter((r) => r.key !== "freight").map((r) => h("div", { class: "bill__row" }, h("span", null, h("b", null, r.label), r.sub ? h("small", null, r.sub) : null), h("span", { class: "num" }, r.value || r.pending || ""))), h("div", { class: "bill__total" }, h("span", null, "Total to pay now"), h("b", { class: "num" }, sheet.orderTotal))),
           h("p", { class: "field__help" }, sheet.hasRate ? `Product and domain prices are in taka at US$1 = ৳${sheet.rate}. The final amount is the one on this bill when it is confirmed.` : "Product and domain prices are in US dollars until the exchange rate loads.")
         )
@@ -42,7 +42,7 @@ export default {
 
       if (pay.paidAt) {
         const due = pay.paidAt + 30 * DAY;
-        add(body, h("div", { class: "notice notice--ok" }, h("p", null, h("b", null, "Payment confirmed"), " on " + dateText(pay.paidAt) + ". Forge now orders your goods.")),
+        add(body, h("div", { class: "notice notice--ok" }, h("p", null, h("b", null, "Payment confirmed"), " on " + dateText(pay.paidAt) + ". Next, Forge prepares your business plan. Forge orders your goods after you have read it.")),
           h("div", { class: "notice notice--info", style: "margin-top:16px" }, h("p", null, h("b", null, "Upload your trade licence by " + dateText(due) + "."), " That is 30 days from today. If it is not uploaded, Forge stops the process of doing business."), st.documents.licence ? h("p", null, "Your licence is uploaded.") : h("p", null, h("a", { href: "#/documents" }, "Upload it on the documents page"))));
       } else if (pay.reportedAt) {
         add(body, h("div", { class: "notice notice--forge" }, h("p", null, h("b", null, "Waiting for Forge to verify your payment.")), h("p", null, "You told us you paid on " + dateText(pay.reportedAt) + (pay.trxId ? " (transaction ID " + pay.trxId + ")" : "") + ". Please make sure the payment went through in your app. Forge checks every payment by hand, so please wait here. Nothing is ordered until Forge confirms it.")),

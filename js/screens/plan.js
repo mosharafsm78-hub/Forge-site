@@ -1,12 +1,12 @@
-import { h, announce, append } from "../ui.js?v=1791344009";
-import { CONFIG } from "../config.js?v=1791344009";
-import { getState, update, currentUser, applyServer } from "../store.js?v=1791344009";
-import { loadBackend } from "../backend.js?v=1791344009";
-import { HOUR } from "../time.js?v=1791344009";
-import { buildPlan } from "../planDoc.js?v=1791344009";
-import { industryById } from "../data/industries.js?v=1791344009";
-import { head, previewAction, reviewNote, journeyFoot } from "./common.js?v=1791344009";
-import { waitPanel } from "./wait.js?v=1791344009";
+import { h, announce, append } from "../ui.js?v=1791344184";
+import { CONFIG } from "../config.js?v=1791344184";
+import { getState, update, currentUser, applyServer } from "../store.js?v=1791344184";
+import { loadBackend } from "../backend.js?v=1791344184";
+import { HOUR } from "../time.js?v=1791344184";
+import { buildPlan } from "../planDoc.js?v=1791344184";
+import { industryById } from "../data/industries.js?v=1791344184";
+import { head, previewAction, reviewNote, journeyFoot } from "./common.js?v=1791344184";
+import { waitPanel } from "./wait.js?v=1791344184";
 
 const add = (el, ...k) => append(el, k);
 const WAIT = HOUR / 2;
@@ -68,17 +68,17 @@ export default {
         const paid = st.payment && st.payment.paidAt;
         if (paid) {
           const w = waitPanel({
-            title: "Forge is writing your business plan",
+            title: "Your business plan is being checked",
             requestedAt: paid,
             durationMs: WAIT,
-            lines: ["Forge writes it from your file: your costs, your freight, your returns risk and your first 90 days. It checks the numbers before you see it.", "It takes about 30 minutes after your payment is confirmed."],
-            lateText: "Forge is checking the numbers. It will appear here in a few minutes.",
+            lines: ["Forge prepares it from your file: your costs, your freight, your returns risk and your first 90 days. It is held for a check of the numbers before you see it.", "It is released about 30 minutes after your payment is confirmed. Forge orders your goods after you have read it."],
+            lateText: "Forge is still checking the numbers. It will appear here in a few minutes.",
             onDue: paint,
           });
           stopper = w.stop;
           add(body, w.el);
         } else {
-          add(body, h("div", { class: "wait" }, h("h3", null, "Your plan is written after your payment"), h("p", { class: "field__help" }, "Once Forge confirms your payment, it writes your business plan in about 30 minutes. You will read it here before anything is ordered for you.")));
+          add(body, h("div", { class: "wait" }, h("h3", null, "Your plan is written after your payment"), h("p", { class: "field__help" }, "Once Forge confirms your payment, it prepares your business plan and releases it about 30 minutes later. Nothing is ordered for you until you have read it.")));
         }
         const demo = previewAction("show the finished plan", () => { update((s) => { s.plan.draftedAt = Date.now(); }); paint(); });
         if (demo) add(body, demo);
